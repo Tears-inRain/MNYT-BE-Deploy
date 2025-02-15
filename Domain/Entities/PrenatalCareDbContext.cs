@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure;
+namespace Infrastructure.Models;
 
 public partial class AppDbContext : DbContext
 {
