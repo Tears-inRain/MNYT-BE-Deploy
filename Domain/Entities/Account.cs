@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Models;
 
-public partial class Account
+public partial class Account : BaseEntity
 {
     public int AccountId { get; set; }
 

@@ -1,5 +1,4 @@
 ﻿using Application.ViewModels.Subject;
-using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.IServices
 {
-    public interface ISubjectService
+    public interface IAccountService
     {
         Task AddAsync(SubjectAddVM subjectVM);
         Task<IList<SubjectVM>> GetAllAsync();

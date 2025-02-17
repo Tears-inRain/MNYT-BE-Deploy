@@ -1,6 +1,6 @@
 ﻿using Application.ViewModels.Subject;
 using AutoMapper;
-using Domain.Entities;
+using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +18,8 @@ namespace Infrastructure.MapperConfigs
 
         public void MappingSubject()
         {
-            CreateMap<SubjectAddVM, Subject>().ReverseMap();
-            CreateMap<SubjectVM, Subject>().ReverseMap();
+            CreateMap<SubjectAddVM, Account>().ReverseMap();
+            CreateMap<SubjectVM, Account>().ReverseMap();
         }
     }
 }

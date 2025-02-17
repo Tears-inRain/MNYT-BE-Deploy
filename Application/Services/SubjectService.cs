@@ -1,7 +1,7 @@
 ﻿using Application.IServices;
 using Application.ViewModels.Subject;
 using AutoMapper;
-using Domain.Entities;
+using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class SubjectService : ISubjectService
+    public class SubjectService : IAccountService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace Application.Services
             {
                 throw new Exception("Price must be greater than 100");
             }
-            Subject item = _mapper.Map<Subject>(subjectVM);
+            Account item = _mapper.Map<Account>(subjectVM);
             await _unitOfWork.SubjectRepo.AddAsync(item);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -36,9 +36,9 @@ namespace Application.Services
         {
             var list = await _unitOfWork.SubjectRepo.GetAllAsync();
 
-            var filterList = list.Where(x => x.TuitionFee < 100);
+            //var filterList = list.Where(x => x.TuitionFee < 100);
 
-            var convertedList = _mapper.Map<List<SubjectVM>>(filterList);
+            var convertedList = _mapper.Map<List<SubjectVM>>(list);
             return convertedList;
         }
 

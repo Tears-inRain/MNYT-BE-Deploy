@@ -21,8 +21,8 @@ namespace Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<ISubjectRepo, SubjectRepo>();
-            services.AddScoped<ISubjectService, SubjectService>();
+            services.AddScoped<IAccountRepo, SubjectRepo>();
+            services.AddScoped<IAccountService, SubjectService>();
 
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 

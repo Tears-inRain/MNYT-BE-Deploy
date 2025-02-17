@@ -1,5 +1,5 @@
 ﻿using Application.IRepos;
-using Domain.Entities;
+using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repos
 {
-    public class SubjectRepo : GenericRepo<Subject>, ISubjectRepo
+    public class SubjectRepo : GenericRepo<Account>, IAccountRepo
     {
         private readonly AppDbContext _appDbContext;
         public SubjectRepo(AppDbContext dbContext) : base(dbContext)
