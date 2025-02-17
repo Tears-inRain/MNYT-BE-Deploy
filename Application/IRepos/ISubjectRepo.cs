@@ -1,4 +1,5 @@
 ﻿
+using Domain.Entities;
 using Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.IRepos
 {
-    public interface IAccountRepo : IGenericRepo<Account>
+    public interface ISubjectRepo : IGenericRepo<Subject>
     {
-        void TestMethod(string content);
     }
 }

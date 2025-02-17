@@ -1,4 +1,5 @@
 ﻿using Application.IRepos;
+using Domain.Entities;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repos
 {
-    public class SubjectRepo : GenericRepo<Account>, IAccountRepo
+    public class SubjectRepo : GenericRepo<Subject>, ISubjectRepo
     {
         private readonly AppDbContext _appDbContext;
         public SubjectRepo(AppDbContext dbContext) : base(dbContext)
@@ -17,9 +18,9 @@ namespace Infrastructure.Repos
             _appDbContext = dbContext;
         }
 
-        public void TestMethod(string content)
-        {
-            Console.WriteLine(content);
-        }
+        //public void TestMethod(string content)
+        //{
+        //    Console.WriteLine(content);
+        //}
     }
 }

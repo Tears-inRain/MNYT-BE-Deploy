@@ -10,9 +10,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
-        private readonly IAccountService _subjectService;
+        private readonly ISubjectService _subjectService;
 
-        public SubjectController(IAccountService subjectService)
+        public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
