@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Models;
@@ -6,10 +7,6 @@ namespace Infrastructure.Models;
 public partial class FetusRecord
 {
     public int FetusRecordId { get; set; }
-
-    public int? PregnancyId { get; set; }
-
-    public int? FetusId { get; set; }
 
     public int? Period { get; set; }
 
@@ -25,5 +22,6 @@ public partial class FetusRecord
 
     public DateOnly? Date { get; set; }
 
-    public virtual Pregnancy? Pregnancy { get; set; }
+    public int? FetusId { get; set; }
+    public virtual Fetus? Fetus { get; set; }
 }

@@ -36,7 +36,5 @@ public partial class Account : BaseEntity
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
-
     public virtual ICollection<Pregnancy> Pregnancies { get; set; } = new List<Pregnancy>();
 }

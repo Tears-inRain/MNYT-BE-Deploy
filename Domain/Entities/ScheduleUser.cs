@@ -7,8 +7,6 @@ public partial class ScheduleUser
 {
     public int ScheduleUserId { get; set; }
 
-    public int? PregnancyId { get; set; }
-
     public string? Title { get; set; }
 
     public string? Status { get; set; }
@@ -18,4 +16,7 @@ public partial class ScheduleUser
     public DateOnly? Date { get; set; }
 
     public string? Note { get; set; }
+
+    public int? PregnancyId { get; set; }
+    public virtual Pregnancy? Pregnancy { get; set; }
 }

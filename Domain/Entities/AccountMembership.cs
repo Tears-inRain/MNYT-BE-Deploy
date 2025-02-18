@@ -20,10 +20,11 @@ public partial class AccountMembership
     public string? PaymentStatus { get; set; }
 
     public string? PaymentMethod { get; set; }
-
-    public string? TransactionCode { get; set; }
-
+    
     public virtual Account? Account { get; set; }
 
     public virtual MembershipPlan? MembershipPlan { get; set; }
+
+    public int PaymentMethodId { get; set; }
+    public required PaymentMethod PaymentMethods { get; set; }
 }

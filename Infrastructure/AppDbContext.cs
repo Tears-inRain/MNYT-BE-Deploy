@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domain.Entities;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<MembershipPlan> MembershipPlans { get; set; }
 
-    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<PaymentMethod> PaymentMethod { get; set; }
 
     public virtual DbSet<Pregnancy> Pregnancies { get; set; }
 
@@ -45,8 +46,11 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ScheduleUser> ScheduleUsers { get; set; }
 
+    public virtual DbSet<Fetus> Fetus { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Account>(entity =>
         {
             entity.HasKey(e => e.AccountId).HasName("PK__Account__B19D418153C218A9");
@@ -95,9 +99,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("Payment_status");
             entity.Property(e => e.StartDate).HasColumnName("Start_date");
-            entity.Property(e => e.TransactionCode)
-                .HasMaxLength(1)
-                .HasColumnName("Transaction_code");
 
             entity.HasOne(d => d.Account).WithMany(p => p.AccountMemberships)
                 .HasForeignKey(d => d.AccountId)
@@ -185,8 +186,26 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__Comment__Blog_po__5BE2A6F2");
         });
 
+        modelBuilder.Entity<Fetus>(entity =>
+        {
+            entity.HasKey(e => e.FetusId).HasName("PK__Fetus__F1A3E2A3D3A3D3A3");
+
+            entity.ToTable("Fetus");
+
+            entity.Property(e => e.FetusId).HasColumnName("Fetus_id");
+            entity.Property(e => e.PregnancyId).HasColumnName("Pregnancy_id");
+            entity.Property(e => e.Name);
+            entity.Property(e => e.gender).HasMaxLength(50);
+
+            entity.HasOne(d => d.Pregnancy).WithMany(p => p.Fetus)
+                .HasForeignKey(d => d.PregnancyId)
+                .HasConstraintName("FK__Fetus__Pregnancy__4D94879B");
+            entity.HasMany(d => d.FetusRecords).WithOne(p => p.Fetus).HasForeignKey(d => d.FetusId);
+        });
+
         modelBuilder.Entity<FetusRecord>(entity =>
         {
+            
             entity.HasKey(e => e.FetusRecordId).HasName("PK__Fetus_Re__11E3575A507B3844");
 
             entity.ToTable("Fetus_Record");
@@ -201,12 +220,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("HC");
             entity.Property(e => e.InputPeriod).HasColumnName("Input_Period");
             entity.Property(e => e.Length).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.PregnancyId).HasColumnName("Pregnancy_id");
             entity.Property(e => e.Weight).HasColumnType("decimal(10, 2)");
-
-            entity.HasOne(d => d.Pregnancy).WithMany(p => p.FetusRecords)
-                .HasForeignKey(d => d.PregnancyId)
-                .HasConstraintName("FK__Fetus_Rec__Pregn__5441852A");
         });
 
         modelBuilder.Entity<Medium>(entity =>
@@ -228,22 +242,25 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
         });
 
-        modelBuilder.Entity<Payment>(entity =>
+        modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payment__DA638B192282CC45");
+            entity.HasKey(e => e.PaymentMethodId).HasName("PK__PaymentMethod__DA638B192282CC45");
 
-            entity.ToTable("Payment");
+            entity.ToTable("PaymentMethod");
 
-            entity.Property(e => e.PaymentId).HasColumnName("Payment_id");
-            entity.Property(e => e.AccountId).HasColumnName("Account_id");
+            entity.Property(e => e.PaymentMethodId).HasColumnName("PaymentMethod_id");
+            entity.Property(e => e.AccountMembershipId).HasColumnName("Account_id");
             entity.Property(e => e.Method).HasMaxLength(50);
             entity.Property(e => e.TransactionCode)
                 .HasMaxLength(1)
                 .HasColumnName("Transaction_code");
             entity.Property(e => e.Via).HasMaxLength(50);
 
-            entity.HasOne(d => d.Account).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.AccountId)
+            entity
+                .HasOne(d => d.AccountMembership)
+                .WithOne(p => p.PaymentMethods)
+                .IsRequired(false)
+                .HasForeignKey<PaymentMethod>(d => d.AccountMembershipId)
                 .HasConstraintName("FK__Payment__Account__403A8C7D");
         });
 
@@ -263,6 +280,8 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Pregnancies)
                 .HasForeignKey(d => d.AccountId)
                 .HasConstraintName("FK__Pregnancy__Accou__5165187F");
+            entity.HasMany(d => d.ScheduleUser).WithOne(p => p.Pregnancy).HasForeignKey(d => d.PregnancyId);
+            entity.HasMany(d => d.Fetus).WithOne(p => p.Pregnancy).HasForeignKey(d => d.PregnancyId);
         });
 
         modelBuilder.Entity<PregnancyStandard>(entity =>
@@ -300,7 +319,8 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.Type).HasMaxLength(50);
-        });
+        }
+        );
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Models;
@@ -19,5 +20,7 @@ public partial class Pregnancy
 
     public virtual Account? Account { get; set; }
 
-    public virtual ICollection<FetusRecord> FetusRecords { get; set; } = new List<FetusRecord>();
+    public virtual ICollection<ScheduleUser> ScheduleUser { get; set; } = new List<ScheduleUser>();
+
+    public virtual ICollection<Fetus> Fetus { get; set; } = new List<Fetus>();
 }

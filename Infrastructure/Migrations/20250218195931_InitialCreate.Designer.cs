@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250218195931_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,34 +24,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Entities.Fetus", b =>
-                {
-                    b.Property<int>("FetusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Fetus_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FetusId"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PregnancyId")
-                        .HasColumnType("int")
-                        .HasColumnName("Pregnancy_id");
-
-                    b.Property<string>("gender")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("FetusId")
-                        .HasName("PK__Fetus__F1A3E2A3D3A3D3A3");
-
-                    b.HasIndex("PregnancyId");
-
-                    b.ToTable("Fetus", (string)null);
-                });
 
             modelBuilder.Entity("Infrastructure.Models.Account", b =>
                 {
@@ -346,13 +321,17 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("Period")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PregnancyId")
+                        .HasColumnType("int")
+                        .HasColumnName("Pregnancy_id");
+
                     b.Property<decimal?>("Weight")
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("FetusRecordId")
                         .HasName("PK__Fetus_Re__11E3575A507B3844");
 
-                    b.HasIndex("FetusId");
+                    b.HasIndex("PregnancyId");
 
                     b.ToTable("Fetus_Record", (string)null);
                 });
@@ -410,7 +389,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("PaymentMethodId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("PaymentMethod_id");
+                        .HasColumnName("Payment_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentMethodId"));
 
@@ -432,13 +411,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("PaymentMethodId")
-                        .HasName("PK__PaymentMethod__DA638B192282CC45");
+                        .HasName("PK__Payment__DA638B192282CC45");
 
                     b.HasIndex("AccountMembershipId")
                         .IsUnique()
                         .HasFilter("[Account_id] IS NOT NULL");
 
-                    b.ToTable("PaymentMethod", (string)null);
+                    b.ToTable("Payment", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Pregnancy", b =>
@@ -573,19 +552,7 @@ namespace Infrastructure.Migrations
                     b.HasKey("ScheduleUserId")
                         .HasName("PK__Schedule__CEFD2C9D1F53F754");
 
-                    b.HasIndex("PregnancyId");
-
                     b.ToTable("Schedule_User", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Fetus", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Pregnancy", "Pregnancy")
-                        .WithMany("Fetus")
-                        .HasForeignKey("PregnancyId")
-                        .HasConstraintName("FK__Fetus__Pregnancy__4D94879B");
-
-                    b.Navigation("Pregnancy");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.AccountMembership", b =>
@@ -668,11 +635,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.FetusRecord", b =>
                 {
-                    b.HasOne("Domain.Entities.Fetus", "Fetus")
+                    b.HasOne("Infrastructure.Models.Pregnancy", "Pregnancy")
                         .WithMany("FetusRecords")
-                        .HasForeignKey("FetusId");
+                        .HasForeignKey("PregnancyId")
+                        .HasConstraintName("FK__Fetus_Rec__Pregn__5441852A");
 
-                    b.Navigation("Fetus");
+                    b.Navigation("Pregnancy");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.PaymentMethod", b =>
@@ -693,20 +661,6 @@ namespace Infrastructure.Migrations
                         .HasConstraintName("FK__Pregnancy__Accou__5165187F");
 
                     b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.ScheduleUser", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Pregnancy", "Pregnancy")
-                        .WithMany("ScheduleUser")
-                        .HasForeignKey("PregnancyId");
-
-                    b.Navigation("Pregnancy");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Fetus", b =>
-                {
-                    b.Navigation("FetusRecords");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Account", b =>
@@ -746,9 +700,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Pregnancy", b =>
                 {
-                    b.Navigation("Fetus");
-
-                    b.Navigation("ScheduleUser");
+                    b.Navigation("FetusRecords");
                 });
 #pragma warning restore 612, 618
         }
