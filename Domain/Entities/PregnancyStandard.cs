@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class PregnancyStandard
+public partial class PregnancyStandard : BaseEntity
 {
-    public int PregnancyStandardId { get; set; }
+    public string? PregnancyType { get; set; }
 
     public string? Type { get; set; }
 

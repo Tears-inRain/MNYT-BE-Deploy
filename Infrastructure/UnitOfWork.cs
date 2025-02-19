@@ -12,17 +12,15 @@ namespace Infrastructure
     {
         public readonly AppDbContext _context;
 
-        public readonly ISubjectRepo _subjectRepo;
 
 
-
-        public UnitOfWork(AppDbContext context, ISubjectRepo subjectRepo)
+        public UnitOfWork(AppDbContext context )
         {
             _context = context;
-            _subjectRepo = subjectRepo;
+
         }
 
-        public ISubjectRepo SubjectRepo => _subjectRepo;
+
 
         public async Task<int> SaveChangesAsync()
         {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class ScheduleTemplate
+public partial class ScheduleTemplate : BaseEntity
 {
-    public int ScheduleTemplateId { get; set; }
-
     public int Period { get; set; }
 
     public string? Type { get; set; }

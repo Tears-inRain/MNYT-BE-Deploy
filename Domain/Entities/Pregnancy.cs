@@ -1,13 +1,7 @@
-﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class Pregnancy
+public partial class Pregnancy : BaseEntity
 {
-    public int PregnancyId { get; set; }
-
     public int? AccountId { get; set; }
 
     public string? Type { get; set; }

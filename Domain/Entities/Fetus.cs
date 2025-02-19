@@ -1,4 +1,4 @@
-﻿using Infrastructure.Models;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public partial class Fetus
+    public partial class Fetus : BaseEntity
     {
-        public int FetusId { get; set; }
-
         public string? Name { get; set; }
 
-        public string? gender { get; set; }
+        public string? Gender { get; set; }
 
         public int? PregnancyId { get; set; }
         public virtual Pregnancy? Pregnancy { get; set; }

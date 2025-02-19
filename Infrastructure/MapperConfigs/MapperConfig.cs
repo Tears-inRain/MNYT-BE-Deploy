@@ -1,11 +1,4 @@
-﻿using Application.ViewModels.Subject;
-using AutoMapper;
-using Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -18,8 +11,6 @@ namespace Infrastructure.MapperConfigs
 
         public void MappingSubject()
         {
-            CreateMap<SubjectAddVM, Account>().ReverseMap();
-            CreateMap<SubjectVM, Account>().ReverseMap();
         }
     }
 }

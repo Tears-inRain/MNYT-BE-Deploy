@@ -9,7 +9,6 @@ namespace Application
 {
     public interface IUnitOfWork
     {
-        ISubjectRepo SubjectRepo { get; }
 
         public Task<int> SaveChangesAsync();
     }

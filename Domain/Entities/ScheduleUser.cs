@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class ScheduleUser
+public partial class ScheduleUser : BaseEntity
 {
-    public int ScheduleUserId { get; set; }
-
     public string? Title { get; set; }
 
     public string? Status { get; set; }

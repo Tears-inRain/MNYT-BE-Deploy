@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
+    <Folder Include="IServices\" />
+    <Folder Include="Services\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

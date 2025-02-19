@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class AccountMembership
+public partial class AccountMembership : BaseEntity
 {
-    public int MembershipId { get; set; }
-
     public int? AccountId { get; set; }
 
     public int? MembershipPlanId { get; set; }
@@ -25,6 +20,6 @@ public partial class AccountMembership
 
     public virtual MembershipPlan? MembershipPlan { get; set; }
 
-    public int PaymentMethodId { get; set; }
+    public int? PaymentMethodId { get; set; }
     public required PaymentMethod PaymentMethods { get; set; }
 }

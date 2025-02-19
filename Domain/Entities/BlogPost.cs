@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class BlogPost
+public partial class BlogPost : BaseEntity
 {
-    public int BlogPostId { get; set; }
-
     public string Title { get; set; } = null!;
 
     public string? Description { get; set; }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class Comment
+public partial class Comment : BaseEntity
 {
-    public int CommentId { get; set; }
-
     public int? AccountId { get; set; }
 
     public int? BlogPostId { get; set; }

@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class PaymentMethod
+public partial class PaymentMethod :BaseEntity
 {
-    public int PaymentMethodId { get; set; }[Key]
-
     public string? Method { get; set; }
 
     public string? Via { get; set; }
 
-    public string? TransactionCode { get; set; }
-
-    public int? AccountMembershipId { get; set; }
-
-    public virtual AccountMembership? AccountMembership { get; set; }
+    public List<AccountMembership> AccountMembership { get; set; }
 }

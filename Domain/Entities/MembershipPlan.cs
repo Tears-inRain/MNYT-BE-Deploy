@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Infrastructure.Models;
+namespace Domain.Entities;
 
-public partial class MembershipPlan
+public partial class MembershipPlan : BaseEntity
 {
-    public int MembershipPlanId { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }

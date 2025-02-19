@@ -2,12 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Infrastructure.Models;
+namespace Domain.Entities;
 
-public partial class FetusRecord
+public partial class FetusRecord : BaseEntity
 {
-    public int FetusRecordId { get; set; }
-
     public int? Period { get; set; }
 
     public int? InputPeriod { get; set; }

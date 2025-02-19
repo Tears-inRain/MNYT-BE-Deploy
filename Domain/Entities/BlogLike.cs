@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Domain.Entities;
 
-namespace Infrastructure.Models;
-
-public partial class BlogLike
+public partial class BlogLike : BaseEntity
 {
-    public int BlogLikeId { get; set; }
-
     public int? AccountId { get; set; }
 
     public int? PostId { get; set; }
