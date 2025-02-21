@@ -1,10 +1,5 @@
 ﻿using Application;
 using Application.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -24,24 +19,9 @@ namespace Infrastructure
         public readonly IMediaRepo _mediaRepo;
         public readonly IPregnancyRepo _regnancyRepo;
         public readonly IPregnancyStandardRepo _standardRepo;
+        public readonly IScheduleTemplateRepo _scheduleTemplateRepo;
+        public readonly IScheduleUserRepo _scheduleUserRepo;
 
-        public UnitOfWork(AppDbContext context, IAccountRepo accountRepo, IAccountMembershipRepo accountMembershipRepo, IMembershipPlanRepo membershipPlanRepo, IPaymentMethodRepo paymentMethodRepo, IBlogBookmarkRepo blogBookmarkRepo, IBlogLikeRepo blogLikeRepo, IBlogPostRepo postRepo, ICommentRepo commentRepo, IFetusRepo fetusRepo, IFetusRecordRepo fetusRecordRepo, IMediaRepo mediaRepo, IPregnancyRepo regnancyRepo, IPregnancyStandardRepo standardRepo)
-        {
-            _context = context;
-            _accountRepo = accountRepo;
-            _accountMembershipRepo = accountMembershipRepo;
-            _membershipPlanRepo = membershipPlanRepo;
-            _paymentMethodRepo = paymentMethodRepo;
-            _blogBookmarkRepo = blogBookmarkRepo;
-            _blogLikeRepo = blogLikeRepo;
-            _postRepo = postRepo;
-            _commentRepo = commentRepo;
-            _fetusRepo = fetusRepo;
-            _fetusRecordRepo = fetusRecordRepo;
-            _mediaRepo = mediaRepo;
-            _regnancyRepo = regnancyRepo;
-            _standardRepo = standardRepo;
-        }
 
         public IAccountRepo AccountRepo => _accountRepo;
 
@@ -69,7 +49,29 @@ namespace Infrastructure
 
         public IPregnancyStandardRepo StandardRepo => _standardRepo;
 
+        public IScheduleTemplateRepo ScheduleTemplateRepo => _scheduleTemplateRepo;
 
+        public IScheduleUserRepo ScheduleUserRepo => _scheduleUserRepo;
+
+        public UnitOfWork(AppDbContext context, IAccountRepo accountRepo, IAccountMembershipRepo accountMembershipRepo, IMembershipPlanRepo membershipPlanRepo, IPaymentMethodRepo paymentMethodRepo, IBlogBookmarkRepo blogBookmarkRepo, IBlogLikeRepo blogLikeRepo, IBlogPostRepo postRepo, ICommentRepo commentRepo, IFetusRepo fetusRepo, IFetusRecordRepo fetusRecordRepo, IMediaRepo mediaRepo, IPregnancyRepo regnancyRepo, IPregnancyStandardRepo standardRepo, IScheduleTemplateRepo scheduleTemplateRepo, IScheduleUserRepo scheduleUserRepo)
+        {
+            _context = context;
+            _accountRepo = accountRepo;
+            _accountMembershipRepo = accountMembershipRepo;
+            _membershipPlanRepo = membershipPlanRepo;
+            _paymentMethodRepo = paymentMethodRepo;
+            _blogBookmarkRepo = blogBookmarkRepo;
+            _blogLikeRepo = blogLikeRepo;
+            _postRepo = postRepo;
+            _commentRepo = commentRepo;
+            _fetusRepo = fetusRepo;
+            _fetusRecordRepo = fetusRecordRepo;
+            _mediaRepo = mediaRepo;
+            _regnancyRepo = regnancyRepo;
+            _standardRepo = standardRepo;
+            _scheduleTemplateRepo = scheduleTemplateRepo;
+            _scheduleUserRepo = scheduleUserRepo;
+        }
 
         public async Task<int> SaveChangesAsync()
         {

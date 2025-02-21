@@ -30,6 +30,10 @@ namespace Application
 
         IPregnancyStandardRepo StandardRepo { get; }
 
+        IScheduleTemplateRepo ScheduleTemplateRepo { get; }
+
+        IScheduleUserRepo ScheduleUserRepo { get; }
+
         public Task<int> SaveChangesAsync();
     }
 }

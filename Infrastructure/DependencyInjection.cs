@@ -27,6 +27,8 @@ namespace Infrastructure
             services.AddScoped<IMediaRepo, MediaRepo>();
             services.AddScoped<IPregnancyRepo, PregnancyRepo>();
             services.AddScoped<IPregnancyStandardRepo, PregnancyStandardRepo>();
+            services.AddScoped<IScheduleTemplateRepo, ScheduleTemplateRepo>();
+            services.AddScoped<IScheduleUserRepo, ScheduleUserRepo>();
 
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 
