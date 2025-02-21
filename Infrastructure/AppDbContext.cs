@@ -28,7 +28,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<FetusRecord> FetusRecords { get; set; }
 
-    public virtual DbSet<Medium> Media { get; set; }
+    public virtual DbSet<Media> Media { get; set; }
 
     public virtual DbSet<MembershipPlan> MembershipPlans { get; set; }
 
