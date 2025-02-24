@@ -49,7 +49,7 @@ namespace Application.Services.Authentication
                 _logger.LogWarning("User already exists with the provided email or username.");
                 return new LoginResponseDTO { Success = false, Message = "User already exists." };
             }
-
+             <(")
             // Validate role
             var allowedRoles = new List<string> { "Member", "Admin", "Manager" };
             if (string.IsNullOrWhiteSpace(registrationDto.Role) ||
