@@ -1,5 +1,6 @@
 
 using Infrastructure;
+using WebAPI.Middlewares;
 namespace WebAPI
 {
     public class Program
@@ -16,6 +17,7 @@ namespace WebAPI
             builder.Services.AddInfrastructureServices(builder.Configuration);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSingleton<GlobalExceptionMiddleware>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
@@ -23,9 +25,11 @@ namespace WebAPI
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

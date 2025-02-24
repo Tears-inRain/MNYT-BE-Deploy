@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.IRepos;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure
 {
@@ -76,6 +77,16 @@ namespace Infrastructure
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }
