@@ -1,4 +1,5 @@
 ﻿using Application.IRepos;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Application
 {
@@ -35,5 +36,7 @@ namespace Application
         IScheduleUserRepo ScheduleUserRepo { get; }
 
         public Task<int> SaveChangesAsync();
+        IDbContextTransaction BeginTransaction();
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

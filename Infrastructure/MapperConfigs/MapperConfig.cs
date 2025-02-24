@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.ViewModels.Authentication;
+using AutoMapper;
+using Domain.Entities;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -6,11 +8,15 @@ namespace Infrastructure.MapperConfigs
     {
         public MapperConfig() 
         {
-            MappingSubject();
+            MappingAccount();
         }
 
-        public void MappingSubject()
+        public void MappingAccount()
         {
+            CreateMap<AccountRegistrationDTO, Account>()
+                    .ForMember(dest => dest.Password, opt => opt.Ignore())
+                    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Active"))
+                    .ForMember(dest => dest.ExternalProvider, opt => opt.Condition(src => src.IsExternal));
         }
     }
 }

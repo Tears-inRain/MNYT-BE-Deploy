@@ -9,5 +9,6 @@ namespace Application.IRepos
 {
     public interface IAccountRepo : IGenericRepo<Account>
     {
+        Task<Account> GetByUsernameOrEmail(string email, string Username);
     }
 }
