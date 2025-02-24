@@ -16,10 +16,6 @@ jobs:
       IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
       DOCKER_PORT: ${{ secrets.DOCKER_PORT }}
       APP_PORT: ${{ secrets.APP_PORT }}
-      APP_SECRET_ID: ${{ secrets.APP_SECRET_ID }}
-      HOST_SECRET_PATH: ${{ secrets.HOST_SECRET_PATH }}
-      DOCKER_SECRET_PATH: ${{ secrets.DOCKER_SECRET_PATH }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,7 +54,10 @@ jobs:
           docker stop $IMAGE_NAME || true
           docker rm $IMAGE_NAME || true
 
-      - name: Run New Container
+      - name: Run Docker Container (Inject JWT Config)
         run: |
-          docker run -v $HOST_SECRET_PATH:$DOCKER_SECRET_PATH/$APP_SECRET_ID \
-           -d --name $IMAGE_NAME -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
+          docker run d --name $IMAGE_NAME \
+            -e Authentication__Jwt__Secret="${{ secrets.JWT_SECRET }}" \
+            -e Authentication__Jwt__Issuer="${{ secrets.JWT_ISSUER }}" \
+            -e Authentication__Jwt__Audience="${{ secrets.JWT_AUDIENCE }}" \
+            -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
