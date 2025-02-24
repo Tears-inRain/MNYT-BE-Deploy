@@ -60,5 +60,5 @@ jobs:
 
       - name: Run New Container
         run: |
-          docker run -v $HOST_SECRET_PATH/secrets.json:$DOCKER_SECRET_PATH/$APP_SECRET_ID/secrets.json \
+          docker run -v $HOST_SECRET_PATH:$DOCKER_SECRET_PATH/$APP_SECRET_ID \
            -d --name $IMAGE_NAME -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
