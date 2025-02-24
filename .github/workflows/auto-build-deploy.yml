@@ -16,6 +16,7 @@ jobs:
       IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
       DOCKER_PORT: ${{ secrets.DOCKER_PORT }}
       APP_PORT: ${{ secrets.APP_PORT }}
+      APP_SECRET_ID: ${{ secrets.APP_SECRET_ID }}
 
     steps:
       - name: Checkout code
@@ -57,4 +58,5 @@ jobs:
 
       - name: Run New Container
         run: |
-          docker run -d --name $IMAGE_NAME -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
+          docker run -v /path/on/host/secrets.json:/root/.microsoft/usersecrets/$APP_SECRET_ID/secrets.json \
+           -d --name $IMAGE_NAME -p $DOCKER_PORT:$APP_PORT $IMAGE_NAME:v1
