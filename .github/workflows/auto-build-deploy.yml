@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Docker Container (Inject JWT Config)
         run: |
-          docker run d --name $IMAGE_NAME \
+          docker run -d --name $IMAGE_NAME \
             -e Authentication__Jwt__Secret="${{ secrets.JWT_SECRET }}" \
             -e Authentication__Jwt__Issuer="${{ secrets.JWT_ISSUER }}" \
             -e Authentication__Jwt__Audience="${{ secrets.JWT_AUDIENCE }}" \
