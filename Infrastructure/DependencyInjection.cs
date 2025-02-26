@@ -49,6 +49,7 @@ namespace Infrastructure
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
             services.AddScoped<IFetusService, FetusService>();
+            services.AddScoped<IFetusRecordService, FetusRecordService>();
             #endregion
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 

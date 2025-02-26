@@ -18,7 +18,7 @@ public partial class FetusRecord : BaseEntity
 
     public decimal? Hc { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public DateOnly? Date { get; set; } //input date
 
     public int? FetusId { get; set; }
     public virtual Fetus? Fetus { get; set; }
