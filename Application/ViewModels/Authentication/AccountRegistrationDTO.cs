@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Application.ViewModels.Authentication
         public string Address { get; set; }
 
         [Required]
-        public string Role { get; set; } = "Member";
+        public string Role { get; set; } = AccountRoleConstants.Member;
 
         public bool IsExternal { get; set; } = false;
         public string? ExternalProvider { get; set; }
