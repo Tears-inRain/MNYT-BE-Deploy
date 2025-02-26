@@ -1,13 +1,12 @@
-﻿using Application.Exceptions;
+﻿using Application.Constants;
+using Application.Exceptions;
 using Application.IServices.Authentication;
 using Application.ViewModels.Authentication;
 using AutoMapper;
-using Domain;
 using Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace Application.Services.Authentication
@@ -49,9 +48,8 @@ namespace Application.Services.Authentication
                 _logger.LogWarning("User already exists with the provided email or username.");
                 return new LoginResponseDTO { Success = false, Message = "User already exists." };
             }
-
             // Validate role
-            var allowedRoles = new List<string> { "Member", "Admin", "Manager" };
+            var allowedRoles = new List<string> { AccountRoleConstants.Member, AccountRoleConstants.Admin, AccountRoleConstants.Manager };
             if (string.IsNullOrWhiteSpace(registrationDto.Role) ||
                 !allowedRoles.Contains(registrationDto.Role, StringComparer.OrdinalIgnoreCase))
             {
@@ -74,7 +72,7 @@ namespace Application.Services.Authentication
                     var accessToken = _jwtTokenService.GenerateJwtToken(
                         account.Id,
                         account.UserName,
-                        account.Role ?? "Customer",
+                        account.Role ?? AccountRoleConstants.Member,
                         account.Status
                     );
 

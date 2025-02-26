@@ -1,4 +1,5 @@
 
+using Application;
 using Infrastructure;
 using WebAPI.Middlewares;
 namespace WebAPI
@@ -8,6 +9,15 @@ namespace WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyMethod()
+                                    .AllowAnyHeader());
+            });
 
             // Add services to the container.
             builder.Configuration.AddEnvironmentVariables();
@@ -22,13 +32,13 @@ namespace WebAPI
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseCors("AllowAll");
+
             if (app.Environment.IsDevelopment())
             {
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI();
+
             app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseHttpsRedirection();
