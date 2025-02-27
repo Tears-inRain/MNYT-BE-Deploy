@@ -1,5 +1,6 @@
 
 using Application;
+using Application.PaymentProviders.VnPay;
 using Infrastructure;
 using WebAPI.Middlewares;
 namespace WebAPI
@@ -21,6 +22,10 @@ namespace WebAPI
 
             // Add services to the container.
             builder.Configuration.AddEnvironmentVariables();
+
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.Configure<VnPaySettings>(builder.Configuration.GetSection("Vnpay"));
 
             builder.Services.AddControllers();
 
