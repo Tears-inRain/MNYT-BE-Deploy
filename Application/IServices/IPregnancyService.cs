@@ -10,9 +10,9 @@ namespace Application.IServices
     public interface IPregnancyService
     {
         Task AddSync(PregnancyAddVM pregnancyAddVM);
-        Task Update(PregnancyVM pregnancyVM);
-        Task Delete(int id);
-        Task SoftDelete(PregnancyVM pregnancyVM);
+        Task UpdateAsync(PregnancyVM pregnancyVM);
+        Task DeleteAsync(int id);
+        Task SoftDeleteAsync(int id);
         Task<IList<PregnancyVM>> GetAllAsync();
         Task<PregnancyVM> GetAsync(int id);
     }

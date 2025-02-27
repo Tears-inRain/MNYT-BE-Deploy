@@ -27,9 +27,13 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
+            if (itemToDelete != null)
+            {
+                throw new KeyNotFoundException("Pregnancy not found");
+            }
             _unitOfWork.PregnancyRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -48,12 +52,19 @@ namespace Application.Services
             return result;
         }
 
-        public Task SoftDelete(PregnancyVM pregnancyVM)
+        public async Task SoftDeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
+            if (itemToDelete != null)
+            {
+                throw new KeyNotFoundException("Pregnancy not found");
+            }
+            _unitOfWork.PregnancyRepo.SoftDelete(itemToDelete);
+            await _unitOfWork.SaveChangesAsync();
+
         }
 
-        public async Task Update(PregnancyVM pregnancyVM)
+        public async Task UpdateAsync(PregnancyVM pregnancyVM)
         {
             var itemToUpdate = _mapper.Map<Pregnancy>(pregnancyVM);
             _unitOfWork.PregnancyRepo.Update(itemToUpdate);

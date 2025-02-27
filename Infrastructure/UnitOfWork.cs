@@ -18,7 +18,7 @@ namespace Infrastructure
         public readonly IFetusRepo _fetusRepo;
         public readonly IFetusRecordRepo _fetusRecordRepo;
         public readonly IMediaRepo _mediaRepo;
-        public readonly IPregnancyRepo _regnancyRepo;
+        public readonly IPregnancyRepo _pregnancyRepo;
         public readonly IPregnancyStandardRepo _standardRepo;
         public readonly IScheduleTemplateRepo _scheduleTemplateRepo;
         public readonly IScheduleUserRepo _scheduleUserRepo;
@@ -46,7 +46,7 @@ namespace Infrastructure
 
         public IMediaRepo MediaRepo => _mediaRepo;
 
-        public IPregnancyRepo RegnancyRepo => _regnancyRepo;
+        public IPregnancyRepo PregnancyRepo => _pregnancyRepo;
 
         public IPregnancyStandardRepo StandardRepo => _standardRepo;
 
@@ -68,7 +68,7 @@ namespace Infrastructure
             _fetusRepo = fetusRepo;
             _fetusRecordRepo = fetusRecordRepo;
             _mediaRepo = mediaRepo;
-            _regnancyRepo = regnancyRepo;
+            _pregnancyRepo = regnancyRepo;
             _standardRepo = standardRepo;
             _scheduleTemplateRepo = scheduleTemplateRepo;
             _scheduleUserRepo = scheduleUserRepo;
