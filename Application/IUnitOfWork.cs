@@ -27,7 +27,7 @@ namespace Application
 
         IMediaRepo MediaRepo { get; }
 
-        IPregnancyRepo RegnancyRepo { get; }
+        IPregnancyRepo PregnancyRepo { get; }
 
         IPregnancyStandardRepo StandardRepo { get; }
 

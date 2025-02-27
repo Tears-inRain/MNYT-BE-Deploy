@@ -1,6 +1,8 @@
 ﻿using Application;
 using Application.IRepos;
+using Application.IServices;
 using Application.IServices.Authentication;
+using Application.Services;
 using Application.Services.Authentication;
 using Application.Utils.Implementation;
 using Application.Utils.Interfaces;
@@ -40,6 +42,7 @@ namespace Infrastructure
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+            services.AddScoped<IPregnancyService, PregnancyService>();
             #endregion
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 
