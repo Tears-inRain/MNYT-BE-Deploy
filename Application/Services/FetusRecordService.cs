@@ -49,7 +49,7 @@ namespace Application.Services
         public async void SoftDelete(int id)
         {
             var record = await _unitOfWork.FetusRecordRepo.GetAsync(id);
-            if (record != null)
+            if (record = null)
             {
                 throw new KeyNotFoundException("Record not found");
             }
