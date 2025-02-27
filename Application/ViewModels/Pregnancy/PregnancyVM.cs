@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.ViewModels.Pregnancy
 {
-    public class PregnancyVM
+    public class PregnancyVM : BaseEntity
     {
         public int? AccountId { get; set; }
 
