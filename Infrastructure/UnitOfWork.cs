@@ -8,6 +8,7 @@ namespace Infrastructure
     {
         public readonly AppDbContext _context;
         public readonly IAccountRepo _accountRepo;
+
         public readonly IAccountMembershipRepo _accountMembershipRepo;
         public readonly IMembershipPlanRepo _membershipPlanRepo;
         public readonly IPaymentMethodRepo _paymentMethodRepo;

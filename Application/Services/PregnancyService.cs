@@ -31,9 +31,7 @@ namespace Application.Services
         {
             var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
             if (itemToDelete != null)
-            {
-                throw new KeyNotFoundException("Pregnancy not found");
-            }
+            
             _unitOfWork.PregnancyRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -55,10 +53,7 @@ namespace Application.Services
         public async Task SoftDeleteAsync(int id)
         {
             var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
-            if (itemToDelete != null)
-            {
-                throw new KeyNotFoundException("Pregnancy not found");
-            }
+            
             _unitOfWork.PregnancyRepo.SoftDelete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
 
