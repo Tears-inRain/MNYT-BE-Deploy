@@ -36,6 +36,7 @@ namespace Application.Services.Authentication
             var issuer = _configuration["Authentication:Jwt:Issuer"];
             var audience = _configuration["Authentication:Jwt:Audience"];
 
+            Console.WriteLine(secret);
             if (string.IsNullOrEmpty(secret))
             {
                 _logger.LogError("JWT Secret is not configured.");

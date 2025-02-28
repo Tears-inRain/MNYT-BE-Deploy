@@ -43,7 +43,8 @@ namespace WebAPI
             {
             }
 
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseMiddleware<GlobalExceptionMiddleware>();
 
             app.UseHttpsRedirection();
