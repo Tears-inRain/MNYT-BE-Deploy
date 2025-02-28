@@ -36,6 +36,7 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<PaymentMethod, PaymentMethodDTO>().ReverseMap();
             CreateMap<TogglePaymentMethodDTO, PaymentMethod>();
+        }
         public void MappingPregnancy()
         {
             CreateMap<PregnancyAddVM, Pregnancy>().ReverseMap();
