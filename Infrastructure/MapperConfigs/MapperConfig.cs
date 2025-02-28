@@ -1,10 +1,7 @@
 ﻿using Application.ViewModels.Authentication;
-<<<<<<< HEAD
 using Application.ViewModels.MembershipPlan;
 using Application.ViewModels.Payment;
-=======
 using Application.ViewModels.Pregnancy;
->>>>>>> origin/main
 using AutoMapper;
 using Domain.Entities;
 
@@ -15,12 +12,9 @@ namespace Infrastructure.MapperConfigs
         public MapperConfig()
         {
             MappingAccount();
-<<<<<<< HEAD
             MappingMembershipPlan();
             MappingPaymentMethod();
-=======
             MappingPregnancy();
->>>>>>> origin/main
         }
 
         public void MappingAccount()
@@ -30,7 +24,6 @@ namespace Infrastructure.MapperConfigs
                     .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Active"))
                     .ForMember(dest => dest.ExternalProvider, opt => opt.Condition(src => src.IsExternal));
         }
-<<<<<<< HEAD
 
         public void MappingMembershipPlan()
         {
@@ -43,12 +36,11 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<PaymentMethod, PaymentMethodDTO>().ReverseMap();
             CreateMap<TogglePaymentMethodDTO, PaymentMethod>();
-=======
         public void MappingPregnancy()
         {
             CreateMap<PregnancyAddVM, Pregnancy>().ReverseMap();
             CreateMap<PregnancyVM, Pregnancy>().ReverseMap();
->>>>>>> origin/main
+
         }
     }
 }
