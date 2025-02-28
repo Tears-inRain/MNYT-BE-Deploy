@@ -2,6 +2,7 @@
 using Application.ViewModels;
 using Application.ViewModels.Authentication;
 using Application.IServices.Authentication;
+using Domain.Entities;
 
 namespace WebAPI.Controllers
 {
@@ -79,6 +80,7 @@ namespace WebAPI.Controllers
                 JWTToken = result.JWTToken,
                 Id = result.Id,
                 UserName = result.UserName,
+                FullName = result.FullName,
                 Email = result.Email,
                 Role = result.Role,
                 Status = result.Status,
