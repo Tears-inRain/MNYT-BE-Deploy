@@ -24,20 +24,19 @@ namespace Application.Services
 
         public async Task<string> CreateVnPayPaymentAsync(int accountId, int membershipPlanId)
         {
-            // Lấy MembershipPlan từ DB
             var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membershipPlanId);
             if (plan == null)
             {
                 throw new Exception("Membership Plan not found.");
             }
 
-            // Tạo record AccountMembership
             var membership = new AccountMembership
             {
                 AccountId = accountId,
                 MembershipPlanId = plan.Id,
                 Amount = plan.Price,
                 Status = "Pending",
+                PaymentStatus = "Pending",
                 PaymentMethodId = (int)PaymentMethodEnum.VNPay,
                 StartDate = null,
                 EndDate = null
@@ -45,7 +44,6 @@ namespace Application.Services
             await _unitOfWork.AccountMembershipRepo.AddAsync(membership);
             await _unitOfWork.SaveChangesAsync();
 
-            // Tạo URL VNPAY, dùng membership.Id làm vnp_TxnRef
             var amount = plan.Price; // decimal
             var orderDesc = $"Payment for membership plan {plan.Name} (AccountMembership #{membership.Id})";
             var orderId = membership.Id.ToString();
@@ -73,22 +71,25 @@ namespace Application.Services
             if (membership == null)
                 return false;
 
+            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membership.MembershipPlanId ?? 0);
+            if (plan == null)
+                return false;
+
             // Check response code
             if (queryParams.TryGetValue("vnp_ResponseCode", out var responseCode))
             {
                 if (responseCode == "00")
                 {
-                    membership.Status = "Paid";
+                    membership.Status = "Active";
+                    membership.PaymentStatus = "Paid";
                     membership.StartDate = DateOnly.FromDateTime(DateTime.Now);
-
-                    // Ví dụ gói 120 ngày
-                    membership.EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(120));
+                    membership.EndDate = membership.StartDate.Value.AddDays(plan.Duration);
 
                     _logger.LogInformation($"Payment success for membership #{membershipId}");
                 }
                 else
                 {
-                    membership.Status = "Failed";
+                    membership.PaymentStatus = "Failed";
                     _logger.LogInformation($"Payment failed for membership #{membershipId} - Code: {responseCode}");
                 }
                 await _unitOfWork.SaveChangesAsync();

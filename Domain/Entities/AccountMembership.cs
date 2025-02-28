@@ -12,7 +12,9 @@ public partial class AccountMembership : BaseEntity
 
     public decimal? Amount { get; set; }
 
-    public string? Status { get; set; }
+    public string? Status { get; set; } // Trạng thái kích hoạt (Active, Expired)
+
+    public string? PaymentStatus { get; set; }
 
     public virtual Account? Account { get; set; }
 

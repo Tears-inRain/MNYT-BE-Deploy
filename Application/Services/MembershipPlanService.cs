@@ -34,7 +34,8 @@ namespace Application.Services
                 Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
-                Price = entity.Price
+                Price = entity.Price,
+                Duration = entity.Duration
             };
 
             return resultDto;
@@ -78,11 +79,7 @@ namespace Application.Services
             if (entity == null)
                 return false;
 
-            // Hard Delete
             _unitOfWork.MembershipPlanRepo.Delete(entity);
-
-            // Soft Delete
-            // _unitOfWork.MembershipPlanRepo.SoftDelete(entity);
 
             await _unitOfWork.SaveChangesAsync();
             return true;
