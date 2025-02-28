@@ -1,4 +1,4 @@
-﻿using Application;
+using Application;
 using Application.IRepos;
 using Application.IServices;
 using Application.IServices.Authentication;
@@ -48,6 +48,7 @@ namespace Infrastructure
             services.AddScoped<IMembershipPlanService, MembershipPlanService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
+            services.AddScoped<IFetusService, FetusService>();
             #endregion
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 

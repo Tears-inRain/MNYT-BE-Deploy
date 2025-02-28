@@ -1,6 +1,7 @@
 ﻿using Application.ViewModels.Authentication;
 using Application.ViewModels.MembershipPlan;
 using Application.ViewModels.Payment;
+using Application.ViewModels.Fetus;
 using Application.ViewModels.Pregnancy;
 using AutoMapper;
 using Domain.Entities;
@@ -15,6 +16,7 @@ namespace Infrastructure.MapperConfigs
             MappingMembershipPlan();
             MappingPaymentMethod();
             MappingPregnancy();
+            MappingFetus();
         }
 
         public void MappingAccount()
@@ -42,6 +44,11 @@ namespace Infrastructure.MapperConfigs
             CreateMap<PregnancyAddVM, Pregnancy>().ReverseMap();
             CreateMap<PregnancyVM, Pregnancy>().ReverseMap();
 
+        }
+        public void MappingFetus()
+        {
+            CreateMap<FetusAddVM, Fetus>().ReverseMap();
+            CreateMap<FetusVM, Fetus>().ReverseMap();
         }
     }
 }
