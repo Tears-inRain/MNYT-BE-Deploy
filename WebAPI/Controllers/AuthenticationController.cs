@@ -75,9 +75,14 @@ namespace WebAPI.Controllers
             var loginResponse = new LoginResponseDTO
             {
                 Success = true,
-                JWTToken = result.JWTToken,
                 Message = "Login successful.",
+                JWTToken = result.JWTToken,
+                Id = result.Id,
+                UserName = result.UserName,
+                Email = result.Email,
                 Role = result.Role,
+                Status = result.Status,
+                IsExternal = result.IsExternal
             };
 
             return Ok(new ApiResponse<LoginResponseDTO>

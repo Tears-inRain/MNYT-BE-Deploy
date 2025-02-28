@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateDate")
@@ -221,7 +221,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateOnly?>("PublishedDay")
                         .HasColumnType("date");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -264,7 +264,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("ReplyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateDate")
@@ -471,7 +471,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateOnly?>("StartDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -584,7 +584,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("PregnancyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("PaymentStatus")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

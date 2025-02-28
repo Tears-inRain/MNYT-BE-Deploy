@@ -84,7 +84,12 @@ namespace Application.Services.Authentication
                         Success = true,
                         Message = "Registration successful.",
                         JWTToken = accessToken,
-                        Role = account.Role
+                        Id = account.Id,
+                        UserName = account.UserName,
+                        Email = account.Email,
+                        Role = account.Role,
+                        Status = account.Status,
+                        IsExternal = account.IsExternal
                     };
                 }
                 catch (SqlException ex)
@@ -135,9 +140,14 @@ namespace Application.Services.Authentication
                 return new LoginResponseDTO
                 {
                     Success = true,
-                    JWTToken = accessToken,
                     Message = "Login successful.",
-                    Role = account.Role
+                    JWTToken = accessToken,
+                    Id = account.Id,
+                    UserName = account.UserName,
+                    Email = account.Email,
+                    Role = account.Role,
+                    Status = account.Status,
+                    IsExternal = account.IsExternal
                 };
             }
             catch (SqlException sqlEx)

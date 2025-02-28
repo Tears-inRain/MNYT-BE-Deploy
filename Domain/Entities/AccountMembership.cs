@@ -10,16 +10,16 @@ public partial class AccountMembership : BaseEntity
 
     public DateOnly? EndDate { get; set; }
 
-    public decimal? PaymentAmount { get; set; }
+    public decimal? Amount { get; set; }
+
+    public string? Status { get; set; } // Trạng thái kích hoạt (Active, Expired)
 
     public string? PaymentStatus { get; set; }
 
-    public string? PaymentMethod { get; set; }
-    
     public virtual Account? Account { get; set; }
 
     public virtual MembershipPlan? MembershipPlan { get; set; }
 
     public int? PaymentMethodId { get; set; }
-    public required PaymentMethod PaymentMethods { get; set; }
+    public virtual PaymentMethod PaymentMethods { get; set; }
 }

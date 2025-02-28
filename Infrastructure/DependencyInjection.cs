@@ -2,6 +2,7 @@
 using Application.IRepos;
 using Application.IServices;
 using Application.IServices.Authentication;
+using Application.PaymentProviders.VnPay;
 using Application.Services;
 using Application.Services.Authentication;
 using Application.Utils.Implementation;
@@ -43,6 +44,10 @@ namespace Infrastructure
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddScoped<IPregnancyService, PregnancyService>();
+            services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IMembershipPlanService, MembershipPlanService>();
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+            services.AddScoped<IAccountMembershipService, AccountMembershipService>();
             #endregion
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 

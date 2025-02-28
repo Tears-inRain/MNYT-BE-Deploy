@@ -16,7 +16,7 @@ public partial class Account : BaseEntity
 
     public string? Status { get; set; }
 
-    public bool? IsExternal { get; set; }
+    public bool IsExternal { get; set; } = false;
 
     public string? ExternalProvider { get; set; }
 
