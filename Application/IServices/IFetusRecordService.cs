@@ -11,8 +11,9 @@ namespace Application.IServices
     {
         Task AddAsync(FetusRecordAddVM fetusRecordAddVM);
         Task UpdateAsync(FetusRecordVM fetusRecordVM);
-        Task<FetusRecordVM> GetByIdAsync(int id);
-        void DeleteAsync(int id);
-        void SoftDelete(int id);
+        Task<IList<FetusRecordVM>> GetAllAsync();
+        Task<FetusRecordVM> GetAsync(int id);
+        Task DeleteAsync(int id);
+        Task SoftDelete(int id);
     }
 }

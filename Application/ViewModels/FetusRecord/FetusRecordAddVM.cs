@@ -21,5 +21,6 @@ namespace Application.ViewModels.FetusRecord
         public decimal? Hc { get; set; }
 
         public DateOnly? Date { get; set; } //input date
+        public int? FetusId { get; set; }
     }
 }

@@ -29,11 +29,17 @@ namespace WebAPI.Controllers
             await _fetusRecordService.UpdateAsync(fetusRecordVM);
             return Ok("Fetus Record Updated");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var items = await _fetusRecordService.GetAllAsync();
+            return Ok(items);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var fetusRecord = await _fetusRecordService.GetByIdAsync(id);
+            var fetusRecord = await _fetusRecordService.GetAsync(id);
             if (fetusRecord == null)
             {
                 return NotFound();
@@ -41,17 +47,17 @@ namespace WebAPI.Controllers
             return Ok(fetusRecord);
         }
 
-        [HttpDelete]
-        public async void DeleteAsync(int id)
+        [HttpDelete("{id}")]
+        public async Task DeleteAsync(int id)
         {
-            _fetusRecordService.DeleteAsync(id);
+            await _fetusRecordService.DeleteAsync(id);
             Ok("Fetus Record Delete");
         }
 
         [HttpDelete("soft")]
-        public async void SoftDelete(int id)
+        public async Task SoftDelete(int id)
         {
-            _fetusRecordService.SoftDelete(id);
+            await _fetusRecordService.SoftDelete(id);
             Ok("Soft");
         }
     }

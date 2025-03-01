@@ -1,4 +1,5 @@
 ﻿using Application.IServices;
+using Application.ViewModels.Fetus;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
@@ -28,22 +29,30 @@ namespace Application.Services
 
         }
 
-        public async void DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            var record = await _unitOfWork.FetusRecordRepo.GetAsync(id);
-            
-            _unitOfWork.FetusRecordRepo.Delete(record);
+            var itemToDelete = await _unitOfWork.FetusRecordRepo.GetAsync(id);
+
+
+            _unitOfWork.FetusRecordRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<FetusRecordVM> GetByIdAsync(int id)
+        public async Task<IList<FetusRecordVM>> GetAllAsync()
         {
-            var record = await _unitOfWork.FetusRecordRepo.GetAsync(id);
-            var convertedRecord = _mapper.Map<FetusRecordVM>(record);
-            return convertedRecord;
+            var items = await _unitOfWork.FetusRecordRepo.GetAllAsync();
+            var result = _mapper.Map<IList<FetusRecordVM>>(items);
+            return result;
         }
 
-        public async void SoftDelete(int id)
+        public async Task<FetusRecordVM> GetAsync(int id)
+        {
+            var item = await _unitOfWork.FetusRepo.GetAsync(id);
+            var result = _mapper.Map<FetusRecordVM>(item);
+            return result;
+        }
+
+        public async Task SoftDelete(int id)
         {
             var record = await _unitOfWork.FetusRecordRepo.GetAsync(id);
             

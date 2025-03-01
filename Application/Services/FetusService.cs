@@ -30,9 +30,9 @@ namespace Application.Services
         public async Task DeleteAsync(int id)
         {
             var itemToDelete = await _unitOfWork.FetusRepo.GetAsync(id);
-            if (itemToDelete != null)
+            
 
-                _unitOfWork.FetusRepo.Delete(itemToDelete);
+            _unitOfWork.FetusRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
 

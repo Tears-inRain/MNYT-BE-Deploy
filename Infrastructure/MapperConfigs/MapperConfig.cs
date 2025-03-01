@@ -51,6 +51,7 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<FetusAddVM, Fetus>().ReverseMap();
             CreateMap<FetusVM, Fetus>().ReverseMap();
+        }
         public void MappingFetusRecord()
         {
             CreateMap<FetusRecordAddVM, FetusRecord>().ReverseMap();
