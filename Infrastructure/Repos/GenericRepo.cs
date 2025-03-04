@@ -33,6 +33,21 @@ namespace Infrastructure.Repos
             return await _dbSet.ToListAsync();
         }
 
+        public virtual IQueryable<TModel> GetAllQueryable(string includeProperties = "")
+        {
+            IQueryable<TModel> query = _dbSet;
+
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
+            return query;
+        }
+
         public async Task<TModel> GetAsync(int id)
         {
             return await _dbSet.FindAsync(id);
