@@ -6,6 +6,7 @@ using Application.ViewModels.Pregnancy;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
+using Application.ViewModels.Accounts;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -27,6 +28,7 @@ namespace Infrastructure.MapperConfigs
                     .ForMember(dest => dest.Password, opt => opt.Ignore())
                     .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Active"))
                     .ForMember(dest => dest.ExternalProvider, opt => opt.Condition(src => src.IsExternal));
+            CreateMap<Account, AccountDTO>();
         }
 
         public void MappingMembershipPlan()
