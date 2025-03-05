@@ -51,6 +51,7 @@ namespace Infrastructure
             services.AddScoped<IFetusService, FetusService>();
             services.AddScoped<IFetusRecordService, FetusRecordService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IPregnancyStandardService, PregnancyStandardService>();
             #endregion
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 

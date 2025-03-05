@@ -29,7 +29,7 @@ namespace Application
 
         IPregnancyRepo PregnancyRepo { get; }
 
-        IPregnancyStandardRepo StandardRepo { get; }
+        IPregnancyStandardRepo PregnancyStandardRepo { get; }
 
         IScheduleTemplateRepo ScheduleTemplateRepo { get; }
 

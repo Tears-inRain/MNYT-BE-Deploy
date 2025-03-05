@@ -7,6 +7,7 @@ using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
 using Application.ViewModels.Accounts;
+using Application.ViewModels.PregnancyStandard;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -20,6 +21,12 @@ namespace Infrastructure.MapperConfigs
             MappingPregnancy();
             MappingFetus();
             MappingFetusRecord();
+            MappingPregnancyStandard();
+        }
+
+        private void MappingPregnancyStandard()
+        {
+            CreateMap<PregnancyStandardVM, PregnancyStandard>().ReverseMap();
         }
 
         public void MappingAccount()

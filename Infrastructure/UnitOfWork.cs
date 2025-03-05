@@ -49,7 +49,7 @@ namespace Infrastructure
 
         public IPregnancyRepo PregnancyRepo => _pregnancyRepo;
 
-        public IPregnancyStandardRepo StandardRepo => _standardRepo;
+        public IPregnancyStandardRepo PregnancyStandardRepo => _standardRepo;
 
         public IScheduleTemplateRepo ScheduleTemplateRepo => _scheduleTemplateRepo;
 
