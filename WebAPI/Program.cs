@@ -1,7 +1,12 @@
 
 using Application;
+using Application.IServices.CronJob;
+using Application.Jobs;
 using Application.PaymentProviders.VnPay;
+using Application.Services.CronJob;
+using Application.Settings;
 using Infrastructure;
+using Quartz;
 using WebAPI.Middlewares;
 namespace WebAPI
 {
@@ -20,16 +25,24 @@ namespace WebAPI
                                     .AllowAnyHeader());
             });
 
+            // register Job in DI
+            builder.Services.AddTransient<SendEmailJob>();
+
             // Add services to the container.
             builder.Configuration.AddEnvironmentVariables();
 
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.Configure<VnPaySettings>(builder.Configuration.GetSection("Vnpay"));
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
             builder.Services.AddControllers();
 
-            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddInfrastructureServicesAsync(builder.Configuration);
+            var schedulerService = builder.Services.BuildServiceProvider().GetRequiredService<IScheduleJobService>();
+            // config Quartz 
+            builder.Services.AddQuartz(q => schedulerService.ConfigureQuartz(q));
+            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSingleton<GlobalExceptionMiddleware>();

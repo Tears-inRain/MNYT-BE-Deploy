@@ -7,19 +7,28 @@ using Application.Services;
 using Application.Services.Authentication;
 using Application.Utils.Implementation;
 using Application.Utils.Interfaces;
+using Microsoft.Data.SqlClient;
 using Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Quartz;
+using Application.IServices.CronJob;
+using Application.Services.CronJob;
+using Application.Settings;
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration config)
+        public static async Task<IServiceCollection> AddInfrastructureServicesAsync(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
+            services.AddTransient<IEmailService, EmailService>();
+            services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
 
             #region repo config
             services.AddScoped<IAccountRepo, AccountRepo>();
@@ -50,10 +59,26 @@ namespace Infrastructure
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
             services.AddScoped<IFetusService, FetusService>();
             services.AddScoped<IFetusRecordService, FetusRecordService>();
+            services.AddScoped<IScheduleUserService, ScheduleUserService>();
+            services.AddScoped<IScheduleJobService, ScheduleJobService>();
             #endregion
-            services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
 
+
+            #region quartz config
+            var quartzBuilder = Host.CreateDefaultBuilder()
+                .ConfigureServices((cxt, services) =>
+                {
+                    services.AddQuartz();
+                    services.AddQuartzHostedService(opt =>
+                    {
+                        opt.WaitForJobsToComplete = true;
+                    });
+                }).Build();
+
+            // will block until the last running job completes
+            await quartzBuilder.RunAsync();
             return services;
+            #endregion
 
         }
     }

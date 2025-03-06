@@ -6,6 +6,7 @@ using Application.ViewModels.Pregnancy;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
+using Application.ViewModels.ScheduleUser;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -19,6 +20,7 @@ namespace Infrastructure.MapperConfigs
             MappingPregnancy();
             MappingFetus();
             MappingFetusRecord();
+            MappingScheduleUser();
         }
 
         public void MappingAccount()
@@ -56,6 +58,11 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<FetusRecordAddVM, FetusRecord>().ReverseMap();
             CreateMap<FetusRecordVM, FetusRecord>().ReverseMap();
+        }
+        public void MappingScheduleUser()
+        {
+            CreateMap<ScheduleUserAddVM,  ScheduleUser>().ReverseMap();
+            CreateMap<ScheduleUserVM,  ScheduleUser>().ReverseMap();
         }
     }
 }
