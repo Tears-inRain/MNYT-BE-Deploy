@@ -16,14 +16,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(PregnancyStandardVM item)
+        public async Task<IActionResult> AddAsync(PregnacyStandardAddVM item)
         {
             await _pregnancyStandardService.AddSync(item);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(PregnancyStandardVM item)
+        public async Task<IActionResult> UpdateAsync(PregnacyStandardAddVM item)
         {
             await _pregnancyStandardService.UpdateAsync(item);
             return Ok();

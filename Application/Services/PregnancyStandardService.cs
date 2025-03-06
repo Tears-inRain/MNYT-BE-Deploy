@@ -16,7 +16,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task AddSync(PregnancyStandardVM pregnancyStandardAddVM)
+        public async Task AddSync(PregnacyStandardAddVM pregnancyStandardAddVM)
         {
             var pregnancyStandard = _mapper.Map<PregnancyStandard>(pregnancyStandardAddVM);
             await _unitOfWork.PregnancyStandardRepo.AddAsync(pregnancyStandard);
@@ -51,7 +51,7 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(PregnancyStandardVM pregnancyVM)
+        public Task UpdateAsync(PregnacyStandardAddVM pregnancyVM)
         {
             var itemToUpdate = _mapper.Map<PregnancyStandard>(pregnancyVM);
             _unitOfWork.PregnancyStandardRepo.Update(itemToUpdate);
