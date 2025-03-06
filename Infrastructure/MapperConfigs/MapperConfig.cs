@@ -27,6 +27,7 @@ namespace Infrastructure.MapperConfigs
         private void MappingPregnancyStandard()
         {
             CreateMap<PregnancyStandardVM, PregnancyStandard>().ReverseMap();
+            CreateMap<PregnacyStandardAddVM, PregnancyStandard>().ReverseMap();
         }
 
         public void MappingAccount()
