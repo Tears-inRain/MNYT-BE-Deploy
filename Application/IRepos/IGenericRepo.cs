@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,8 +15,9 @@ namespace Application.IRepos
         void Delete(TModel model);
         void SoftDelete(TModel model);
         Task<IEnumerable<TModel>> GetAllAsync();
-        IQueryable<TModel> GetAllQueryable(string includeProperties = "");
         Task<TModel> GetAsync(int id);
-
+        Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "");
+        IQueryable<TModel> GetAllQueryable(string includeProperties = "");
+        Task<TModel> GetAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "");
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,32 @@ namespace Infrastructure.Repos
             return await _dbSet.ToListAsync();
         }
 
+        public async Task<TModel> GetAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public void SoftDelete(TModel model)
+        {
+            model.IsDeleted = true;
+        }
+
+        public void Update(TModel model)
+        {
+            _dbSet.Update(model);
+        }
+        public virtual async Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "")
+        {
+            IQueryable<TModel> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty.Trim());
+            }
+
+            return await query.ToListAsync();
+        }
+
         public virtual IQueryable<TModel> GetAllQueryable(string includeProperties = "")
         {
             IQueryable<TModel> query = _dbSet;
@@ -48,19 +75,19 @@ namespace Infrastructure.Repos
             return query;
         }
 
-        public async Task<TModel> GetAsync(int id)
+        public async Task<TModel> GetAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "")
         {
-            return await _dbSet.FindAsync(id);
-        }
+            IQueryable<TModel> query = _dbSet;
 
-        public void SoftDelete(TModel model)
-        {
-            model.IsDeleted = true;
-        }
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
 
-        public void Update(TModel model)
-        {
-            _dbSet.Update(model);
+            return await query.FirstOrDefaultAsync(predicate);
         }
     }
 }
