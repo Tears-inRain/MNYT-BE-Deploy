@@ -18,6 +18,7 @@ namespace Application.ViewModels.ScheduleUser
         public DateOnly? Date { get; set; }
 
         public string? Note { get; set; }
+
         public int? PregnancyId { get; set; }
     }
 }
