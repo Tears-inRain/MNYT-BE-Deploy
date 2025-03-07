@@ -51,6 +51,7 @@ namespace Application.Services
                 return false;
 
             paymentMethod.IsActive = isActive;
+            _unitOfWork.PaymentMethodRepo.Update(paymentMethod);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }

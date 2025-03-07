@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +47,47 @@ namespace Infrastructure.Repos
         public void Update(TModel model)
         {
             _dbSet.Update(model);
+        }
+        public virtual async Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "")
+        {
+            IQueryable<TModel> query = _dbSet;
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty.Trim());
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public virtual IQueryable<TModel> GetAllQueryable(string includeProperties = "")
+        {
+            IQueryable<TModel> query = _dbSet;
+
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
+            return query;
+        }
+
+        public async Task<TModel> GetAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "")
+        {
+            IQueryable<TModel> query = _dbSet;
+
+            if (!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty.Trim());
+                }
+            }
+
+            return await query.FirstOrDefaultAsync(predicate);
         }
     }
 }

@@ -20,5 +20,10 @@ namespace Infrastructure.Repos
 
             return account;
         }
+
+        public async Task<bool> AnyAsync(Expression<Func<Account, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
     }
 }

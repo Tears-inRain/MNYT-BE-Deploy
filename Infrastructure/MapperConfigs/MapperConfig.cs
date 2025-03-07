@@ -7,6 +7,8 @@ using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
 using Application.ViewModels.ScheduleUser;
+using Application.ViewModels.Accounts;
+using Application.ViewModels.PregnancyStandard;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -21,6 +23,13 @@ namespace Infrastructure.MapperConfigs
             MappingFetus();
             MappingFetusRecord();
             MappingScheduleUser();
+            MappingPregnancyStandard();
+        }
+
+        private void MappingPregnancyStandard()
+        {
+            CreateMap<PregnancyStandardVM, PregnancyStandard>().ReverseMap();
+            CreateMap<PregnacyStandardAddVM, PregnancyStandard>().ReverseMap();
         }
 
         public void MappingAccount()
@@ -29,6 +38,7 @@ namespace Infrastructure.MapperConfigs
                     .ForMember(dest => dest.Password, opt => opt.Ignore())
                     .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Active"))
                     .ForMember(dest => dest.ExternalProvider, opt => opt.Condition(src => src.IsExternal));
+            CreateMap<Account, AccountDTO>();
         }
 
         public void MappingMembershipPlan()
