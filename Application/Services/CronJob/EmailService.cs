@@ -17,6 +17,7 @@ namespace Application.Services.CronJob
             _emailSettings = emailSettings.Value;
             _logger = logger;
         }
+
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             var email = new MimeMessage();
