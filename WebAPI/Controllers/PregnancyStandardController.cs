@@ -16,9 +16,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(PregnacyStandardAddVM item)
+        public async Task<IActionResult> AddAsync(List<PregnacyStandardAddVM> items)
         {
-            await _pregnancyStandardService.AddSync(item);
+            foreach(var item in items)
+            {
+                await _pregnancyStandardService.AddSync(item);
+            }
             return Ok();
         }
 
