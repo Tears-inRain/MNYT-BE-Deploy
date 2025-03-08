@@ -8,6 +8,7 @@ using AutoMapper;
 using Domain.Entities;
 using Application.ViewModels.Accounts;
 using Application.ViewModels.PregnancyStandard;
+using Application.ViewModels.Blog;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -22,6 +23,7 @@ namespace Infrastructure.MapperConfigs
             MappingFetus();
             MappingFetusRecord();
             MappingPregnancyStandard();
+            MappingBlog();
         }
 
         private void MappingPregnancyStandard()
@@ -65,6 +67,22 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<FetusRecordAddVM, FetusRecord>().ReverseMap();
             CreateMap<FetusRecordVM, FetusRecord>().ReverseMap();
+        }
+
+        public void MappingBlog()
+        {
+            CreateMap<CreateBlogPostDTO, BlogPost>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Draft"));
+
+            CreateMap<BlogPost, ReadBlogPostDTO>()
+                .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author != null ? src.Author.UserName : null))
+                .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.BlogLikes.Count))
+                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
+                .ForMember(dest => dest.BookmarkCount, opt => opt.MapFrom(src => src.BlogBookmarks.Count));
+
+            CreateMap<CreateCommentDTO, Comment>();
+            CreateMap<Comment, ReadCommentDTO>()
+                .ForMember(dest => dest.AccountUserName, opt => opt.MapFrom(src => src.Account != null ? src.Account.UserName : null));
         }
     }
 }
