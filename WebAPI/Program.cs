@@ -31,7 +31,6 @@ namespace WebAPI
 
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.Configure<VnPaySettings>(builder.Configuration.GetSection("Vnpay"));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
             builder.Services.AddControllers();
