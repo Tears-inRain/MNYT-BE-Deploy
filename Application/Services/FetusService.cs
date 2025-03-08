@@ -14,6 +14,7 @@ namespace Application.Services
     public class FetusService : IFetusService
     {
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IMapper _mapper; 
         public FetusService(IUnitOfWork unitOfWork, IMapper mapper)
         {

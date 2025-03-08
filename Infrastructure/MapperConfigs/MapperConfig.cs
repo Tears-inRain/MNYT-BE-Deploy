@@ -6,6 +6,7 @@ using Application.ViewModels.Pregnancy;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
+using Application.ViewModels.ScheduleUser;
 using Application.ViewModels.Accounts;
 using Application.ViewModels.PregnancyStandard;
 using Application.ViewModels.Blog;
@@ -22,6 +23,7 @@ namespace Infrastructure.MapperConfigs
             MappingPregnancy();
             MappingFetus();
             MappingFetusRecord();
+            MappingScheduleUser();
             MappingPregnancyStandard();
             MappingBlog();
         }
@@ -29,6 +31,7 @@ namespace Infrastructure.MapperConfigs
         private void MappingPregnancyStandard()
         {
             CreateMap<PregnancyStandardVM, PregnancyStandard>().ReverseMap();
+            CreateMap<PregnacyStandardAddVM, PregnancyStandard>().ReverseMap();
         }
 
         public void MappingAccount()
@@ -67,6 +70,11 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<FetusRecordAddVM, FetusRecord>().ReverseMap();
             CreateMap<FetusRecordVM, FetusRecord>().ReverseMap();
+        }
+        public void MappingScheduleUser()
+        {
+            CreateMap<ScheduleUserAddVM,  ScheduleUser>().ReverseMap();
+            CreateMap<ScheduleUserVM,  ScheduleUser>().ReverseMap();
         }
 
         public void MappingBlog()
