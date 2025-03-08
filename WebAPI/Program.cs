@@ -38,7 +38,7 @@ namespace WebAPI
 
             builder.Services.AddControllers();
 
-            builder.Services.AddInfrastructureServicesAsync(builder.Configuration).Wait();
+            builder.Services.AddInfrastructureServicesAsync(builder.Configuration);
             var schedulerService = builder.Services.BuildServiceProvider().GetRequiredService<IScheduleJobService>();
             // config Quartz 
             builder.Services.AddQuartz(q => schedulerService.ConfigureQuartz(q));
