@@ -75,7 +75,7 @@ namespace Infrastructure.Repos
             return query;
         }
 
-        public async Task<TModel> GetAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "")
+        public async Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "")
         {
             IQueryable<TModel> query = _dbSet;
 

@@ -49,7 +49,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Updating postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.GetAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -80,7 +80,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Deleting postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.GetAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -107,7 +107,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Publishing postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.GetAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found", postId);

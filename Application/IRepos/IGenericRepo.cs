@@ -18,6 +18,6 @@ namespace Application.IRepos
         Task<TModel> GetAsync(int id);
         Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "");
         IQueryable<TModel> GetAllQueryable(string includeProperties = "");
-        Task<TModel> GetAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "");
+        Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "");
     }
 }
