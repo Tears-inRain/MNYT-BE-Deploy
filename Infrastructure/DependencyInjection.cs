@@ -66,6 +66,7 @@ namespace Infrastructure
             services.AddScoped<IBlogPostService, BlogPostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInteractionService, InteractionService>();
+            services.AddScoped<IMediaService, MediaService>();
             #endregion
 
 

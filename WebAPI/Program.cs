@@ -1,9 +1,7 @@
 
-using Application;
 using Application.IServices.CronJob;
 using Application.Jobs;
 using Application.PaymentProviders.VnPay;
-using Application.Services.CronJob;
 using Application.Settings;
 using Infrastructure;
 using Quartz;
