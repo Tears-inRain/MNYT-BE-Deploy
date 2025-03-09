@@ -10,6 +10,7 @@ using Application.ViewModels.ScheduleUser;
 using Application.ViewModels.Accounts;
 using Application.ViewModels.PregnancyStandard;
 using Application.ViewModels.Blog;
+using Application.ViewModels.Media;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -26,6 +27,7 @@ namespace Infrastructure.MapperConfigs
             MappingScheduleUser();
             MappingPregnancyStandard();
             MappingBlog();
+            MappingMedia();
         }
 
         private void MappingPregnancyStandard()
@@ -91,6 +93,12 @@ namespace Infrastructure.MapperConfigs
             CreateMap<CreateCommentDTO, Comment>();
             CreateMap<Comment, ReadCommentDTO>()
                 .ForMember(dest => dest.AccountUserName, opt => opt.MapFrom(src => src.Account != null ? src.Account.UserName : null));
+        }
+        public void MappingMedia()
+        {
+            CreateMap<CreateMediaDTO, Media>();
+            CreateMap<MediaDTO, Media>();
+            CreateMap<Media, MediaDTO>();
         }
     }
 }

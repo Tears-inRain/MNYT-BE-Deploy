@@ -66,8 +66,10 @@ namespace Infrastructure
             services.AddScoped<IBlogPostService, BlogPostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInteractionService, InteractionService>();
+            services.AddScoped<IMediaService, MediaService>();
             #endregion
 
+            services.Configure<VnPaySettings>(options => config.GetSection("Vnpay").Bind(options));
 
             #region quartz config
             var quartzBuilder = Host.CreateDefaultBuilder()

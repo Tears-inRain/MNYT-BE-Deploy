@@ -1,9 +1,7 @@
 
-using Application;
 using Application.IServices.CronJob;
 using Application.Jobs;
 using Application.PaymentProviders.VnPay;
-using Application.Services.CronJob;
 using Application.Settings;
 using Infrastructure;
 using Quartz;
@@ -33,7 +31,6 @@ namespace WebAPI
 
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.Configure<VnPaySettings>(builder.Configuration.GetSection("Vnpay"));
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
             builder.Services.AddControllers();
