@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Application.PaymentProviders.VnPay
 {
-    public class VnPayService : IVnPayService
+    public class VnPayLibrary : IVnPayLibrary
     {
         private readonly VnPaySettings _settings;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public VnPayService(IOptions<VnPaySettings> options, IHttpContextAccessor httpContextAccessor)
+        public VnPayLibrary(IOptions<VnPaySettings> options, IHttpContextAccessor httpContextAccessor)
         {
             _settings = options.Value;
             _httpContextAccessor = httpContextAccessor;

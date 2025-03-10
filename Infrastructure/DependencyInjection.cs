@@ -57,6 +57,7 @@ namespace Infrastructure
             services.AddScoped<IMembershipPlanService, MembershipPlanService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
+            services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<IFetusService, FetusService>();
             services.AddScoped<IFetusRecordService, FetusRecordService>();
             services.AddScoped<IScheduleUserService, ScheduleUserService>();
