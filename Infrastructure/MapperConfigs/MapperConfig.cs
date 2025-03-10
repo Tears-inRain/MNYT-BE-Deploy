@@ -101,6 +101,7 @@ namespace Infrastructure.MapperConfigs
             CreateMap<CreateMediaDTO, Media>();
             CreateMap<MediaDTO, Media>();
             CreateMap<Media, MediaDTO>();
+        }
         public void MappingScheduleTemplate()
         {
             CreateMap<ScheduleTemplateAddVM, ScheduleTemplate>().ReverseMap();
