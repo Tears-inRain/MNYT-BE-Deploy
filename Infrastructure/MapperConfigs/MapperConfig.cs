@@ -11,6 +11,7 @@ using Application.ViewModels.Accounts;
 using Application.ViewModels.PregnancyStandard;
 using Application.ViewModels.Blog;
 using Application.ViewModels.Media;
+using Application.ViewModels.ScheduleTemplate;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -28,6 +29,7 @@ namespace Infrastructure.MapperConfigs
             MappingPregnancyStandard();
             MappingBlog();
             MappingMedia();
+            MappingScheduleTemplate();
         }
 
         private void MappingPregnancyStandard()
@@ -99,6 +101,11 @@ namespace Infrastructure.MapperConfigs
             CreateMap<CreateMediaDTO, Media>();
             CreateMap<MediaDTO, Media>();
             CreateMap<Media, MediaDTO>();
+        }
+        public void MappingScheduleTemplate()
+        {
+            CreateMap<ScheduleTemplateAddVM, ScheduleTemplate>().ReverseMap();
+            CreateMap<ScheduleTemplateVM, ScheduleTemplate>().ReverseMap();
         }
     }
 }

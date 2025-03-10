@@ -9,7 +9,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class FetusController : ControllerBase
     {
-        IFetusService _fetusService;
+        private readonly IFetusService _fetusService;
 
         public FetusController(IFetusService fetusService)
         {
