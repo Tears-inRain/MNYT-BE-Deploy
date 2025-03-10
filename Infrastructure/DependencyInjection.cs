@@ -53,7 +53,7 @@ namespace Infrastructure
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddScoped<IPregnancyService, PregnancyService>();
-            services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IVnPayLibrary, VnPayLibrary>();
             services.AddScoped<IMembershipPlanService, MembershipPlanService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
