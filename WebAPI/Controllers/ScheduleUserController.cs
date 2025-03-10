@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ScheduleUserController : ControllerBase
     {
-        IScheduleUserService _scheduleUserService;
+        private readonly IScheduleUserService _scheduleUserService;
         public ScheduleUserController(IScheduleUserService service)
         {
             _scheduleUserService = service;
@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
 
             return Ok();
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await _scheduleUserService.DeleteAsync(id);
