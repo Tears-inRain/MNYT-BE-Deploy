@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.PaymentProviders.VnPay
 {
-    public interface IVnPayService
+    public interface IVnPayLibrary
     {
         string CreatePaymentUrl(decimal amount, string orderDesc, string orderId);
         bool VerifySignature(IDictionary<string, string> queryParams);

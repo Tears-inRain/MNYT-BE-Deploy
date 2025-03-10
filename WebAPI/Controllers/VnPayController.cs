@@ -9,11 +9,11 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     public class VnPayController : ControllerBase
     {
-        private readonly IAccountMembershipService _membershipService;
+        private readonly IVnPayService _vnPayService;
 
-        public VnPayController(IAccountMembershipService membershipService)
+        public VnPayController(IVnPayService vnPayService)
         {
-            _membershipService = membershipService;
+            _vnPayService = vnPayService;
         }
 
         [HttpPost("CreatePayment")]
@@ -30,7 +30,7 @@ namespace WebAPI.Controllers
 
             try
             {
-                var paymentUrl = await _membershipService.CreateVnPayPaymentAsync(dto.AccountId, dto.MembershipPlanId);
+                var paymentUrl = await _vnPayService.CreateVnPayPaymentAsync(dto.AccountId, dto.MembershipPlanId);
 
                 return Ok(ApiResponse<string>.SuccessResponse(
                     paymentUrl,
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
                 queryParams[q.Key] = q.Value;
             }
 
-            var success = await _membershipService.HandleVnPayCallbackAsync(queryParams);
+            var success = await _vnPayService.HandleVnPayCallbackAsync(queryParams);
             if (!success)
             {
                 return BadRequest(ApiResponse<string>.FailureResponse(

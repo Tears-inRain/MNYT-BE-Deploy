@@ -1,5 +1,5 @@
 ﻿using Application.IServices;
-using Application.PaymentProviders.VnPay;
+using Domain;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.Extensions.Logging;
@@ -9,26 +9,34 @@ namespace Application.Services
     public class AccountMembershipService : IAccountMembershipService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IVnPayService _vnPayService;
         private readonly ILogger<AccountMembershipService> _logger;
 
-        public AccountMembershipService(
-            IUnitOfWork unitOfWork,
-            IVnPayService vnPayService,
-            ILogger<AccountMembershipService> logger)
+        public AccountMembershipService(IUnitOfWork unitOfWork,
+                                        ILogger<AccountMembershipService> logger)
         {
             _unitOfWork = unitOfWork;
-            _vnPayService = vnPayService;
             _logger = logger;
         }
 
-        public async Task<string> CreateVnPayPaymentAsync(int accountId, int membershipPlanId)
+        public async Task<AccountMembership?> GetActiveMembershipAsync(int accountId)
         {
+            var activeMem = await _unitOfWork.AccountMembershipRepo.FindOneAsync(
+                m => m.AccountId == accountId && m.Status == "Active"
+            );
+            return activeMem;
+        }
+
+        public async Task<AccountMembership> CreateNewMembershipAsync(int accountId, int membershipPlanId)
+        {
+            var currentActive = await GetActiveMembershipAsync(accountId);
+            if (currentActive != null)
+            {
+                throw new Exception("You already have an active membership. Cannot register a new one.");
+            }
+
             var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membershipPlanId);
             if (plan == null)
-            {
-                throw new Exception("Membership Plan not found.");
-            }
+                throw new Exception("MembershipPlan not found.");
 
             var membership = new AccountMembership
             {
@@ -37,66 +45,53 @@ namespace Application.Services
                 Amount = plan.Price,
                 Status = "Pending",
                 PaymentStatus = "Pending",
-                PaymentMethodId = (int)PaymentMethodEnum.VNPay,
+                PaymentMethodId = (int)PaymentMethodEnum.VNPAY,
                 StartDate = null,
-                EndDate = null
+                EndDate = null,
             };
             await _unitOfWork.AccountMembershipRepo.AddAsync(membership);
             await _unitOfWork.SaveChangesAsync();
 
-            var amount = plan.Price; // decimal
-            var orderDesc = $"Payment for membership plan {plan.Name} (AccountMembership #{membership.Id})";
-            var orderId = membership.Id.ToString();
-            var paymentUrl = _vnPayService.CreatePaymentUrl(amount, orderDesc, orderId);
-
-            return paymentUrl;
+            _logger.LogInformation("Created new membership #{MembershipId} for account #{AccountId}", membership.Id, accountId);
+            return membership;
         }
 
-        public async Task<bool> HandleVnPayCallbackAsync(IDictionary<string, string> queryParams)
+        public async Task<AccountMembership> UpgradeMembershipAsync(int accountId, int newPlanId)
         {
-            var validSignature = _vnPayService.VerifySignature(queryParams);
-            if (!validSignature)
+            var current = await GetActiveMembershipAsync(accountId);
+            if (current == null)
             {
-                _logger.LogWarning("Invalid signature from VNPAY.");
-                return false;
+                throw new Exception("You don't have an active membership to upgrade.");
             }
 
-            // Lấy vnp_ResponseCode, vnp_TxnRef
-            if (!queryParams.TryGetValue("vnp_TxnRef", out var orderIdStr))
-                return false;
-            if (!int.TryParse(orderIdStr, out int membershipId))
-                return false;
+            var newPlan = await _unitOfWork.MembershipPlanRepo.GetAsync(newPlanId);
+            if (newPlan == null)
+                throw new Exception("New MembershipPlan not found.");
 
-            var membership = await _unitOfWork.AccountMembershipRepo.GetAsync(membershipId);
-            if (membership == null)
-                return false;
-
-            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membership.MembershipPlanId ?? 0);
-            if (plan == null)
-                return false;
-
-            // Check response code
-            if (queryParams.TryGetValue("vnp_ResponseCode", out var responseCode))
+            if (newPlan.Price <= (current.Amount ?? 0))
             {
-                if (responseCode == "00")
-                {
-                    membership.Status = "Active";
-                    membership.PaymentStatus = "Paid";
-                    membership.StartDate = DateOnly.FromDateTime(DateTime.Now);
-                    membership.EndDate = membership.StartDate.Value.AddDays(plan.Duration);
-
-                    _logger.LogInformation($"Payment success for membership #{membershipId}");
-                }
-                else
-                {
-                    membership.PaymentStatus = "Failed";
-                    _logger.LogInformation($"Payment failed for membership #{membershipId} - Code: {responseCode}");
-                }
-                await _unitOfWork.SaveChangesAsync();
-                return true;
+                throw new Exception("Cannot downgrade or upgrade to a cheaper or equal plan.");
             }
+            var extraCost = newPlan.Price - (current.Amount ?? 0);
 
-            return false;
+            var membership = new AccountMembership
+            {
+                AccountId = accountId,
+                MembershipPlanId = newPlan.Id,
+                Amount = extraCost,
+                Status = "Pending",
+                PaymentStatus = "Pending",
+                PaymentMethodId = (int)PaymentMethodEnum.VNPAY,
+                StartDate = null,
+                EndDate = null,
+            };
+            await _unitOfWork.AccountMembershipRepo.AddAsync(membership);
+            await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Created membership for upgrade #{NewMemId} from old membership #{OldMemId} for account #{AccountId}",
+                membership.Id, current.Id, accountId);
+
+            return membership;
         }
     }
 }
