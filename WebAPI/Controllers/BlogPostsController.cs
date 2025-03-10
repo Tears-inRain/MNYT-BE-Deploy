@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Application.IServices;
 using Application.ViewModels.Blog;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostService _blogService;
@@ -18,6 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPostById(int postId)
         {
             var result = await _blogService.GetBlogPostByIdAsync(postId);
@@ -30,6 +33,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("all")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPosts()
         {
             var posts = await _blogService.GetAllPostsAsync();
@@ -40,6 +44,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("all-paginated")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPostsPaginated([FromQuery] QueryParameters query)
         {
             var result = await _blogService.GetAllPostsPaginatedAsync(query);
@@ -49,6 +54,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreatePost([FromQuery] int authorId, [FromBody] CreateBlogPostDTO dto)
         {
             var created = await _blogService.CreateBlogPostAsync(authorId, dto);
@@ -56,6 +62,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdatePost(int postId, [FromQuery] int accountId, [FromBody] UpdateBlogPostDTO dto)
         {
             var updated = await _blogService.UpdateBlogPostAsync(postId, dto, accountId);
@@ -68,6 +75,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeletePost(int postId, [FromQuery] int accountId)
         {
             var success = await _blogService.DeleteBlogPostAsync(postId, accountId);
@@ -80,6 +88,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("{postId}/publish")]
+        [AllowAnonymous]
         public async Task<IActionResult> PublishPost(int postId, [FromQuery] int accountId)
         {
             var success = await _blogService.PublishBlogPostAsync(postId, accountId);

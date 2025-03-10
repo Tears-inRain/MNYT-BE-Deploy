@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
 using Application.IServices;
 using Application.ViewModels.Accounts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -18,6 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -37,6 +40,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -51,6 +55,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("paged")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaginated([FromQuery] QueryParameters query)
         {
             try
@@ -67,6 +72,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateAccountDTO updateDto)
         {
             if (!ModelState.IsValid)
@@ -93,6 +99,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("ban/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> BanAccount(int id)
         {
             try
@@ -112,6 +119,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPatch("unban/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> UnbanAccount(int id)
         {
             try

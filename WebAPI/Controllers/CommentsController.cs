@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels.Blog;
 using Application.IServices;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -18,6 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> AddComment(int accountId, [FromBody] CreateCommentDTO dto)
         {
             var comment = await _commentService.AddCommentAsync(accountId, dto);
@@ -29,6 +32,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("post/{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCommentsByPost(int postId, [FromQuery] QueryParameters query)
         {
             var comments = await _commentService.GetCommentsByPostAsync(postId, query);
@@ -36,6 +40,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{commentId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteComment(int commentId, int accountId)
         {
             var success = await _commentService.DeleteCommentAsync(commentId, accountId);

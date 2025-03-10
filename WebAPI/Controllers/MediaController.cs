@@ -2,11 +2,13 @@
 using Application.ViewModels.Media;
 using Application.IServices;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class MediaController : ControllerBase
     {
         private readonly IMediaService _mediaService;
@@ -17,6 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromBody] CreateMediaDTO mediaDto)
         {
             if (!ModelState.IsValid)
@@ -44,6 +47,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -70,6 +74,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -89,6 +94,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<IActionResult> Update([FromBody] MediaDTO mediaDto)
         {
             if (!ModelState.IsValid)
@@ -123,6 +129,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
         {
             try
