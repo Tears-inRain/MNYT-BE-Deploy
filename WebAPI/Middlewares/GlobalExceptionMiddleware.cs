@@ -22,7 +22,6 @@ namespace WebAPI.Middlewares
                 //var hashMap = new Dictionary<string, string>();
                 //hashMap[ex.ErrorCode] = ex.Message;
 
-
                 await context.Response.WriteAsJsonAsync(new
                 {
                     ex.ErrorCode,
