@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
     [Authorize]
     public class PregnancyController : ControllerBase
     {
-        IPregnancyService _pregnancyservice;
+        private readonly IPregnancyService _pregnancyservice;
 
         public PregnancyController(IPregnancyService service)
         {

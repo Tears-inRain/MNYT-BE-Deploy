@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
     [Authorize]
     public class FetusController : ControllerBase
     {
-        IFetusService _fetusService;
+        private readonly IFetusService _fetusService;
 
         public FetusController(IFetusService fetusService)
         {
