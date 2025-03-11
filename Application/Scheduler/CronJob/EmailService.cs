@@ -4,9 +4,8 @@ using MimeKit;
 using Application.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
-using Application.IServices.CronJob;
 
-namespace Application.Services.CronJob
+namespace Application.Scheduler.CronJob
 {
     public class EmailService : IEmailService
     {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
-namespace Application.Jobs
+namespace Application.Scheduler.Jobs
 {
     [DisallowConcurrentExecution]
     public class CheckAccountMembershipJob : IJob

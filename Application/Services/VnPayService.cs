@@ -1,5 +1,4 @@
 ﻿using Application.IServices;
-using Application.PaymentProviders.VnPay;
 using Domain;
 using Domain.Entities;
 using Microsoft.Extensions.Logging;

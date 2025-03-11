@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
-using Application.IServices;
 using Application.ViewModels.Payment;
+using Application.IServices;
 
 namespace WebAPI.Controllers
 {

@@ -26,7 +26,6 @@ namespace Application.Services
             FetusRecord record = _mapper.Map<FetusRecord>(fetusRecordAddVM);
             await _unitOfWork.FetusRecordRepo.AddAsync(record);
             await _unitOfWork.SaveChangesAsync();
-
         }
 
         public async Task DeleteAsync(int id)

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IServices.CronJob
+namespace Application.Scheduler.CronJob
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string to,  string subject, string body);
+        Task SendEmailAsync(string to, string subject, string body);
     }
 }

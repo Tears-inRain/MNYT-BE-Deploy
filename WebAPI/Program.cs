@@ -1,5 +1,5 @@
-using Application.IServices.CronJob;
-using Application.Jobs;
+using Application.Scheduler;
+using Application.Scheduler.Jobs;
 using Application.Settings;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -69,10 +69,10 @@ namespace WebAPI
             builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             builder.Services.AddInfrastructureServicesAsync(builder.Configuration);
-            var schedulerService = builder.Services.BuildServiceProvider().GetRequiredService<IScheduleJobService>();
+
             // config Quartz 
-            builder.Services.AddQuartz(q => schedulerService.ConfigureQuartz(q));
-            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+            builder.Services.AddQuartzJobs();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSingleton<GlobalExceptionMiddleware>();

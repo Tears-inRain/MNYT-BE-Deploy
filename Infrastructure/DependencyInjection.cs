@@ -1,10 +1,7 @@
 using Application;
 using Application.IRepos;
-using Application.IServices;
-using Application.IServices.Authentication;
 using Application.PaymentProviders.VnPay;
 using Application.Services;
-using Application.Services.Authentication;
 using Application.Utils.Implementation;
 using Application.Utils.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -14,9 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
-using Application.IServices.CronJob;
-using Application.Services.CronJob;
 using Application.Settings;
+using Application.Authentication;
+using Application.Authentication.Interface;
+using Application.Scheduler.JobSetup;
+using Application.IServices;
+using Application.Scheduler.JobSetup.Interfaces;
+using Application.Scheduler.CronJob;
 
 namespace Infrastructure
 {
@@ -61,7 +62,8 @@ namespace Infrastructure
             services.AddScoped<IFetusService, FetusService>();
             services.AddScoped<IFetusRecordService, FetusRecordService>();
             services.AddScoped<IScheduleUserService, ScheduleUserService>();
-            services.AddScoped<IScheduleJobService, ScheduleJobService>();
+            services.AddScoped<IScheduleJobSetup, ScheduleJobSetup>();
+            services.AddScoped<ICheckAccountMembershipJobSetup, CheckAccountMembershipJobSetup>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPregnancyStandardService, PregnancyStandardService>();
             services.AddScoped<IBlogPostService, BlogPostService>();

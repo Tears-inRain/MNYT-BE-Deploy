@@ -1,9 +1,13 @@
 ﻿using Application.Utils.Implementation;
 using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
-using Application.IServices;
 using Application.ViewModels.Accounts;
 using Microsoft.AspNetCore.Authorization;
+using Application.Services;
+using Application.ViewModels.Fetus;
+using Application.ViewModels.Blog;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Application.IServices;
 
 namespace WebAPI.Controllers
 {
@@ -38,6 +42,14 @@ namespace WebAPI.Controllers
                 return StatusCode(500, ApiResponse<AccountDTO>.FailureResponse("An error occurred while retrieving the account."));
             }
         }
+
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> AddAsync(CreateAccountDTO createAccountDto)
+        //{
+        //    var created = await _accountService.AddAsync(createAccountDto);
+        //    return Ok(ApiResponse<CreateAccountDTO>.SuccessResponse(created, "Post created successfully."));
+        //}
 
         [HttpGet]
         [AllowAnonymous]

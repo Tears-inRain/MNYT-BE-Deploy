@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IServices.CronJob
+namespace Application.Scheduler.JobSetup.Interfaces
 {
-    public interface IScheduleJobService
+    public interface IScheduleJobSetup
     {
         void ConfigureQuartz(IServiceCollectionQuartzConfigurator quartz);
     }

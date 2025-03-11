@@ -8,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.ViewModels;
-using Application.IServices;
 using Application.ViewModels.Accounts;
+using Application.ViewModels.FetusRecord;
+using Application.ViewModels.Blog;
+using Application.IServices;
 
 namespace Application.Services
 {
@@ -31,6 +33,16 @@ namespace Application.Services
 
             return _mapper.Map<AccountDTO>(account);
         }
+
+        //public async Task<CreateAccountDTO> AddAsync(CreateAccountDTO createAccountDto)
+        //{
+        //    Account record = _mapper.Map<Account>(createAccountDto);
+        //    record.Password = BCrypt.Net.BCrypt.HashPassword(record.Password, workFactor: 12);
+        //    await _unitOfWork.AccountRepo.AddAsync(record);
+        //    await _unitOfWork.SaveChangesAsync();
+
+        //    return _mapper.Map<CreateAccountDTO>(record);
+        //}
 
         public async Task<IEnumerable<AccountDTO>> GetAllAccountsAsync()
         {

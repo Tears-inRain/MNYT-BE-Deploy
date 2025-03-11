@@ -11,8 +11,8 @@ namespace Application.IServices
     {
         Task AddAsync(ScheduleUserAddVM scheduleUserAddVM);
         Task UpdateAsync(ScheduleUserVM scheduleUserVM);
-        Task <IList<ScheduleUserVM>> GetAllAsync();
-        Task <ScheduleUserVM> GetAsync(int id);
+        Task<IList<ScheduleUserVM>> GetAllAsync();
+        Task<ScheduleUserVM> GetAsync(int id);
         Task SoftDelete(int id);
         Task DeleteAsync(int id);
     }

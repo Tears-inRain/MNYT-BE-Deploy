@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels.Media;
-using Application.IServices;
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Application.IServices;
 
 namespace WebAPI.Controllers
 {

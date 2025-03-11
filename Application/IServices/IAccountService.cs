@@ -12,6 +12,7 @@ namespace Application.IServices
     public interface IAccountService
     {
         Task<AccountDTO?> GetAccountByIdAsync(int id);
+        //Task<CreateAccountDTO> AddAsync(CreateAccountDTO createAccountDto);
         Task<IEnumerable<AccountDTO>> GetAllAccountsAsync();
         Task<PaginatedList<AccountDTO>> GetAllAccountsPaginatedAsync(QueryParameters queryParameters);
         Task<AccountDTO?> UpdateAccountAsync(int accountId, UpdateAccountDTO updateDto);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IServices.Authentication
+namespace Application.Authentication.Interface
 {
     public interface IJwtTokenService
     {
