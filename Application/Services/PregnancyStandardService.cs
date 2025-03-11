@@ -44,6 +44,13 @@ namespace Application.Services
             return result;
         }
 
+        public async Task<IList<PregnancyStandardVM>> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType)
+        {
+            var item = await _unitOfWork.PregnancyStandardRepo.GetByTypeAndPregnancyTypeAsync(type, pregnancyType);
+            var result = _mapper.Map<IList<PregnancyStandardVM>>(item);
+            return result;
+        }
+
         public async Task SoftDeleteAsync(int id)
         {
             var itemToDelete = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);

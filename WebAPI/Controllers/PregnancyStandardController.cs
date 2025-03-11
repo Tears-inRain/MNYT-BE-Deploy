@@ -59,5 +59,13 @@ namespace WebAPI.Controllers
             var item = await _pregnancyStandardService.GetAsync(id);
             return Ok(item);
         }
+
+        [HttpGet("{type}/{pregnancyType}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType)
+        {
+            var item = await _pregnancyStandardService.GetByTypeAndPregnancyTypeAsync(type, pregnancyType);
+            return Ok(item);
+        }
     }
 }
