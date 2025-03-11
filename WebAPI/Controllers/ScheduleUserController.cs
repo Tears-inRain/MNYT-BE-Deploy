@@ -10,7 +10,7 @@ namespace WebAPI.Controllers
     [Authorize]
     public class ScheduleUserController : ControllerBase
     {
-        IScheduleUserService _scheduleUserService;
+        private readonly IScheduleUserService _scheduleUserService;
         public ScheduleUserController(IScheduleUserService service)
         {
             _scheduleUserService = service;
@@ -30,7 +30,7 @@ namespace WebAPI.Controllers
 
             return Ok();
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> DeleteAsync(int id)
         {

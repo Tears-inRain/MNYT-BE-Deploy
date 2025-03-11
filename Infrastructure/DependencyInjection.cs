@@ -70,6 +70,7 @@ namespace Infrastructure
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInteractionService, InteractionService>();
             services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IScheduleTemplateService, ScheduleTemplateService>();
             #endregion
 
             services.Configure<VnPaySettings>(options => config.GetSection("Vnpay").Bind(options));
