@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
-using Application.IServices;
 using Application.ViewModels.Payment;
+using Application.IServices;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PaymentMethodController : ControllerBase
     {
         private readonly IPaymentMethodService _service;
@@ -28,6 +29,7 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         //[Authorize(Roles = "Manager,Admin")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var allMethods = await _service.GetAllPaymentMethodsAsync();
@@ -50,7 +52,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}/toggle")]
-        //[Authorize(Roles = "Manager,Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ToggleActive(int id, [FromBody] TogglePaymentMethodDTO toggleDto)
         {
             var result = await _service.TogglePaymentMethodAsync(id, toggleDto.IsActive);

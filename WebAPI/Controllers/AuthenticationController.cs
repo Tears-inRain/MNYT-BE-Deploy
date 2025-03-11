@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
 using Application.ViewModels.Authentication;
-using Application.IServices.Authentication;
 using Domain.Entities;
+using Application.Authentication.Interface;
 
 namespace WebAPI.Controllers
 {

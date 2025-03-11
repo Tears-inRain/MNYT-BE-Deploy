@@ -1,11 +1,13 @@
 ﻿using Application.IServices;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class InteractionsController : ControllerBase
     {
         private readonly IInteractionService _interactionService;
@@ -16,6 +18,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("like/{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> LikePost(int postId, int accountId)
         {
             var success = await _interactionService.LikePostAsync(accountId, postId);
@@ -27,6 +30,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("like/{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> UnlikePost(int postId, int accountId)
         {
             var success = await _interactionService.UnlikePostAsync(accountId, postId);
@@ -38,6 +42,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("bookmark/{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> BookmarkPost(int postId, int accountId)
         {
             var success = await _interactionService.BookmarkPostAsync(accountId, postId);
@@ -49,6 +54,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("bookmark/{postId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> RemoveBookmark(int postId, int accountId)
         {
             var success = await _interactionService.RemoveBookmarkAsync(accountId, postId);

@@ -1,5 +1,5 @@
 ﻿using Application.IRepos;
-using Application.IServices.CronJob;
+using Application.Scheduler.CronJob;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Jobs
+namespace Application.Scheduler.Jobs
 {
     public class SendEmailJob : IJob
     {
@@ -33,7 +33,7 @@ namespace Application.Jobs
                 {
                     string subject = "Lịch hẹn của bạn";
                     string body = $"Bạn có lịch hẹn \"{schedule.Title}\" vào ngày {schedule.Date:dd/MM/yyyy}. Vui lòng kiểm tra chi tiết";
-                    
+
                     await _emailService.SendEmailAsync(email, subject, body);
                     _logger.LogInformation($"Sent email to {email} at {DateTime.Now}");
                 }

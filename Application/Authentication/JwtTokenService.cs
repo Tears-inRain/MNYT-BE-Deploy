@@ -1,4 +1,4 @@
-﻿using Application.IServices.Authentication;
+﻿using Application.Authentication.Interface;
 using Application.Utils.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Services.Authentication
+namespace Application.Authentication
 {
     public class JwtTokenService : IJwtTokenService
     {

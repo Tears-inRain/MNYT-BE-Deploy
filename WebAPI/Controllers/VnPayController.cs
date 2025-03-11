@@ -1,12 +1,14 @@
 ﻿using Application.IServices;
 using Application.ViewModels;
 using Application.ViewModels.Payment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class VnPayController : ControllerBase
     {
         private readonly IVnPayService _vnPayService;
@@ -17,6 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("CreatePayment")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDTO dto)
         {
             // Ở đây, bạn có thể kiểm tra model, role user, etc.
@@ -48,6 +51,7 @@ namespace WebAPI.Controllers
 
         //    Cấu hình "vnp_ReturnUrl": "https://localhost:5001/api/VnPay/Callback"
         [HttpGet("Callback")]
+        [AllowAnonymous]
         public async Task<IActionResult> Callback()
         {
             // Lấy các query params

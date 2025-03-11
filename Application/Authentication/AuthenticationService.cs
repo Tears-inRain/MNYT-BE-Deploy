@@ -1,6 +1,6 @@
-﻿using Application.Constants;
+﻿using Application.Authentication.Interface;
+using Application.Constants;
 using Application.Exceptions;
-using Application.IServices.Authentication;
 using Application.ViewModels.Authentication;
 using AutoMapper;
 using Domain.Entities;
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace Application.Services.Authentication
+namespace Application.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
@@ -37,7 +37,7 @@ namespace Application.Services.Authentication
                 string.IsNullOrWhiteSpace(registrationDto.UserName) ||
                 string.IsNullOrWhiteSpace(registrationDto.Password))
             {
-               throw new APIException(HttpStatusCode.BadRequest, "Invalid registration data." );
+                throw new APIException(HttpStatusCode.BadRequest, "Invalid registration data.");
             }
 
             // Check if account already exists (by Email or Username)

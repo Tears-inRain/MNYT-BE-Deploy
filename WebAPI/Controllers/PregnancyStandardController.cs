@@ -1,11 +1,13 @@
 ﻿using Application.IServices;
 using Application.ViewModels.PregnancyStandard;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PregnancyStandardController : Controller
     {
         IPregnancyStandardService _pregnancyStandardService;
@@ -16,6 +18,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> AddAsync(List<PregnacyStandardAddVM> items)
         {
             foreach(var item in items)
@@ -26,6 +29,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateAsync(PregnacyStandardAddVM item)
         {
             await _pregnancyStandardService.UpdateAsync(item);
@@ -33,6 +37,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await _pregnancyStandardService.DeleteAsync(id);
@@ -40,6 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllAsync()
         {
             var items = await _pregnancyStandardService.GetAllAsync();
@@ -47,6 +53,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAsync(int id)
         {
             var item = await _pregnancyStandardService.GetAsync(id);
