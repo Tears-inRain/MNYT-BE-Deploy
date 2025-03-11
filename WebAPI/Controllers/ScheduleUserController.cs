@@ -31,7 +31,6 @@ namespace WebAPI.Controllers
             return Ok();
         }
         [HttpDelete("{id}")]
-        [HttpDelete]
         [AllowAnonymous]
         public async Task<IActionResult> DeleteAsync(int id)
         {
