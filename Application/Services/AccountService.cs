@@ -1,5 +1,4 @@
-﻿using Application.Utils.Implementation;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
 using Domain;
 using System;
@@ -11,7 +10,8 @@ using Application.ViewModels;
 using Application.ViewModels.Accounts;
 using Application.ViewModels.FetusRecord;
 using Application.ViewModels.Blog;
-using Application.IServices;
+using Application.Services.IServices;
+using Application.Utils;
 
 namespace Application.Services
 {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Application;
 
-
-namespace Application.PaymentProviders.VnPay
+namespace Infrastructure.PaymentProviders.VnPay
 {
     public class VnPayLibrary : IVnPayLibrary
     {

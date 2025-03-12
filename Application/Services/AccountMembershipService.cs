@@ -1,4 +1,4 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
@@ -45,7 +45,7 @@ namespace Application.Services
                 Amount = plan.Price,
                 Status = "Pending",
                 PaymentStatus = "Pending",
-                PaymentMethodId = (int)PaymentMethodEnum.VNPAY,
+                PaymentMethodId = (int)PaymentMethodEnum.Cash,
                 StartDate = null,
                 EndDate = null,
             };
@@ -81,7 +81,7 @@ namespace Application.Services
                 Amount = extraCost,
                 Status = "Pending",
                 PaymentStatus = "Pending",
-                PaymentMethodId = (int)PaymentMethodEnum.VNPAY,
+                PaymentMethodId = (int)PaymentMethodEnum.Cash,
                 StartDate = null,
                 EndDate = null,
             };

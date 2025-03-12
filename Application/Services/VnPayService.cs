@@ -1,6 +1,7 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Domain;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services
@@ -47,6 +48,8 @@ namespace Application.Services
 
                 newMembership = await _membershipService.UpgradeMembershipAsync(accountId, membershipPlanId);
             }
+
+            newMembership.PaymentMethodId = (int)PaymentMethodEnum.VNPAY;
 
             var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(newMembership.MembershipPlanId ?? 0);
             if (plan == null)

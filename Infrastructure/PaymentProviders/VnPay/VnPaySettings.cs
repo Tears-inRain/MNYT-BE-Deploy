@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.PaymentProviders.VnPay
+namespace Infrastructure.PaymentProviders.VnPay
 {
     public class VnPaySettings
     {

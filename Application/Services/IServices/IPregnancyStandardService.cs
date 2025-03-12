@@ -1,6 +1,6 @@
 ﻿using Application.ViewModels.PregnancyStandard;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IPregnancyStandardService
     {

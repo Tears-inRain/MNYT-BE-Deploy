@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
 using Application.ViewModels.Payment;
-using Application.IServices;
+using Application.Services.IServices;
 
 namespace WebAPI.Controllers
 {

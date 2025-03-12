@@ -1,13 +1,13 @@
-﻿using Application.Utils.Implementation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.ViewModels.Blog;
 using Application.ViewModels;
+using Application.Utils;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IBlogPostService
     {

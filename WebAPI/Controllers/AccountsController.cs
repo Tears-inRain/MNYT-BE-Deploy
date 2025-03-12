@@ -1,5 +1,4 @@
-﻿using Application.Utils.Implementation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
 using Application.ViewModels.Accounts;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +6,8 @@ using Application.Services;
 using Application.ViewModels.Fetus;
 using Application.ViewModels.Blog;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Application.IServices;
+using Application.Services.IServices;
+using Application.Utils;
 
 namespace WebAPI.Controllers
 {

@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.Extensions.Logging;
 using Application.ViewModels.MembershipPlan;
-using Application.IServices;
+using Application.Services.IServices;
 
 namespace Application.Services
 {
