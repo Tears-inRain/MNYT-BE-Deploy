@@ -24,13 +24,22 @@ namespace WebAPI.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ApiResponse<string>.FailureResponse("Invalid registration data.", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+                return BadRequest(new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Invalid registration data.",
+                    Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                });
             }
 
             var result = await _authenticationService.RegisterAsync(registrationDto);
             if (!result.Success)
             {
-                return BadRequest(ApiResponse<string>.FailureResponse(result.Message));
+                return BadRequest(new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = result.Message
+                });
             }
 
             return Ok(new ApiResponse<string>
@@ -46,13 +55,22 @@ namespace WebAPI.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ApiResponse<string>.FailureResponse("Validation errors occurred.", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
+                return BadRequest(new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Validation errors occurred.",
+                    Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                });
             }
 
             var result = await _authenticationService.LoginAsync(loginDto);
             if (!result.Success)
             {
-                return Unauthorized(ApiResponse<string>.FailureResponse(result.Message));
+                return Unauthorized(new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = result.Message
+                });
             }
             var loginResponse = new LoginResponseDTO
             {
