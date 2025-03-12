@@ -1,7 +1,7 @@
 ﻿using Application.ViewModels.MembershipPlan;
 using Domain.Entities;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IMembershipPlanService
     {

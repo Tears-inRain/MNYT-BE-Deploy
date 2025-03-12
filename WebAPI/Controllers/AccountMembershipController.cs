@@ -1,4 +1,4 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Application.ViewModels;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;

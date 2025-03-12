@@ -2,7 +2,7 @@
 using Application.ViewModels.Media;
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Application.IServices;
+using Application.Services.IServices;
 
 namespace WebAPI.Controllers
 {

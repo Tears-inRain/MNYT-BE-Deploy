@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Domain;
 using Microsoft.Extensions.Logging;
-using Application.IServices;
+using Application.Services.IServices;
 
 namespace Application.Services
 {

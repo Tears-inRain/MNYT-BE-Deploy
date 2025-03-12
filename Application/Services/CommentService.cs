@@ -1,17 +1,10 @@
-﻿
-using Application.Utils.Implementation;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
-using Domain;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Application.ViewModels.Blog;
 using Application.ViewModels;
-using Application.IServices;
+using Application.Services.IServices;
+using Application.Utils;
 
 namespace Application.Services
 {

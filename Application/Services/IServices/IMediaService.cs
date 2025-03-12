@@ -1,6 +1,6 @@
 ﻿using Application.ViewModels.Media;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IMediaService
     {

@@ -1,12 +1,12 @@
-﻿using Application.Utils.Implementation;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Application.ViewModels.Blog;
 using Application.ViewModels;
-using Application.IServices;
+using Application.Services.IServices;
+using Application.Utils;
 
 
 namespace Application.Services
