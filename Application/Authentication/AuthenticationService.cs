@@ -87,7 +87,8 @@ namespace Application.Authentication
                         Email = account.Email,
                         Role = account.Role,
                         Status = account.Status,
-                        IsExternal = account.IsExternal
+                        IsExternal = account.IsExternal,
+                        ExternalProvider = account.ExternalProvider,
                     };
                 }
                 catch (SqlException ex)
@@ -145,7 +146,8 @@ namespace Application.Authentication
                     Email = account.Email,
                     Role = account.Role,
                     Status = account.Status,
-                    IsExternal = account.IsExternal
+                    IsExternal = account.IsExternal,
+                    ExternalProvider = account.ExternalProvider,
                 };
             }
             catch (SqlException sqlEx)

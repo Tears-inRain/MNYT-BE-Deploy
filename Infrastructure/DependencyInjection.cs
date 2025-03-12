@@ -2,7 +2,6 @@ using Application;
 using Application.IRepos;
 using Application.Services;
 using Application.Utils.Interfaces;
-using Microsoft.Data.SqlClient;
 using Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
