@@ -10,6 +10,8 @@ public partial class BlogPost : BaseEntity
 
     public int? ImageId { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public int? AuthorId { get; set; }
 
     public int? Period { get; set; }

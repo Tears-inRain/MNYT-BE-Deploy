@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250219170735_Re0")]
-    partial class Re0
+    [Migration("20250313131905_resetdb")]
+    partial class resetdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -49,7 +49,7 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsExternal")
+                    b.Property<bool>("IsExternal")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
@@ -61,7 +61,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateDate")
@@ -87,6 +87,9 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -99,12 +102,6 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("MembershipPlanId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("PaymentAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("PaymentMethodId")
                         .HasColumnType("int");
 
@@ -113,6 +110,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateOnly?>("StartDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -203,6 +203,9 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("AuthorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -211,6 +214,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -221,7 +227,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateOnly?>("PublishedDay")
                         .HasColumnType("date");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -264,7 +270,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("ReplyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateDate")
@@ -290,6 +296,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -301,9 +310,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -360,7 +366,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("FetusRecords");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Medium", b =>
+            modelBuilder.Entity("Domain.Entities.Media", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -402,6 +408,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -431,11 +440,14 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Method")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -471,7 +483,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateOnly?>("StartDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -584,7 +596,7 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("PregnancyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PaymentStatus")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
