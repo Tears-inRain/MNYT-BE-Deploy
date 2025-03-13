@@ -12,5 +12,7 @@ namespace Application.ViewModels.Blog
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Period { get; set; }
+        public int? ImageId { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }
