@@ -78,8 +78,8 @@ namespace Infrastructure.MapperConfigs
         }
         public void MappingScheduleUser()
         {
-            CreateMap<ScheduleUserAddVM,  ScheduleUser>().ReverseMap();
-            CreateMap<ScheduleUserVM,  ScheduleUser>().ReverseMap();
+            CreateMap<ScheduleUserAddVM, ScheduleUser>().ReverseMap();
+            CreateMap<ScheduleUserVM, ScheduleUser>().ReverseMap();
         }
 
         public void MappingBlog()
@@ -92,6 +92,7 @@ namespace Infrastructure.MapperConfigs
                 .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.BlogLikes.Count))
                 .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
                 .ForMember(dest => dest.BookmarkCount, opt => opt.MapFrom(src => src.BlogBookmarks.Count));
+            CreateMap<UpdateBlogPostDTO, BlogPost>();
 
             CreateMap<CreateCommentDTO, Comment>();
             CreateMap<Comment, ReadCommentDTO>()
