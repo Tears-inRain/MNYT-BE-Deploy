@@ -1,5 +1,6 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
+using Application.ViewModels.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +42,17 @@ namespace WebAPI.Controllers
             return Ok(ApiResponse<string>.SuccessResponse("Post unliked successfully."));
         }
 
+        [HttpGet("likes")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiResponse<List<ReadBlogPostDTO>>>> GetLikesByAccountId(int accountId)
+        {
+            var likedPosts = await _interactionService.GetAllLikesByAccountIdAsync(accountId);
+            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+                likedPosts,
+                $"Retrieved {likedPosts.Count} liked posts for accountId = {accountId}."
+            ));
+        }
+
         [HttpPost("bookmark/{postId}")]
         [AllowAnonymous]
         public async Task<IActionResult> BookmarkPost(int postId, int accountId)
@@ -63,6 +75,17 @@ namespace WebAPI.Controllers
                 return NotFound(ApiResponse<string>.FailureResponse("Either post not found or it wasn't bookmarked."));
             }
             return Ok(ApiResponse<string>.SuccessResponse("Bookmark removed successfully."));
+        }
+
+        [HttpGet("bookmarks")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiResponse<List<ReadBlogPostDTO>>>> GetBookmarksByAccountId(int accountId)
+        {
+            var bookmarkedPosts = await _interactionService.GetAllBookmarksByAccountIdAsync(accountId);
+            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+                bookmarkedPosts,
+                $"Retrieved {bookmarkedPosts.Count} bookmarked posts for accountId = {accountId}."
+            ));
         }
     }
 }

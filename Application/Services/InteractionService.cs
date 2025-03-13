@@ -2,6 +2,9 @@
 using Domain;
 using Microsoft.Extensions.Logging;
 using Application.Services.IServices;
+using Application.ViewModels.Blog;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Application.Services
 {
@@ -9,10 +12,12 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<InteractionService> _logger;
+        private readonly IMapper _mapper;
 
-        public InteractionService(IUnitOfWork unitOfWork, ILogger<InteractionService> logger)
+        public InteractionService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<InteractionService> logger)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
             _logger = logger;
         }
 
@@ -67,6 +72,22 @@ namespace Application.Services
             return true;
         }
 
+        public async Task<List<ReadBlogPostDTO>> GetAllLikesByAccountIdAsync(int accountId)
+        {
+            _logger.LogInformation("Retrieving all liked posts for accountId: {AccountId}", accountId);
+
+            var query = _unitOfWork.BlogLikeRepo
+                .GetAllQueryable("Post.Author, Post.BlogBookmarks, Post.BlogLikes, Post.Comments")
+                .Where(l => l.AccountId == accountId && !l.IsDeleted
+                            && l.Post != null && !l.Post.IsDeleted);
+
+            var likedPosts = await query
+                .Select(l => l.Post!)
+                .ToListAsync();
+
+            return _mapper.Map<List<ReadBlogPostDTO>>(likedPosts);
+        }
+
         public async Task<bool> BookmarkPostAsync(int accountId, int postId)
         {
             _logger.LogInformation("Account {AccountId} bookmarking post {PostId}", accountId, postId);
@@ -116,6 +137,22 @@ namespace Application.Services
             _unitOfWork.BlogBookmarkRepo.Update(bookmark);
             await _unitOfWork.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<ReadBlogPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId)
+        {
+            _logger.LogInformation("Retrieving all bookmarked posts for accountId: {AccountId}", accountId);
+
+            var query = _unitOfWork.BlogBookmarkRepo
+                .GetAllQueryable("Post.Author, Post.BlogBookmarks, Post.BlogLikes, Post.Comments")
+                .Where(b => b.AccountId == accountId && !b.IsDeleted
+                            && b.Post != null && !b.Post.IsDeleted);
+
+            var bookmarkedPosts = await query
+                .Select(b => b.Post!)
+                .ToListAsync();
+
+            return _mapper.Map<List<ReadBlogPostDTO>>(bookmarkedPosts);
         }
     }
 }
