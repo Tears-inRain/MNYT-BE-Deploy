@@ -1,6 +1,5 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Application.ViewModels.ScheduleTemplate;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers

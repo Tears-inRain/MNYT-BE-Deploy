@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Application.ViewModels.Authentication
 {
     public class LoginResponseDTO
@@ -18,5 +13,6 @@ namespace Application.ViewModels.Authentication
         public string Role { get; set; }
         public string Status { get; set; }
         public bool IsExternal { get; set; }
+        public string? ExternalProvider { get; set; }
     }
 }

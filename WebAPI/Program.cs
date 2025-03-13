@@ -5,7 +5,6 @@ using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Quartz;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;

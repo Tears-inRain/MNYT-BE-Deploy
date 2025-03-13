@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Utils.Implementation
+namespace Application.Utils
 {
     public class DateTimeProvider : IDateTimeProvider
     {

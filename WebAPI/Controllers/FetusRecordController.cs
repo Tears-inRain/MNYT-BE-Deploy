@@ -1,7 +1,6 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Application.ViewModels.FetusRecord;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers

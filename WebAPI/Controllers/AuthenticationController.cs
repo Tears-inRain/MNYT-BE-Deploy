@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels;
 using Application.ViewModels.Authentication;
-using Domain.Entities;
 using Application.Authentication.Interface;
 
 namespace WebAPI.Controllers
@@ -84,15 +83,11 @@ namespace WebAPI.Controllers
                 Email = result.Email,
                 Role = result.Role,
                 Status = result.Status,
-                IsExternal = result.IsExternal
+                IsExternal = result.IsExternal,
+                ExternalProvider = result.ExternalProvider
             };
 
-            return Ok(new ApiResponse<LoginResponseDTO>
-            {
-                Success = true,
-                Data = loginResponse,
-                Message = loginResponse.Message
-            });
+            return Ok(ApiResponse<LoginResponseDTO>.SuccessResponse(loginResponse, "Login successful."));
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Application.Utils.Implementation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Application.IServices;
+using Application.Services.IServices;
+using Application.Utils;
 
 namespace WebAPI.Controllers
 {

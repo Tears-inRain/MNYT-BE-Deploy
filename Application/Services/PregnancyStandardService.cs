@@ -1,4 +1,4 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Application.ViewModels.PregnancyStandard;
 using AutoMapper;
 using Domain.Entities;
@@ -41,6 +41,13 @@ namespace Application.Services
         {
             var item = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
             var result = _mapper.Map<PregnancyStandardVM>(item);
+            return result;
+        }
+
+        public async Task<IList<PregnancyStandardVM>> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType)
+        {
+            var item = await _unitOfWork.PregnancyStandardRepo.GetByTypeAndPregnancyTypeAsync(type, pregnancyType);
+            var result = _mapper.Map<IList<PregnancyStandardVM>>(item);
             return result;
         }
 

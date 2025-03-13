@@ -1,10 +1,7 @@
 using Application;
 using Application.IRepos;
-using Application.PaymentProviders.VnPay;
 using Application.Services;
-using Application.Utils.Implementation;
 using Application.Utils.Interfaces;
-using Microsoft.Data.SqlClient;
 using Infrastructure.Repos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +12,11 @@ using Application.Settings;
 using Application.Authentication;
 using Application.Authentication.Interface;
 using Application.Scheduler.JobSetup;
-using Application.IServices;
 using Application.Scheduler.JobSetup.Interfaces;
 using Application.Scheduler.CronJob;
+using Application.Services.IServices;
+using Infrastructure.PaymentProviders.VnPay;
+using Application.Utils;
 
 namespace Infrastructure
 {
@@ -53,24 +52,32 @@ namespace Infrastructure
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+
+            services.AddScoped<IAccountService, AccountService>();
+
             services.AddScoped<IPregnancyService, PregnancyService>();
-            services.AddScoped<IVnPayLibrary, VnPayLibrary>();
+            services.AddScoped<IFetusService, FetusService>();
+            services.AddScoped<IFetusRecordService, FetusRecordService>();
+
+            services.AddScoped<IScheduleUserService, ScheduleUserService>();
+
+            services.AddScoped<IPregnancyStandardService, PregnancyStandardService>();
+            services.AddScoped<IScheduleTemplateService, ScheduleTemplateService>();
+
             services.AddScoped<IMembershipPlanService, MembershipPlanService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
+            services.AddScoped<IVnPayLibrary, VnPayLibrary>();
             services.AddScoped<IVnPayService, VnPayService>();
-            services.AddScoped<IFetusService, FetusService>();
-            services.AddScoped<IFetusRecordService, FetusRecordService>();
-            services.AddScoped<IScheduleUserService, ScheduleUserService>();
-            services.AddScoped<IScheduleJobSetup, ScheduleJobSetup>();
-            services.AddScoped<ICheckAccountMembershipJobSetup, CheckAccountMembershipJobSetup>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IPregnancyStandardService, PregnancyStandardService>();
+            services.AddScoped<ICashPaymentService, CashPaymentService>();
+
             services.AddScoped<IBlogPostService, BlogPostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInteractionService, InteractionService>();
             services.AddScoped<IMediaService, MediaService>();
-            services.AddScoped<IScheduleTemplateService, ScheduleTemplateService>();
+
+            services.AddScoped<IScheduleJobSetup, ScheduleJobSetup>();
+            services.AddScoped<ICheckAccountMembershipJobSetup, CheckAccountMembershipJobSetup>();
             #endregion
 
             services.Configure<VnPaySettings>(options => config.GetSection("Vnpay").Bind(options));

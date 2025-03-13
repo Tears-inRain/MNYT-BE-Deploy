@@ -1,6 +1,6 @@
 ﻿using Application.ViewModels.PregnancyStandard;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IPregnancyStandardService
     {
@@ -10,5 +10,6 @@ namespace Application.IServices
         Task SoftDeleteAsync(int id);
         Task<IList<PregnancyStandardVM>> GetAllAsync();
         Task<PregnancyStandardVM> GetAsync(int id);
+        Task<IList<PregnancyStandardVM>> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType);
     }
 }

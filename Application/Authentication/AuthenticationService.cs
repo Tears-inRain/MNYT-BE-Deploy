@@ -32,7 +32,6 @@ namespace Application.Authentication
 
         public async Task<LoginResponseDTO> RegisterAsync(AccountRegistrationDTO registrationDto)
         {
-            // Validate inputs
             if (string.IsNullOrWhiteSpace(registrationDto.Email) ||
                 string.IsNullOrWhiteSpace(registrationDto.UserName) ||
                 string.IsNullOrWhiteSpace(registrationDto.Password))
@@ -40,7 +39,6 @@ namespace Application.Authentication
                 throw new APIException(HttpStatusCode.BadRequest, "Invalid registration data.");
             }
 
-            // Check if account already exists (by Email or Username)
             var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(registrationDto.Email, registrationDto.UserName);
 
             if (existedAccount != null)
@@ -48,7 +46,7 @@ namespace Application.Authentication
                 _logger.LogWarning("User already exists with the provided email or username.");
                 return new LoginResponseDTO { Success = false, Message = "User already exists." };
             }
-            // Validate role
+
             var allowedRoles = new List<string> { AccountRoleConstants.Member, AccountRoleConstants.Admin, AccountRoleConstants.Manager };
             if (string.IsNullOrWhiteSpace(registrationDto.Role) ||
                 !allowedRoles.Contains(registrationDto.Role, StringComparer.OrdinalIgnoreCase))
@@ -68,7 +66,6 @@ namespace Application.Authentication
                     await _unitOfWork.AccountRepo.AddAsync(account);
                     await _unitOfWork.SaveChangesAsync();
 
-                    // Tạo token
                     var accessToken = _jwtTokenService.GenerateJwtToken(
                         account.Id,
                         account.UserName,
@@ -90,7 +87,8 @@ namespace Application.Authentication
                         Email = account.Email,
                         Role = account.Role,
                         Status = account.Status,
-                        IsExternal = account.IsExternal
+                        IsExternal = account.IsExternal,
+                        ExternalProvider = account.ExternalProvider,
                     };
                 }
                 catch (SqlException ex)
@@ -110,7 +108,6 @@ namespace Application.Authentication
 
         public async Task<LoginResponseDTO> LoginAsync(AccountLoginDTO loginDto)
         {
-            // Validate inputs
             if (string.IsNullOrWhiteSpace(loginDto.EmailOrUsername) || string.IsNullOrWhiteSpace(loginDto.Password))
             {
                 return new LoginResponseDTO { Success = false, Message = "Invalid login data." };
@@ -149,7 +146,8 @@ namespace Application.Authentication
                     Email = account.Email,
                     Role = account.Role,
                     Status = account.Status,
-                    IsExternal = account.IsExternal
+                    IsExternal = account.IsExternal,
+                    ExternalProvider = account.ExternalProvider,
                 };
             }
             catch (SqlException sqlEx)

@@ -1,4 +1,4 @@
-﻿using Application.Utils.Implementation;
+﻿using Application.Utils;
 using Application.ViewModels;
 using Application.ViewModels.Accounts;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.IServices
+namespace Application.Services.IServices
 {
     public interface IAccountService
     {

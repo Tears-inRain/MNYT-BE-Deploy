@@ -1,4 +1,4 @@
-﻿using Application.IServices;
+﻿using Application.Services.IServices;
 using Application.ViewModels.PregnancyStandard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +57,14 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetAsync(int id)
         {
             var item = await _pregnancyStandardService.GetAsync(id);
+            return Ok(item);
+        }
+
+        [HttpGet("{type}/{pregnancyType}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType)
+        {
+            var item = await _pregnancyStandardService.GetByTypeAndPregnancyTypeAsync(type, pregnancyType);
             return Ok(item);
         }
     }

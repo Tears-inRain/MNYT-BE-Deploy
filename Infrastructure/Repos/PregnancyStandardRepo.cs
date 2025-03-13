@@ -1,5 +1,6 @@
 ﻿using Application.IRepos;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,13 @@ namespace Infrastructure.Repos
         {
             _appDbContext = dbContext;
         }
+
+        public async Task<IEnumerable<PregnancyStandard?>> GetByTypeAndPregnancyTypeAsync(string type, string pregnancyType)
+        {
+            return await _appDbContext.PregnancyStandards
+                .Where(x => x.Type == type && x.PregnancyType == pregnancyType)
+                .ToListAsync();
+        }
+
     }
 }
