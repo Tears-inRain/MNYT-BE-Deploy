@@ -17,6 +17,9 @@ namespace Application.ViewModels.Blog
         public int? Period { get; set; }
         public string? Status { get; set; }
         public DateOnly? PublishedDay { get; set; }
+        public int? ImageId { get; set; }
+
+        public string? ImageUrl { get; set; }
 
         // For illustration: 
         public int LikeCount { get; set; }
