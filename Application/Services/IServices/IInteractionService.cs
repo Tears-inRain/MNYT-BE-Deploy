@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.ViewModels.Blog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,7 @@ namespace Application.Services.IServices
         Task<bool> UnlikePostAsync(int accountId, int postId);
         Task<bool> BookmarkPostAsync(int accountId, int postId);
         Task<bool> RemoveBookmarkAsync(int accountId, int postId);
+        Task<List<ReadBlogPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId);
+        Task<List<ReadBlogPostDTO>> GetAllLikesByAccountIdAsync(int accountId);
     }
 }
