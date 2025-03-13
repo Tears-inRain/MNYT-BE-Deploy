@@ -26,12 +26,25 @@ namespace Infrastructure.Repos
 
         public async Task<IEnumerable<TModel>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            var result = await _dbSet.ToListAsync();
+            foreach (var item in result)
+            {
+                if (item.IsDeleted)
+                {
+                    result.Remove(item);
+                }
+            }
+            return result;
         }
 
         public async Task<TModel> GetAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            TModel? model = await _dbSet.FindAsync(id);
+            if (model == null || model.IsDeleted == true)
+            {
+                throw new Exception($"{model} not found");
+            }
+            return model;
         }
 
         public void SoftDelete(TModel model)
@@ -52,7 +65,7 @@ namespace Infrastructure.Repos
                 query = query.Include(includeProperty.Trim());
             }
 
-            return await query.ToListAsync();
+            return await query.Where(x=>x.IsDeleted!=true).ToListAsync();
         }
 
         public virtual IQueryable<TModel> GetAllQueryable(string includeProperties = "")
@@ -67,7 +80,7 @@ namespace Infrastructure.Repos
                 }
             }
 
-            return query;
+            return query.Where(x => !x.IsDeleted);
         }
 
         public async Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "")
@@ -82,7 +95,7 @@ namespace Infrastructure.Repos
                 }
             }
 
-            return await query.FirstOrDefaultAsync(predicate);
+            return await query.Where(x => !x.IsDeleted).FirstOrDefaultAsync(predicate);
         }
     }
 }
