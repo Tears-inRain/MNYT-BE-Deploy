@@ -67,5 +67,12 @@ namespace WebAPI.Controllers
             await _fetusRecordService.SoftDelete(id);
             Ok("Soft");
         }
+        [HttpGet("FetusId/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllByFetusId(int id)
+        {
+            var fetusQuery = await _fetusRecordService.GetAllByFetusIdAsync(id);
+            return Ok(fetusQuery);
+        }
     }
 }
