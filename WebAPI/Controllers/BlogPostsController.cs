@@ -53,6 +53,20 @@ namespace WebAPI.Controllers
             ));
         }
 
+        [HttpGet("by-category")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllByCategory([FromQuery] string category)
+        {
+            var posts = await _blogService.GetAllByCategoryAsync(category);
+
+            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+                posts,
+                string.IsNullOrEmpty(category)
+                    ? "All blog posts retrieved without category filter."
+                    : $"All blog posts for category '{category}' retrieved successfully."
+            ));
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreatePost([FromQuery] int authorId, [FromBody] CreateBlogPostDTO dto)

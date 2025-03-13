@@ -61,7 +61,7 @@ namespace Application.Services
                 _logger.LogWarning("Account Id: {AccountId} is not the author of postId: {PostId}", requestAccountId, postId);
                 return null;
             }
-
+            if (!string.IsNullOrWhiteSpace(dto.Category)){post.Category = dto.Category;}
             if (!string.IsNullOrWhiteSpace(dto.Title)) post.Title = dto.Title;
             if (!string.IsNullOrWhiteSpace(dto.Description)) post.Description = dto.Description;
             if (dto.Period.HasValue) post.Period = dto.Period.Value;
@@ -171,6 +171,22 @@ namespace Application.Services
                 pagedEntities.PageIndex,
                 pagedEntities.Items.Count
             );
+        }
+
+        public async Task<List<ReadBlogPostDTO>> GetAllByCategoryAsync(string category)
+        {
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(p => !p.IsDeleted);
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(p => p.Category == category);
+            }
+
+            var posts = await query.ToListAsync();
+
+            return _mapper.Map<List<ReadBlogPostDTO>>(posts);
         }
     }
 }

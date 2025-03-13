@@ -19,5 +19,6 @@ namespace Application.IServices
         Task<ReadBlogPostDTO?> GetBlogPostByIdAsync(int postId);
         Task<List<ReadBlogPostDTO>> GetAllPostsAsync();
         Task<PaginatedList<ReadBlogPostDTO>> GetAllPostsPaginatedAsync(QueryParameters queryParameters);
+        Task<List<ReadBlogPostDTO>> GetAllByCategoryAsync(string category);
     }
 }

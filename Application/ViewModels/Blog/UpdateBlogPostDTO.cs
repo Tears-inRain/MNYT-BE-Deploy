@@ -8,6 +8,7 @@ namespace Application.ViewModels.Blog
 {
     public class UpdateBlogPostDTO
     {
+        public string? Category { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public int? Period { get; set; }
