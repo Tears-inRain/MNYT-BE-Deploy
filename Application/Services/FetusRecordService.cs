@@ -44,6 +44,13 @@ namespace Application.Services
             return result;
         }
 
+        public async Task<IList<FetusRecordVM>> GetAllByFetusIdAsync(int id)
+        {
+            var fetusQuery = _unitOfWork.FetusRecordRepo.GetAllQueryable().Where(f=>f.FetusId == id);
+            var result = await Task.Run(() => _mapper.Map<IList<FetusRecordVM>>(fetusQuery.ToList()));
+            return result;
+        }
+
         public async Task<FetusRecordVM> GetAsync(int id)
         {
             var item = await _unitOfWork.FetusRepo.GetAsync(id);
