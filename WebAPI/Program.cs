@@ -1,8 +1,10 @@
+using Application.PaymentProviders.VnPay;
 using Application.Scheduler;
 using Application.Scheduler.Jobs;
 using Application.Settings;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -34,8 +36,6 @@ namespace WebAPI
 
             builder.Services.AddHttpContextAccessor();
 
-            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
             builder.Configuration.AddUserSecrets<Program>();
 
             var jwtSecretKey = builder.Configuration["Authentication:Jwt:Secret"];
@@ -66,7 +66,6 @@ namespace WebAPI
             });
 
             builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
             builder.Services.AddInfrastructureServicesAsync(builder.Configuration);
 
             // config Quartz 
