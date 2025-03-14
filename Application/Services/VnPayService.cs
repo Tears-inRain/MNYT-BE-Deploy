@@ -1,26 +1,32 @@
-﻿using Application.Services.IServices;
-using Domain;
+﻿using Application.PaymentProviders.VnPay;
+using Application.Services.IServices;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Application.Services
 {
     public class VnPayService : IVnPayService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IVnPayLibrary _vnPayLibrary;
+        private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAccountMembershipService _membershipService;
         private readonly ILogger<VnPayService> _logger;
 
         public VnPayService(
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
             IUnitOfWork unitOfWork,
-            IVnPayLibrary vnPayLibrary,
             IAccountMembershipService membershipService,
             ILogger<VnPayService> logger)
         {
             _unitOfWork = unitOfWork;
-            _vnPayLibrary = vnPayLibrary;
+            _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
             _membershipService = membershipService;
             _logger = logger;
         }
@@ -51,79 +57,80 @@ namespace Application.Services
 
             newMembership.PaymentMethodId = (int)PaymentMethodEnum.VNPAY;
 
-            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(newMembership.MembershipPlanId ?? 0);
-            if (plan == null)
-            {
-                throw new Exception("The membership plan does not exist.");
-            }
-
             decimal amount = newMembership.Amount ?? 0;
-            string orderDesc = $"Payment for membership plan {plan.Name} (AccountMembership #{newMembership.Id})";
-            string orderId = newMembership.Id.ToString();
+            string orderDesc = $"Payment for membership plan ... (#{newMembership.Id})";
 
-            _logger.LogInformation("Calling CreatePaymentUrl with amount={Amount}, desc={Desc}, orderId={OrderId}",
-                                   amount, orderDesc, orderId);
+            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
+            var tick = DateTime.Now.Ticks.ToString();
 
-            var paymentUrl = _vnPayLibrary.CreatePaymentUrl(amount, orderDesc, orderId);
+            var vnpay = new VnPayLibrary();
+            vnpay.AddRequestData("vnp_Version", "2.1.0");
+            vnpay.AddRequestData("vnp_Command", _configuration["Vnpay:vnp_Command"]);
+            vnpay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:vnp_TmnCode"]);
+            vnpay.AddRequestData("vnp_Amount", ((long)(amount * 100)).ToString());
+            vnpay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:vnp_CurrCode"]);
+            vnpay.AddRequestData("vnp_TxnRef", tick);
+            vnpay.AddRequestData("vnp_IpAddr", PaymentProviders.VnPay.Utils.GetIpAddress(_httpContextAccessor));
+            vnpay.AddRequestData("vnp_OrderInfo", orderDesc);
+            vnpay.AddRequestData("vnp_OrderType", "other");
+            vnpay.AddRequestData("vnp_ReturnUrl", _configuration["Vnpay:vnp_ReturnUrl"]);
+            vnpay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_Locale", _configuration["Vnpay:vnp_Locale"]);
+            vnpay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss"));
 
-            _logger.LogInformation("VNPAY payment URL generated: {PaymentUrl}", paymentUrl);
+            string paymentUrl = vnpay.CreateRequestUrl(_configuration["Vnpay:vnp_BaseUrl"], _configuration["Vnpay:vnp_HashSecret"]);
+            _logger.LogInformation("Payment URL: {0}", paymentUrl);
 
             return paymentUrl;
         }
 
         public async Task<bool> HandleVnPayCallbackAsync(IDictionary<string, string> queryParams)
         {
-            _logger.LogInformation("Start HandleVnPayCallbackAsync with queryParams: {QueryString}",
-                                   string.Join("&", queryParams.Select(kv => $"{kv.Key}={kv.Value}")));
-
-            var validSignature = _vnPayLibrary.VerifySignature(queryParams);
-            if (!validSignature)
+            var vnpay = new VnPayLibrary();
+            foreach (var (k, v) in queryParams)
             {
-                _logger.LogWarning("Invalid signature from VNPAY. Full query: {Query}",
-                                   string.Join("&", queryParams.Select(kv => $"{kv.Key}={kv.Value}")));
+                if (k.StartsWith("vnp_"))
+                {
+                    vnpay.AddResponseData(k, v);
+                }
+            }
+
+            if (!queryParams.TryGetValue("vnp_SecureHash", out var inputHash))
+            {
                 return false;
             }
 
-            if (!queryParams.TryGetValue("vnp_TxnRef", out var orderIdStr))
+            bool isValid = vnpay.ValidateSignature(inputHash, _configuration["Vnpay:vnp_HashSecret"]);
+            if (!isValid)
             {
-                _logger.LogWarning("Missing vnp_TxnRef in queryParams.");
-                return false;
-            }
-            if (!int.TryParse(orderIdStr, out int membershipId))
-            {
-                _logger.LogWarning("Could not parse membershipId from vnp_TxnRef = {OrderIdStr}", orderIdStr);
+                _logger.LogWarning("Invalid signature from vnpay");
                 return false;
             }
 
+            if (!queryParams.TryGetValue("vnp_TxnRef", out var txnRef))
+            {
+                return false;
+            }
+            if (!int.TryParse(txnRef, out int membershipId))
+            {
+                return false;
+            }
             var membership = await _unitOfWork.AccountMembershipRepo.GetAsync(membershipId);
-            if (membership == null)
-                return false;
+            if (membership == null) return false;
 
-            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membership.MembershipPlanId ?? 0);
-            if (plan == null)
-                return false;
-
-            if (queryParams.TryGetValue("vnp_ResponseCode", out var responseCode))
+            if (queryParams.TryGetValue("vnp_ResponseCode", out var resp) && resp == "00")
             {
-                if (responseCode == "00")
-                {
-                    membership.Status = "Active";
-                    membership.PaymentStatus = "Paid";
-                    membership.StartDate = DateOnly.FromDateTime(DateTime.Now);
-                    membership.EndDate = membership.StartDate.Value.AddDays(plan.Duration);
-
-                    _logger.LogInformation("Payment success for membership #{MembershipId}, set Active.", membershipId);
-                }
-                else
-                {
-                    membership.PaymentStatus = "Failed";
-                    _logger.LogInformation($"Payment failed for membership #{membershipId} - Code: {responseCode}");
-                }
-                await _unitOfWork.SaveChangesAsync();
-                return true;
+                membership.Status = "Active";
+                membership.PaymentStatus = "Paid";
             }
+            else
+            {
+                membership.PaymentStatus = "Failed";
+            }
+            await _unitOfWork.SaveChangesAsync();
 
-            return false;
+            return true;
         }
     }
 }

@@ -15,8 +15,8 @@ using Application.Scheduler.JobSetup;
 using Application.Scheduler.JobSetup.Interfaces;
 using Application.Scheduler.CronJob;
 using Application.Services.IServices;
-using Infrastructure.PaymentProviders.VnPay;
 using Application.Utils;
+using Application.PaymentProviders.VnPay;
 
 namespace Infrastructure
 {
@@ -29,7 +29,6 @@ namespace Infrastructure
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(config.GetConnectionString("MNYT_DB")));
             services.AddTransient<IEmailService, EmailService>();
             services.Configure<EmailSettings>(config.GetSection("EmailSettings"));
-
             #region repo config
             services.AddScoped<IAccountRepo, AccountRepo>();
             services.AddScoped<IAccountMembershipRepo, AccountMembershipRepo>();
@@ -67,7 +66,6 @@ namespace Infrastructure
             services.AddScoped<IMembershipPlanService, MembershipPlanService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IAccountMembershipService, AccountMembershipService>();
-            services.AddScoped<IVnPayLibrary, VnPayLibrary>();
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<ICashPaymentService, CashPaymentService>();
 
@@ -79,8 +77,6 @@ namespace Infrastructure
             services.AddScoped<IScheduleJobSetup, ScheduleJobSetup>();
             services.AddScoped<ICheckAccountMembershipJobSetup, CheckAccountMembershipJobSetup>();
             #endregion
-
-            services.Configure<VnPaySettings>(options => config.GetSection("Vnpay").Bind(options));
 
             #region quartz config
             var quartzBuilder = Host.CreateDefaultBuilder()
