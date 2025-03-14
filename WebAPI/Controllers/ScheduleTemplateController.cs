@@ -14,10 +14,13 @@ namespace WebAPI.Controllers
             _scheduleTemplateService = scheduleTemplateService;
         }
         [HttpPost]
-        public async Task<IActionResult> AddAsync(ScheduleTemplateAddVM scheduleTemplateAddVM)
+        public async Task<IActionResult> AddAsync(List<ScheduleTemplateAddVM> scheduleTemplateAddVMs)
         {
-            await _scheduleTemplateService.AddAsync(scheduleTemplateAddVM);
-            return Ok(scheduleTemplateAddVM);
+            for (int i = 0; i < scheduleTemplateAddVMs.Count; i++)
+            {
+                await _scheduleTemplateService.AddAsync(scheduleTemplateAddVMs[i]);
+            }
+            return Ok(scheduleTemplateAddVMs);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(ScheduleTemplateVM scheduleTemplateVM)
