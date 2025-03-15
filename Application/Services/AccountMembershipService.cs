@@ -1,4 +1,7 @@
 ﻿using Application.Services.IServices;
+using Application.ViewModels.AccountMembership;
+using Application.ViewModels.Blog;
+using AutoMapper;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
@@ -9,21 +12,25 @@ namespace Application.Services
     public class AccountMembershipService : IAccountMembershipService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
         private readonly ILogger<AccountMembershipService> _logger;
 
         public AccountMembershipService(IUnitOfWork unitOfWork,
+                                        IMapper mapper,
                                         ILogger<AccountMembershipService> logger)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task<AccountMembership?> GetActiveMembershipAsync(int accountId)
+        public async Task<ReadAccountMembershipDTO?> GetActiveMembershipAsync(int accountId)
         {
             var activeMem = await _unitOfWork.AccountMembershipRepo.FindOneAsync(
                 m => m.AccountId == accountId && m.Status == "Active"
             );
-            return activeMem;
+            return _mapper.Map<ReadAccountMembershipDTO>(activeMem);
+            ;
         }
 
         public async Task<AccountMembership> CreateNewMembershipAsync(int accountId, int membershipPlanId)

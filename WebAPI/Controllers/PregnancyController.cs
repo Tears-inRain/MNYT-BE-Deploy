@@ -1,8 +1,11 @@
 ﻿using Application.Services.IServices;
+using Application.ViewModels.Blog;
+using Application.ViewModels;
 using Application.ViewModels.Pregnancy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Application.ViewModels.Fetus;
 
 namespace WebAPI.Controllers
 {
@@ -22,8 +25,12 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AddAsync(PregnancyAddVM item)
         {
-            await _pregnancyservice.AddSync(item);
-            return Ok();
+            var created = await _pregnancyservice.CreatePregnancySync(item);
+            if (created == null)
+            {
+                return NotFound(ApiResponse<ReadPregnancyDTO>.FailureResponse("Cannot create pregnancy; account not found."));
+            }
+            return Ok(ApiResponse<ReadPregnancyDTO>.SuccessResponse(created, "Pregnancy created successfully."));
         }
 
         [HttpPut]

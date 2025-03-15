@@ -12,6 +12,7 @@ using Application.ViewModels.PregnancyStandard;
 using Application.ViewModels.Blog;
 using Application.ViewModels.Media;
 using Application.ViewModels.ScheduleTemplate;
+using Application.ViewModels.AccountMembership;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -22,6 +23,7 @@ namespace Infrastructure.MapperConfigs
             MappingAccount();
             MappingMembershipPlan();
             MappingPaymentMethod();
+            MappingAccountMembership();
             MappingPregnancy();
             MappingFetus();
             MappingFetusRecord();
@@ -55,6 +57,11 @@ namespace Infrastructure.MapperConfigs
             CreateMap<MembershipPlan, MembershipPlanDTO>();
         }
 
+        public void MappingAccountMembership()
+        {
+            CreateMap<AccountMembership, ReadAccountMembershipDTO>();
+        }
+
         public void MappingPaymentMethod()
         {
             CreateMap<PaymentMethod, PaymentMethodDTO>().ReverseMap();
@@ -64,12 +71,14 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<PregnancyAddVM, Pregnancy>().ReverseMap();
             CreateMap<PregnancyVM, Pregnancy>().ReverseMap();
+            CreateMap<Pregnancy, ReadPregnancyDTO>();
 
         }
         public void MappingFetus()
         {
             CreateMap<FetusAddVM, Fetus>().ReverseMap();
             CreateMap<FetusVM, Fetus>().ReverseMap();
+            CreateMap<Fetus, ReadFetusDTO>();
         }
         public void MappingFetusRecord()
         {

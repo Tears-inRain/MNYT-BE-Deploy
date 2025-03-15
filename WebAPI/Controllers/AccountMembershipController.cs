@@ -1,5 +1,6 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
+using Application.ViewModels.AccountMembership;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,19 +28,19 @@ namespace WebAPI.Controllers
                 var active = await _membershipService.GetActiveMembershipAsync(accountId);
                 if (active == null)
                 {
-                    return Ok(ApiResponse<AccountMembership>.SuccessResponse(
+                    return Ok(ApiResponse<ReadAccountMembershipDTO>.SuccessResponse(
                         null,
                         "No active membership for this account."
                     ));
                 }
-                return Ok(ApiResponse<AccountMembership>.SuccessResponse(
+                return Ok(ApiResponse<ReadAccountMembershipDTO>.SuccessResponse(
                     active,
                     "Active membership retrieved successfully."
                 ));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<AccountMembership>.FailureResponse(
+                return StatusCode(500, ApiResponse<ReadAccountMembershipDTO>.FailureResponse(
                     "Failed to get active membership."
                 ));
             }

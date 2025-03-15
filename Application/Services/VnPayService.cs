@@ -65,7 +65,7 @@ namespace Application.Services
             var tick = DateTime.Now.Ticks.ToString();
 
             var vnpay = new VnPayLibrary();
-            vnpay.AddRequestData("vnp_Version", "2.1.0");
+            vnpay.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
             vnpay.AddRequestData("vnp_Command", _configuration["Vnpay:vnp_Command"]);
             vnpay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:vnp_TmnCode"]);
             vnpay.AddRequestData("vnp_Amount", ((long)(amount * 100)).ToString());

@@ -10,7 +10,7 @@ namespace Application.Services.IServices
 {
     public interface IFetusService
     {
-        Task AddSync(FetusAddVM fetusAddVM);
+        Task<ReadFetusDTO> CreateFetusSync(FetusAddVM fetusAddVM);
         Task UpdateAsync(FetusVM fetusVM);
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);

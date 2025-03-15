@@ -1,5 +1,9 @@
 ﻿using Application.Services.IServices;
+using Application.ViewModels;
+using Application.ViewModels.Blog;
 using Application.ViewModels.Fetus;
+using Application.ViewModels.Pregnancy;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +21,17 @@ namespace WebAPI.Controllers
         {
             _fetusService = fetusService;
         }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> AddAsync(FetusAddVM fetusAddVM)
         {
-            await _fetusService.AddSync(fetusAddVM);
-            return Ok();
+            var created = await _fetusService.CreateFetusSync(fetusAddVM);
+            if (created == null)
+            {
+                return NotFound(ApiResponse<ReadFetusDTO>.FailureResponse("Cannot add fetus; pregnancy not found."));
+            }
+            return Ok(ApiResponse<ReadFetusDTO>.SuccessResponse(created, "Fetus created successfully."));
         }
 
         [HttpPut]
