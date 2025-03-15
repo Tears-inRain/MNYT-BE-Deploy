@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             return Ok(item);
         }
 
-        [HttpGet("accountId{id}")]
+        [HttpGet("accountId/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllByAccountId(int id)
         {

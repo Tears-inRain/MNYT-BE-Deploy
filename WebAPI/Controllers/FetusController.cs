@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             return Ok(item);
         }
 
-        [HttpGet("pregnancyId{id}")]
+        [HttpGet("pregnancyId/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllByPregnancyId(int id)
         {
