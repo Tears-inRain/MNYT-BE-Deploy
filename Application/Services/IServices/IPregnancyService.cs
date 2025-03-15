@@ -15,5 +15,6 @@ namespace Application.Services.IServices
         Task SoftDeleteAsync(int id);
         Task<IList<PregnancyVM>> GetAllAsync();
         Task<PregnancyVM> GetAsync(int id);
+        Task<IList<PregnancyVM>> GetAllByAccountIdAsync(int id);
     }
 }
