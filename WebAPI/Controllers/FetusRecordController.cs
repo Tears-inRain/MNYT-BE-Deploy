@@ -19,9 +19,12 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> AddFetusRecord(FetusRecordAddVM fetusRecordAddVM)
+        public async Task<IActionResult> AddFetusRecord(List<FetusRecordAddVM> fetusRecordAddVMs)
         {
-            await _fetusRecordService.AddAsync(fetusRecordAddVM);
+            foreach (var item in fetusRecordAddVMs)
+            {
+                await _fetusRecordService.AddAsync(item);
+            }
             return Ok("Fetus Record Added");
         }
 

@@ -54,6 +54,10 @@ namespace Infrastructure.Repos
 
         public void Update(TModel model)
         {
+            if (model == null || model.IsDeleted == true)
+            {
+                throw new Exception("Data is not exist");
+            }
             _dbSet.Update(model);
         }
         public virtual async Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "")
