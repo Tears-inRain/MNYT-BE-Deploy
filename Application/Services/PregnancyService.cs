@@ -89,5 +89,11 @@ namespace Application.Services
             _unitOfWork.PregnancyRepo.Update(itemToUpdate);
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task<IList<PregnancyVM>> GetAllByAccountIdAsync(int id)
+        {
+            var pregnancyQuery = _unitOfWork.PregnancyRepo.GetAllQueryable().Where(x => x.AccountId == id);
+            var result = await Task.Run(() => _mapper.Map<IList<PregnancyVM>>(pregnancyQuery.ToList()));
+            return result;
+        }
     }
 }
