@@ -1,7 +1,10 @@
 ﻿using Application.Services.IServices;
+using Application.ViewModels.Blog;
+using Application.ViewModels.Fetus;
 using Application.ViewModels.Pregnancy;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,17 +17,38 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public PregnancyService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly ILogger<PregnancyService> _logger;
+        public PregnancyService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper,
+            ILogger<PregnancyService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task AddSync(PregnancyAddVM pregnancyAddVM)
+        public async Task<ReadPregnancyDTO> CreatePregnancySync(PregnancyAddVM pregnancyAddVM)
         {
+            _logger.LogInformation("Creating a pregnancy for accountId: {AccountId}", pregnancyAddVM.AccountId);
+
+            var account = await _unitOfWork.AccountRepo.FindOneAsync(p => p.Id == pregnancyAddVM.AccountId);
+            if (account == null)
+            {
+                _logger.LogWarning("Account {AccountId} not found, cannot create prenancy", pregnancyAddVM.AccountId);
+                return null;
+            }
+
             var pregnancy = _mapper.Map<Pregnancy>(pregnancyAddVM);
+            pregnancy.CreateDate = DateTime.UtcNow;
+            pregnancy.UpdateDate = DateTime.UtcNow;
+
             await _unitOfWork.PregnancyRepo.AddAsync(pregnancy);
             await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Successfully created pregnancy Id: {PregnancyId}", pregnancy.Id);
+
+            return _mapper.Map<ReadPregnancyDTO>(pregnancy);
         }
 
         public async Task DeleteAsync(int id)

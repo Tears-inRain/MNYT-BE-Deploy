@@ -3,6 +3,7 @@ using Application.ViewModels.Fetus;
 using Application.ViewModels.Pregnancy;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +15,39 @@ namespace Application.Services
     public class FetusService : IFetusService
     {
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<FetusService> _logger;
         private readonly IMapper _mapper; 
-        public FetusService(IUnitOfWork unitOfWork, IMapper mapper)
+        public FetusService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper,
+            ILogger<FetusService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
-        public async Task AddSync(FetusAddVM fetusAddVM)
+
+        public async Task<ReadFetusDTO> CreateFetusSync(FetusAddVM fetusAddVM)
         {
+            _logger.LogInformation("Creating a fetus for pregnancyId: {PregnancyId}", fetusAddVM.PregnancyId);
+
+            var pregnancy = await _unitOfWork.PregnancyRepo.FindOneAsync(p => p.Id == fetusAddVM.PregnancyId);
+            if (pregnancy == null)
+            {
+                _logger.LogWarning("Prenancy {PrenancyId} not found, cannot create fetus", fetusAddVM.PregnancyId);
+                return null;
+            }
+
             var fetus = _mapper.Map<Fetus>(fetusAddVM);
+            fetus.CreateDate = DateTime.UtcNow;
+            fetus.UpdateDate = DateTime.UtcNow;
+
             await _unitOfWork.FetusRepo.AddAsync(fetus);
             await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Successfully created fetus Id: {FetusId}", fetus.Id);
+
+            return _mapper.Map<ReadFetusDTO>(fetus);
         }
 
         public async Task DeleteAsync(int id)

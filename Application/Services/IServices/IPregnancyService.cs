@@ -9,7 +9,7 @@ namespace Application.Services.IServices
 {
     public interface IPregnancyService
     {
-        Task AddSync(PregnancyAddVM pregnancyAddVM);
+        Task<ReadPregnancyDTO> CreatePregnancySync(PregnancyAddVM pregnancyAddVM);
         Task UpdateAsync(PregnancyVM pregnancyVM);
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
