@@ -20,7 +20,7 @@ namespace Application.Scheduler.JobSetup
             quartz.AddTrigger(opts => opts
                 .ForJob(jobKey)
                 .WithIdentity("SendEmailJob-trigger")
-                .WithCronSchedule("0 * * ? * *")); // Chạy mỗi phút
+                .WithCronSchedule("0 0/30 * ? * *")); // Chạy mỗi 30 phút
         }
     }
 }
