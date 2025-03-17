@@ -51,5 +51,12 @@ namespace WebAPI.Controllers
             var item = await _scheduleUserService.GetAsync(id);
             return Ok(item);
         }
+        [HttpGet("pregnancyId/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllByPregnancyId(int id)
+        {
+            var items = await _scheduleUserService.GetAllByPregnancyIdAsync(id);
+            return Ok(items);
+        }
     }
 }

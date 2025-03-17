@@ -1,8 +1,10 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels.FetusRecord;
+using Application.ViewModels.Pregnancy;
 using Application.ViewModels.ScheduleUser;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +65,13 @@ namespace Application.Services
             _unitOfWork.ScheduleUserRepo.Update(itemToUpdate);
 
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<IList<ScheduleUserVM>> GetAllByPregnancyIdAsync(int id)
+        {
+            var query = _unitOfWork.ScheduleUserRepo.GetAllQueryable().Where(x => x.PregnancyId == id);
+            var list = await query.ToListAsync();
+            return _mapper.Map<IList<ScheduleUserVM>>(list);
         }
     }
 }
