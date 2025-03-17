@@ -24,7 +24,7 @@ namespace Application.Scheduler.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+            var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);//thời gian gửi bị trễ 1 ngày, need fix
             var schedules = await _scheduleUserRepo.GetSchedulesByDateAsync(today);
 
             foreach (var schedule in schedules)
@@ -32,7 +32,7 @@ namespace Application.Scheduler.Jobs
                 if (schedule.Pregnancy?.Account?.Email is string email)
                 {
                     string subject = "Lịch hẹn của bạn";
-                    string body = $"Bạn có lịch hẹn \"{schedule.Title}\" vào ngày {schedule.Date:dd/MM/yyyy}. Vui lòng kiểm tra chi tiết";
+                    string body = $"Bạn có lịch hẹn \"{schedule.Type}\" \"{schedule.Title}\" với nội dung \"{schedule.Note}\" vào ngày {schedule.Date:dd/MM/yyyy}. Vui lòng kiểm tra chi tiết";
 
                     await _emailService.SendEmailAsync(email, subject, body);
                     _logger.LogInformation($"Sent email to {email} at {DateTime.Now}");
