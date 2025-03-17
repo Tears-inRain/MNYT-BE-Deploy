@@ -188,5 +188,9 @@ namespace Application.Services
 
             return _mapper.Map<List<ReadBlogPostDTO>>(posts);
         }
+        public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
+        {
+            return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
+        }
     }
 }

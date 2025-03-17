@@ -113,5 +113,13 @@ namespace WebAPI.Controllers
 
             return Ok(ApiResponse<string>.SuccessResponse("Post published successfully."));
         }
+
+        [HttpGet("top-authors")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTop3Authors()
+        {
+            var result = await _blogService.GetTopAuthorsAsync();
+            return Ok(result);
+        }
     }
 }
