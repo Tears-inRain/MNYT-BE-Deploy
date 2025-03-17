@@ -3,6 +3,7 @@ using Application.ViewModels.Fetus;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,9 +47,9 @@ namespace Application.Services
 
         public async Task<IList<FetusRecordVM>> GetAllByFetusIdAsync(int id)
         {
-            var fetusQuery = _unitOfWork.FetusRecordRepo.GetAllQueryable().Where(f=>f.FetusId == id);
-            var result = await Task.Run(() => _mapper.Map<IList<FetusRecordVM>>(fetusQuery.ToList()));
-            return result;
+            var recordQuery = _unitOfWork.FetusRecordRepo.GetAllQueryable().Where(f=>f.FetusId == id);
+            var recordList = await recordQuery.ToListAsync();
+            return _mapper.Map<IList<FetusRecordVM>>(recordList);
         }
 
         public async Task<FetusRecordVM> GetAsync(int id)

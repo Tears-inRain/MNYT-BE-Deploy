@@ -3,6 +3,7 @@ using Application.ViewModels.Fetus;
 using Application.ViewModels.Pregnancy;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -90,8 +91,8 @@ namespace Application.Services
         public async Task<IList<FetusVM>> GetAllByPregnancyIdAsync(int id)
         {
             var fetusQuery = _unitOfWork.FetusRepo.GetAllQueryable().Where(x => x.PregnancyId == id);
-            var result = await Task.Run(() => _mapper.Map<IList<FetusVM>>(fetusQuery.ToList()));
-            return result;
+            var fetusList = await fetusQuery.ToListAsync();
+            return _mapper.Map<IList<FetusVM>>(fetusList);
         }
     }
 }
