@@ -4,7 +4,7 @@ public partial class ScheduleUser : BaseEntity
 {
     public string? Title { get; set; }
 
-    public string? Status { get; set; }
+    public string? Status { get; set; } = "pending";
 
     public string? Type { get; set; }
 

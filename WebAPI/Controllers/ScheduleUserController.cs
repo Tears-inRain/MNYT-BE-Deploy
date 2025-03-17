@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> AddAsync(ScheduleUserAddVM item)
-        {
+        {            
             await _scheduleUserService.AddAsync(item);
             return Ok(item);
         }
