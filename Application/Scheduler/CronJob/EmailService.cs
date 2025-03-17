@@ -20,7 +20,7 @@ namespace Application.Scheduler.CronJob
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("System notification", _emailSettings.SenderEmail));
+            email.From.Add(new MailboxAddress("Mầm Non Yêu Thương", _emailSettings.SenderEmail));
             email.To.Add(new MailboxAddress("", to));
             email.Subject = subject;
 
