@@ -9,7 +9,7 @@ namespace Application.Services.IServices
 {
     public interface IFetusRecordService
     {
-        Task AddAsync(FetusRecordAddVM fetusRecordAddVM);
+        Task AddFetusRecordAsync(List<FetusRecordAddVM> fetusRecordAddVMs);
         Task UpdateAsync(FetusRecordVM fetusRecordVM);
         Task<IList<FetusRecordVM>> GetAllAsync();
         Task<FetusRecordVM> GetAsync(int id);

@@ -8,8 +8,6 @@ namespace Application.ViewModels.FetusRecord
 {
     public class FetusRecordAddVM
     {
-        
-
         public int? InputPeriod { get; set; }
 
         public decimal? Weight { get; set; }

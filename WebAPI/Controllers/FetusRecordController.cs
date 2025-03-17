@@ -21,9 +21,18 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AddFetusRecord(List<FetusRecordAddVM> fetusRecordAddVMs)
         {
-            foreach (var item in fetusRecordAddVMs)
+            if (fetusRecordAddVMs == null || fetusRecordAddVMs.Count == 0)
             {
-                await _fetusRecordService.AddAsync(item);
+                return BadRequest("Invalid input data");
+            }
+            try
+            {
+                await _fetusRecordService.AddFetusRecordAsync(fetusRecordAddVMs);
+                return Ok("Fetus Record(s) Added Successfully");
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
             }
             return Ok("Fetus Record Added");
         }

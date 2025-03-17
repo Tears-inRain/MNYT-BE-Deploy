@@ -2,6 +2,7 @@
 using Application.ViewModels.Fetus;
 using Application.ViewModels.FetusRecord;
 using AutoMapper;
+using AutoMapper.Internal;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,11 +23,41 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task AddAsync(FetusRecordAddVM fetusRecordAddVM)
+
+        public async Task AddFetusRecordAsync(List<FetusRecordAddVM> fetusRecordAddVMs)
         {
-            FetusRecord record = _mapper.Map<FetusRecord>(fetusRecordAddVM);
-            await _unitOfWork.FetusRecordRepo.AddAsync(record);
+            if (fetusRecordAddVMs == null || fetusRecordAddVMs.Count == 0)
+                throw new ArgumentException("No records to add");
+
+            var fetusId = fetusRecordAddVMs.First().FetusId;
+
+            var existingRecords = await _unitOfWork.FetusRecordRepo
+                .GetAllQueryable()
+                .Where(r => r.FetusId == fetusId)
+                .OrderBy(r => r.Date)
+                .ToListAsync();
+            //var existingRecordsMapped = _mapper.Map<List<FetusRecord>>(existingRecords);
+
+            var newRecords =  _mapper.Map<List<FetusRecord>>(fetusRecordAddVMs); //error with FetusRecordVM
+
+            var allRecords = existingRecords.Concat(newRecords).OrderBy(r => r.Date).ToList();
+
+            AdjustPeriods(allRecords);
+
+            await _unitOfWork.FetusRecordRepo.AddRangeAsync(newRecords);
             await _unitOfWork.SaveChangesAsync();
+
+            _unitOfWork.FetusRecordRepo.UpdateRange(existingRecords);
+            await _unitOfWork.SaveChangesAsync();
+            
+        }
+
+        private void AdjustPeriods(List<FetusRecord> records)
+        {
+            for (int i = 0; i < records.Count; i++)
+            {
+                records[i].Period = records[i].InputPeriod - (records.Last().InputPeriod - records[i].InputPeriod);
+            }
         }
 
         public async Task DeleteAsync(int id)
