@@ -50,6 +50,7 @@ namespace Infrastructure.Repos
         public void SoftDelete(TModel model)
         {
             model.IsDeleted = true;
+            model.UpdateDate = DateTime.UtcNow;
         }
 
         public void Update(TModel model)

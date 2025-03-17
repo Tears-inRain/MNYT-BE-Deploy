@@ -94,10 +94,7 @@ namespace Application.Services
                 return false;
             }
 
-            comment.IsDeleted = true;
-            comment.UpdateDate = DateTime.UtcNow;
-
-            _unitOfWork.CommentRepo.Update(comment);
+            _unitOfWork.CommentRepo.SoftDelete(comment);
             await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Comment Id: {CommentId} soft-deleted by account {AccountId}", commentId, accountId);

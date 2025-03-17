@@ -80,7 +80,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Deleting postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -93,10 +93,7 @@ namespace Application.Services
                 return false;
             }
 
-            post.IsDeleted = true;
-            post.UpdateDate = DateTime.UtcNow;
-
-            _unitOfWork.PostRepo.Update(post);
+            _unitOfWork.PostRepo.SoftDelete(post);
             await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Successfully soft-deleted BlogPost Id: {PostId}", post.Id);
