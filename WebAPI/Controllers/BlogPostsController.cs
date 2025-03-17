@@ -116,9 +116,9 @@ namespace WebAPI.Controllers
 
         [HttpGet("top-authors")]
         [AllowAnonymous]
-        public async Task<IAccountService> GetTop3Authors()
+        public async Task<IActionResult> GetTop3Authors()
         {
-            var result = await _blogService.GetTopAuthorAsync();
+            var result = await _blogService.GetTopAuthorsAsync();
             return Ok(result);
         }
     }
