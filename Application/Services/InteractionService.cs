@@ -64,10 +64,7 @@ namespace Application.Services
                 return false;
             }
 
-            like.IsDeleted = true;
-            like.UpdateDate = DateTime.UtcNow;
-
-            _unitOfWork.BlogLikeRepo.Update(like);
+            _unitOfWork.BlogLikeRepo.SoftDelete(like);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
@@ -131,10 +128,7 @@ namespace Application.Services
                 return false;
             }
 
-            bookmark.IsDeleted = true;
-            bookmark.UpdateDate = DateTime.UtcNow;
-
-            _unitOfWork.BlogBookmarkRepo.Update(bookmark);
+            _unitOfWork.BlogBookmarkRepo.SoftDelete(bookmark);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
