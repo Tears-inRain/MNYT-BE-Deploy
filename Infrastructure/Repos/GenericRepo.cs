@@ -26,7 +26,7 @@ namespace Infrastructure.Repos
 
         public async Task<IEnumerable<TModel>> GetAllAsync()
         {
-            var result = await _dbSet.ToListAsync();
+            var result = _dbSet;
             foreach (var item in result)
             {
                 if (item.IsDeleted)
@@ -34,7 +34,7 @@ namespace Infrastructure.Repos
                     result.Remove(item);
                 }
             }
-            return result;
+            return await result.ToListAsync();
         }
 
         public async Task<TModel> GetAsync(int id)
