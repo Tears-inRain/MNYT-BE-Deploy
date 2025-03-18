@@ -1,15 +1,9 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels.Fetus;
-using Application.ViewModels.Pregnancy;
 using AutoMapper;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -28,7 +22,7 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<ReadFetusDTO> CreateFetusSync(FetusAddVM fetusAddVM)
+        public async Task<ReadFetusDTO> CreateFetusAsync(FetusAddVM fetusAddVM)
         {
             _logger.LogInformation("Creating a fetus for pregnancyId: {PregnancyId}", fetusAddVM.PregnancyId);
 
