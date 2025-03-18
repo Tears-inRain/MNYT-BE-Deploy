@@ -2,6 +2,7 @@
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Net;
 
 namespace Infrastructure.Repos
 {
@@ -42,7 +43,7 @@ namespace Infrastructure.Repos
             TModel? model = await _dbSet.FindAsync(id);
             if (model == null || model.IsDeleted == true)
             {
-                throw new Exception($"{model} not found");
+                throw new Exceptions.InfrastructureException(HttpStatusCode.BadRequest, $"{model} not found");
             }
             return model;
         }
@@ -57,7 +58,7 @@ namespace Infrastructure.Repos
         {
             if (model == null || model.IsDeleted == true)
             {
-                throw new Exception("Data is not exist");
+                throw new Exceptions.InfrastructureException(HttpStatusCode.BadRequest, "Data is not exist");
             }
             _dbSet.Update(model);
         }

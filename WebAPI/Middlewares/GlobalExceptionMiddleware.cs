@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Infrastructure.Exceptions;
 
 namespace WebAPI.Middlewares
 {
@@ -10,10 +11,11 @@ namespace WebAPI.Middlewares
             {
                 await next(context);
             }
-            catch (APIException ex)
+            catch (Application.Exceptions.ApplicationException ex)
             {
                 // todo push notification & writing log
                 Console.WriteLine("========== GlobalExceptionMiddleware - Catched exception ==========");
+                Console.WriteLine("========== ApplicationException ==========");
                 Console.WriteLine("Error code: " + ex.ErrorCode);
                 Console.WriteLine("Message: " + ex.Message);
                 Console.WriteLine("========== GlobalExceptionMiddleware - End of exception ==========");
@@ -21,6 +23,22 @@ namespace WebAPI.Middlewares
 
                 //var hashMap = new Dictionary<string, string>();
                 //hashMap[ex.ErrorCode] = ex.Message;
+
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    ex.ErrorCode,
+                    ex.Message
+                });
+            }
+            catch (InfrastructureException ex)
+            {
+                // todo push notification & writing log
+                Console.WriteLine("========== GlobalExceptionMiddleware - Catched exception ==========");
+                Console.WriteLine("========== InfrastructureException ==========");
+                Console.WriteLine("Error code: " + ex.ErrorCode);
+                Console.WriteLine("Message: " + ex.Message);
+                Console.WriteLine("========== GlobalExceptionMiddleware - End of exception ==========");
+                context.Response.StatusCode = ex.StatusCode;
 
                 await context.Response.WriteAsJsonAsync(new
                 {

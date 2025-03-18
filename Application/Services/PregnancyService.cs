@@ -29,7 +29,7 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<ReadPregnancyDTO> CreatePregnancySync(PregnancyAddVM pregnancyAddVM)
+        public async Task<ReadPregnancyDTO> CreatePregnancyAsync(PregnancyAddVM pregnancyAddVM)
         {
             _logger.LogInformation("Creating a pregnancy for accountId: {AccountId}", pregnancyAddVM.AccountId);
 

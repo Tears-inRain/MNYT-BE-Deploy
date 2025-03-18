@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AddAsync(FetusAddVM fetusAddVM)
         {
-            var created = await _fetusService.CreateFetusSync(fetusAddVM);
+            var created = await _fetusService.CreateFetusAsync(fetusAddVM);
             if (created == null)
             {
                 return NotFound(ApiResponse<ReadFetusDTO>.FailureResponse("Cannot add fetus; pregnancy not found."));

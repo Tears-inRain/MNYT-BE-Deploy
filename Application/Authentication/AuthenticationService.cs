@@ -36,7 +36,7 @@ namespace Application.Authentication
                 string.IsNullOrWhiteSpace(registrationDto.UserName) ||
                 string.IsNullOrWhiteSpace(registrationDto.Password))
             {
-                throw new APIException(HttpStatusCode.BadRequest, "Invalid registration data.");
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Invalid registration data.");
             }
 
             var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(registrationDto.Email, registrationDto.UserName);

@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AddAsync(PregnancyAddVM item)
         {
-            var created = await _pregnancyservice.CreatePregnancySync(item);
+            var created = await _pregnancyservice.CreatePregnancyAsync(item);
             if (created == null)
             {
                 return NotFound(ApiResponse<ReadPregnancyDTO>.FailureResponse("Cannot create pregnancy; account not found."));
