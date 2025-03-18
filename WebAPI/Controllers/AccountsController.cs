@@ -43,14 +43,6 @@ namespace WebAPI.Controllers
             }
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> AddAsync(CreateAccountDTO createAccountDto)
-        //{
-        //    var created = await _accountService.AddAsync(createAccountDto);
-        //    return Ok(ApiResponse<CreateAccountDTO>.SuccessResponse(created, "Post created successfully."));
-        //}
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAll()
