@@ -14,6 +14,7 @@ namespace Application.Services.IServices
         Task<ReadBlogPostDTO> CreateBlogPostAsync(int authorId, CreateBlogPostDTO dto);
         Task<ReadBlogPostDTO?> UpdateBlogPostAsync(int postId, UpdateBlogPostDTO dto, int requestUserId);
         Task<bool> DeleteBlogPostAsync(int postId, int requestUserId);
+        Task<bool> ChangeBlogPostStatusAsync(int postId, int requestAccountId, string status);
         Task<bool> PublishBlogPostAsync(int postId, int requestUserId);
 
         Task<ReadBlogPostDTO?> GetBlogPostByIdAsync(int postId);

@@ -101,6 +101,19 @@ namespace WebAPI.Controllers
             return Ok(ApiResponse<string>.SuccessResponse("Post deleted successfully."));
         }
 
+        [HttpPatch("{postId}/change-status")]
+        [AllowAnonymous]
+        public async Task<IActionResult> PublishPost(int postId, [FromQuery] int accountId, string status)
+        {
+            var success = await _blogService.ChangeBlogPostStatusAsync(postId, accountId, status);
+            if (!success)
+            {
+                return NotFound(ApiResponse<string>.FailureResponse("Could not change post status, not found or no permission."));
+            }
+
+            return Ok(ApiResponse<string>.SuccessResponse("Post status successfully."));
+        }
+
         [HttpPatch("{postId}/publish")]
         [AllowAnonymous]
         public async Task<IActionResult> PublishPost(int postId, [FromQuery] int accountId)

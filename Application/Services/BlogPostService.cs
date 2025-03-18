@@ -100,11 +100,38 @@ namespace Application.Services
             return true;
         }
 
+        public async Task<bool> ChangeBlogPostStatusAsync(int postId, int requestAccountId, string status)
+        {
+            _logger.LogInformation("Change postId: {PostId} status by accountId: {AccountId}", postId, requestAccountId);
+
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
+            if (post == null)
+            {
+                _logger.LogWarning("Post Id: {PostId} not found", postId);
+                return false;
+            }
+
+            if (post.AuthorId != requestAccountId)
+            {
+                _logger.LogWarning("Account Id: {AccountId} not allowed to publish postId: {PostId}", requestAccountId, postId);
+                return false;
+            }
+
+            post.Status = status;
+            post.UpdateDate = DateTime.UtcNow;
+
+            _unitOfWork.PostRepo.Update(post);
+            await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Successfully change BlogPost Id: {PostId} status", post.Id);
+            return true;
+        }
+
         public async Task<bool> PublishBlogPostAsync(int postId, int requestAccountId)
         {
             _logger.LogInformation("Publishing postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found", postId);
@@ -132,7 +159,7 @@ namespace Application.Services
         {
             var post = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .FirstOrDefaultAsync(p => p.Id == postId && !p.IsDeleted);
+                .FirstOrDefaultAsync(p => p.Id == postId);
 
             if (post == null)
             {
