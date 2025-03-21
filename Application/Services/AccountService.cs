@@ -70,9 +70,11 @@ namespace Application.Services
         {
             var account = await _unitOfWork.AccountRepo.GetAsync(accountId);
             if (account == null) return null;
+            account.FullName = updateDto.FullName;
+            account.PhoneNumber = updateDto.PhoneNumber;
+            account.UserName = updateDto.UserName;
+            account.Email = updateDto.Email;
 
-            account.FullName = updateDto.FullName ?? account.FullName;
-            account.PhoneNumber = updateDto.PhoneNumber ?? account.PhoneNumber;
             account.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.AccountRepo.Update(account);
