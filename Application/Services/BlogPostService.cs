@@ -7,6 +7,7 @@ using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
+using System.Net;
 
 
 namespace Application.Services
@@ -202,14 +203,14 @@ namespace Application.Services
 
         public async Task<List<ReadBlogPostDTO>> GetAllByCategoryAsync(string category)
         {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cant not be null or empty.");
+            }
+
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => !p.IsDeleted && p.Author.Role != "Admin");
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(p => p.Category == category);
-            }
+                .Where(p => p.Category == category && p.Author.Role != "Admin");
 
             var posts = await query.ToListAsync();
 
@@ -231,7 +232,5 @@ namespace Application.Services
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
         }
-
-
     }
 }
