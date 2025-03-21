@@ -114,12 +114,6 @@ namespace Application.Services
                 return false;
             }
 
-            if (post.AuthorId != requestAccountId)
-            {
-                _logger.LogWarning("Account Id: {AccountId} not allowed to publish postId: {PostId}", requestAccountId, postId);
-                return false;
-            }
-
             post.Status = status;
             post.UpdateDate = DateTime.UtcNow;
 
