@@ -67,6 +67,18 @@ namespace WebAPI.Controllers
             ));
         }
 
+        [HttpGet("admin-posts")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiResponse<List<ReadBlogPostDTO>>>> GetAllPostsByAdmin()
+        {
+            var posts = await _blogService.GetAllPostsByAdminAsync();
+
+            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+                posts,
+                "Successfully retrieved all posts by admin accounts."
+            ));
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreatePost([FromQuery] int authorId, [FromBody] CreateBlogPostDTO dto)
