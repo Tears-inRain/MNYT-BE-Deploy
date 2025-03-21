@@ -18,8 +18,8 @@ namespace Application.ViewModels.Blog
         public string? Status { get; set; }
         public DateOnly? PublishedDay { get; set; }
         public int? ImageId { get; set; }
-
         public string? ImageUrl { get; set; }
+        public DateTime CreateDate { get; set; }
 
         // For illustration: 
         public int LikeCount { get; set; }
