@@ -212,9 +212,24 @@ namespace Application.Services
 
             return _mapper.Map<List<ReadBlogPostDTO>>(posts);
         }
+
+        public async Task<List<ReadBlogPostDTO>> GetAllPostsByAdminAsync()
+        {
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(post => post.Author != null
+                               && post.Author.Role == "Admin");
+
+            var adminPosts = await query.ToListAsync();
+
+            return _mapper.Map<List<ReadBlogPostDTO>>(adminPosts);
+        }
+
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
         }
+
+
     }
 }
