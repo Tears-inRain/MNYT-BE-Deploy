@@ -62,7 +62,7 @@ namespace Application.Services
                 _logger.LogWarning("Account Id: {AccountId} is not the author of postId: {PostId}", requestAccountId, postId);
                 return null;
             }
-            if (!string.IsNullOrWhiteSpace(dto.Category)){post.Category = dto.Category;}
+            if (!string.IsNullOrWhiteSpace(dto.Category)) { post.Category = dto.Category; }
             if (!string.IsNullOrWhiteSpace(dto.Title)) post.Title = dto.Title;
             if (!string.IsNullOrWhiteSpace(dto.Description)) post.Description = dto.Description;
             if (dto.Period.HasValue) post.Period = dto.Period.Value;
