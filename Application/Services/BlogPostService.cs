@@ -7,6 +7,7 @@ using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
+using System.Net;
 
 
 namespace Application.Services
@@ -49,7 +50,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Updating postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -172,14 +173,17 @@ namespace Application.Services
 
         public async Task<List<ReadBlogPostDTO>> GetAllPostsAsync()
         {
-            var posts = await _unitOfWork.PostRepo.GetAllAsync("Author,BlogLikes,BlogBookmarks,Comments");
+            var query =  _unitOfWork.PostRepo.GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(post => post.Author.Role != "Admin"); 
+            var posts = await query.ToListAsync();
+
             return _mapper.Map<List<ReadBlogPostDTO>>(posts);
         }
 
         public async Task<PaginatedList<ReadBlogPostDTO>> GetAllPostsPaginatedAsync(QueryParameters queryParameters)
         {
             var query = _unitOfWork.PostRepo.GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => !p.IsDeleted);
+                .Where(post => post.Author.Role != "Admin");
 
             var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
                 query.OrderByDescending(p => p.CreateDate),
@@ -199,14 +203,14 @@ namespace Application.Services
 
         public async Task<List<ReadBlogPostDTO>> GetAllByCategoryAsync(string category)
         {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cant not be null or empty.");
+            }
+
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => !p.IsDeleted);
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(p => p.Category == category);
-            }
+                .Where(p => p.Category == category && p.Author.Role != "Admin");
 
             var posts = await query.ToListAsync();
 
@@ -217,8 +221,7 @@ namespace Application.Services
         {
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.Author != null
-                               && post.Author.Role == "Admin");
+                .Where(post => post.Author.Role == "Admin");
 
             var adminPosts = await query.ToListAsync();
 
@@ -229,7 +232,5 @@ namespace Application.Services
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
         }
-
-
     }
 }
