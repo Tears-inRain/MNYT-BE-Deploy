@@ -65,7 +65,9 @@ namespace Application.Services
             if (!string.IsNullOrWhiteSpace(dto.Category)) { post.Category = dto.Category; }
             if (!string.IsNullOrWhiteSpace(dto.Title)) post.Title = dto.Title;
             if (!string.IsNullOrWhiteSpace(dto.Description)) post.Description = dto.Description;
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl)) post.ImageUrl = dto.ImageUrl;
             if (dto.Period.HasValue) post.Period = dto.Period.Value;
+            if (dto.ImageId.HasValue) post.ImageId = dto.ImageId.Value;
 
             post.UpdateDate = DateTime.UtcNow;
 
