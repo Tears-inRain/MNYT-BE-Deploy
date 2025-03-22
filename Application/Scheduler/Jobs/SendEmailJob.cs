@@ -24,7 +24,7 @@ namespace Application.Scheduler.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);//thời gian gửi bị trễ 1 ngày, need fix
+            var today = DateTime.UtcNow.Date;//thời gian gửi bị trễ 1 ngày, need fix
             var schedules = await _scheduleUserRepo.GetSchedulesByDateAsync(today);
 
             foreach (var schedule in schedules)

@@ -6,6 +6,8 @@ public partial class ScheduleTemplate : BaseEntity
 
     public string? Type { get; set; }
 
+    public string Tag { get; set; }
+
     public string? Title { get; set; }
 
     public string? Status { get; set; }

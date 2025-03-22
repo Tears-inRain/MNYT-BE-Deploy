@@ -12,7 +12,7 @@ namespace Infrastructure.Repos
         {
             _appDbContext = dbContext;
         }
-        public async Task<List<ScheduleUser>> GetSchedulesByDateAsync(DateOnly date)
+        public async Task<List<ScheduleUser>> GetSchedulesByDateAsync(DateTime date)
         {
             return await _appDbContext.ScheduleUsers
                 .Include(s => s.Pregnancy)

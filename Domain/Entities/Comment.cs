@@ -12,6 +12,8 @@ public partial class Comment : BaseEntity
 
     public string? Content { get; set; }
 
+    public string? ImageUrl { get; set; }
+
     public virtual Account? Account { get; set; }
 
     public virtual BlogPost? BlogPost { get; set; }
