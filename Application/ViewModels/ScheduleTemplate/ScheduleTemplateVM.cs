@@ -13,6 +13,8 @@ namespace Application.ViewModels.ScheduleTemplate
 
         public string? Type { get; set; }
 
+        public string Tag { get; set; }
+
         public string? Status { get; set; }
 
         public string? Title { get; set; }
