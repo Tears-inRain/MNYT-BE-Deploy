@@ -5,7 +5,7 @@ namespace Application.Services.IServices
     public interface IPregnancyStandardService
     {
         Task AddSync(PregnacyStandardAddVM pregnancyAddVM);
-        Task UpdateAsync(PregnacyStandardAddVM pregnancyVM);
+        Task<PregnancyStandardVM> UpdateAsync(int id,PregnacyStandardAddVM pregnancyVM);
         Task DeleteAsync(int id);
         Task SoftDeleteAsync(int id);
         Task<IList<PregnancyStandardVM>> GetAllAsync();

@@ -58,11 +58,14 @@ namespace Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(PregnacyStandardAddVM pregnancyVM)
+        public async Task<PregnancyStandardVM> UpdateAsync(int id,PregnacyStandardAddVM pregnancyVM)
         {
-            var itemToUpdate = _mapper.Map<PregnancyStandard>(pregnancyVM);
+            var itemToUpdate = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
+            if (itemToUpdate == null) return null;
+            _mapper.Map(pregnancyVM, itemToUpdate);
             _unitOfWork.PregnancyStandardRepo.Update(itemToUpdate);
-            return _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
+            return _mapper.Map<PregnancyStandardVM>(itemToUpdate);
         }
     }
 }

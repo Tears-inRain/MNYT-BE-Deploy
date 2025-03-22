@@ -1,7 +1,10 @@
 ﻿using Application.Services.IServices;
+using Application.ViewModels.Accounts;
+using Application.ViewModels;
 using Application.ViewModels.PregnancyStandard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services;
 
 namespace WebAPI.Controllers
 {
@@ -28,11 +31,31 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateAsync(PregnacyStandardAddVM item)
+        public async Task<IActionResult> UpdateAsync(int id,[FromBody]PregnacyStandardAddVM item)
         {
-            await _pregnancyStandardService.UpdateAsync(item);
+
+            if (!ModelState.IsValid)
+            {
+                return base.BadRequest(ApiResponse<PregnancyStandardVM>.FailureResponse(
+                    "Invalid data.", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                ));
+            }
+            try
+            {
+                var updatedPS = await _pregnancyStandardService.UpdateAsync(id,item);
+                if (updatedPS == null)
+                {
+                    return base.NotFound(ApiResponse<PregnancyStandardVM>.FailureResponse("Account not found or update failed."));
+                }
+
+                return base.Ok(ApiResponse<PregnancyStandardVM>.SuccessResponse(updatedPS, "Account updated successfully."));
+            }
+            catch (Exception ex)
+            {
+                return base.StatusCode(500, ApiResponse<PregnancyStandardVM>.FailureResponse("An error occurred while updating the account."));
+            }
             return Ok();
         }
 
