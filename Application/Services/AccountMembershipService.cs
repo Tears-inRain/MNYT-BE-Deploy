@@ -1,6 +1,7 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels.AccountMembership;
 using Application.ViewModels.Blog;
+using Application.ViewModels.Media;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
@@ -31,6 +32,12 @@ namespace Application.Services
             );
             return _mapper.Map<ReadAccountMembershipDTO>(activeMem);
             ;
+        }
+
+        public async Task<IEnumerable<ReadAccountMembershipDTO>> GetAllAccountMembershipAsync()
+        {
+            var entities = await _unitOfWork.AccountMembershipRepo.GetAllAsync();
+            return _mapper.Map<IEnumerable<ReadAccountMembershipDTO>>(entities);
         }
 
         public async Task<AccountMembership> CreateNewMembershipAsync(int accountId, int membershipPlanId)

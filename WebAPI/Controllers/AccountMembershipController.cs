@@ -1,6 +1,7 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
 using Application.ViewModels.AccountMembership;
+using Application.ViewModels.Blog;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,17 @@ namespace WebAPI.Controllers
                     "Failed to get active membership."
                 ));
             }
+        }
+
+        [HttpGet("all")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllAccountMembership()
+        {
+            var result = await _membershipService.GetAllAccountMembershipAsync();
+            return Ok(ApiResponse<IEnumerable<ReadAccountMembershipDTO>>.SuccessResponse(
+                result,
+                "All account membership retrieved successfully."
+            ));
         }
     }
 }
