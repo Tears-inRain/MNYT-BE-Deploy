@@ -11,6 +11,7 @@ namespace Application.Services.IServices
     public interface IAccountMembershipService
     {
         Task<ReadAccountMembershipDTO?> GetActiveMembershipAsync(int accountId);
+        Task<IEnumerable<ReadAccountMembershipDTO>> GetAllAccountMembershipAsync();
         Task<AccountMembership> CreateNewMembershipAsync(int accountId, int membershipPlanId);
         Task<AccountMembership> UpgradeMembershipAsync(int accountId, int newPlanId);
     }

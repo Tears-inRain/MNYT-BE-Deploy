@@ -22,14 +22,14 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<MediaDTO> CreateMediaAsync(CreateMediaDTO createMediaDto)
+        public async Task<ReadMediaDTO> CreateMediaAsync(CreateMediaDTO createMediaDto)
         {
             var entity = _mapper.Map<Media>(createMediaDto);
 
             await _unitOfWork.MediaRepo.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
 
-            var resultDto = new MediaDTO
+            var resultDto = new ReadMediaDTO
             {
                 Id = entity.Id,
                 Type = entity.Type,
@@ -39,22 +39,22 @@ namespace Application.Services
             return resultDto;
         }
 
-        public async Task<MediaDTO?> GetMediaByIdAsync(int id)
+        public async Task<ReadMediaDTO?> GetMediaByIdAsync(int id)
         {
             var entity = await _unitOfWork.MediaRepo.GetAsync(id);
             if (entity == null)
                 return null;
 
-            return _mapper.Map<MediaDTO>(entity);
+            return _mapper.Map<ReadMediaDTO>(entity);
         }
 
-        public async Task<IEnumerable<MediaDTO>> GetAllMediaAsync()
+        public async Task<IEnumerable<ReadMediaDTO>> GetAllMediaAsync()
         {
             var entities = await _unitOfWork.MediaRepo.GetAllAsync();
-            return _mapper.Map<IEnumerable<MediaDTO>>(entities);
+            return _mapper.Map<IEnumerable<ReadMediaDTO>>(entities);
         }
 
-        public async Task<MediaDTO?> UpdateMediaAsync(MediaDTO mediaDto)
+        public async Task<ReadMediaDTO?> UpdateMediaAsync(ReadMediaDTO mediaDto)
         {
             if (mediaDto.Id <= 0)
             {
@@ -68,7 +68,7 @@ namespace Application.Services
             _mapper.Map(mediaDto, entity);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<MediaDTO>(entity);
+            return _mapper.Map<ReadMediaDTO>(entity);
         }
 
         public async Task<bool> DeleteMediaAsync(int id)

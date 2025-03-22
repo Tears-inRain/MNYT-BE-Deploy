@@ -4,13 +4,13 @@ namespace Application.Services.IServices
 {
     public interface IMediaService
     {
-        Task<MediaDTO> CreateMediaAsync(CreateMediaDTO createMediaDto);
+        Task<ReadMediaDTO> CreateMediaAsync(CreateMediaDTO createMediaDto);
 
-        Task<MediaDTO?> GetMediaByIdAsync(int id);
+        Task<ReadMediaDTO?> GetMediaByIdAsync(int id);
 
-        Task<IEnumerable<MediaDTO>> GetAllMediaAsync();
+        Task<IEnumerable<ReadMediaDTO>> GetAllMediaAsync();
 
-        Task<MediaDTO?> UpdateMediaAsync(MediaDTO mediaDto);
+        Task<ReadMediaDTO?> UpdateMediaAsync(ReadMediaDTO mediaDto);
 
         Task<bool> DeleteMediaAsync(int id);
     }

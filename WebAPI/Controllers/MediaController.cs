@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
             try
             {
                 var createdDto = await _mediaService.CreateMediaAsync(mediaDto);
-                return Ok(ApiResponse<MediaDTO>.SuccessResponse(
+                return Ok(ApiResponse<ReadMediaDTO>.SuccessResponse(
                     createdDto,
                     "Media created successfully."
                 ));
@@ -55,19 +55,19 @@ namespace WebAPI.Controllers
                 var mediaDto = await _mediaService.GetMediaByIdAsync(id);
                 if (mediaDto == null)
                 {
-                    return NotFound(ApiResponse<MediaDTO>.FailureResponse(
+                    return NotFound(ApiResponse<ReadMediaDTO>.FailureResponse(
                         "Media plan not found."
                     ));
                 }
 
-                return Ok(ApiResponse<MediaDTO>.SuccessResponse(
+                return Ok(ApiResponse<ReadMediaDTO>.SuccessResponse(
                     mediaDto,
                     "Media retrieved successfully."
                 ));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<MediaDTO>.FailureResponse(
+                return StatusCode(500, ApiResponse<ReadMediaDTO>.FailureResponse(
                     "An error occurred while retrieving the media."
                 ));
             }
@@ -80,14 +80,14 @@ namespace WebAPI.Controllers
             try
             {
                 var media = await _mediaService.GetAllMediaAsync();
-                return Ok(ApiResponse<IEnumerable<MediaDTO>>.SuccessResponse(
+                return Ok(ApiResponse<IEnumerable<ReadMediaDTO>>.SuccessResponse(
                     media,
                     "List of media retrieved successfully."
                 ));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<IEnumerable<MediaDTO>>.FailureResponse(
+                return StatusCode(500, ApiResponse<IEnumerable<ReadMediaDTO>>.FailureResponse(
                     "An error occurred while retrieving the list of media."
                 ));
             }
@@ -95,11 +95,11 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [AllowAnonymous]
-        public async Task<IActionResult> Update([FromBody] MediaDTO mediaDto)
+        public async Task<IActionResult> Update([FromBody] ReadMediaDTO mediaDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ApiResponse<MediaDTO>.FailureResponse(
+                return BadRequest(ApiResponse<ReadMediaDTO>.FailureResponse(
                     "Invalid data.",
                     ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
                 ));
@@ -110,19 +110,19 @@ namespace WebAPI.Controllers
                 var updatedDto = await _mediaService.UpdateMediaAsync(mediaDto);
                 if (updatedDto == null)
                 {
-                    return NotFound(ApiResponse<MediaDTO>.FailureResponse(
+                    return NotFound(ApiResponse<ReadMediaDTO>.FailureResponse(
                         "Media not found or missing ID."
                     ));
                 }
 
-                return Ok(ApiResponse<MediaDTO>.SuccessResponse(
+                return Ok(ApiResponse<ReadMediaDTO>.SuccessResponse(
                     updatedDto,
                     "Media updated successfully."
                 ));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ApiResponse<MediaDTO>.FailureResponse(
+                return StatusCode(500, ApiResponse<ReadMediaDTO>.FailureResponse(
                     "An error occurred while updating the media."
                 ));
             }

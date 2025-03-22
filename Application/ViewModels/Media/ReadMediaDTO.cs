@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ViewModels.Media
 {
-    public class MediaDTO
+    public class ReadMediaDTO
     {
         public int Id { get; set; }
 
