@@ -69,7 +69,7 @@ namespace Application.Services
             return true;
         }
 
-        public async Task<List<ReadBlogPostDTO>> GetAllLikesByAccountIdAsync(int accountId)
+        public async Task<List<ReadPostDTO>> GetAllLikesByAccountIdAsync(int accountId)
         {
             _logger.LogInformation("Retrieving all liked posts for accountId: {AccountId}", accountId);
 
@@ -82,7 +82,7 @@ namespace Application.Services
                 .Select(l => l.Post!)
                 .ToListAsync();
 
-            return _mapper.Map<List<ReadBlogPostDTO>>(likedPosts);
+            return _mapper.Map<List<ReadPostDTO>>(likedPosts);
         }
 
         public async Task<bool> BookmarkPostAsync(int accountId, int postId)
@@ -133,7 +133,7 @@ namespace Application.Services
             return true;
         }
 
-        public async Task<List<ReadBlogPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId)
+        public async Task<List<ReadPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId)
         {
             _logger.LogInformation("Retrieving all bookmarked posts for accountId: {AccountId}", accountId);
 
@@ -146,7 +146,7 @@ namespace Application.Services
                 .Select(b => b.Post!)
                 .ToListAsync();
 
-            return _mapper.Map<List<ReadBlogPostDTO>>(bookmarkedPosts);
+            return _mapper.Map<List<ReadPostDTO>>(bookmarkedPosts);
         }
     }
 }

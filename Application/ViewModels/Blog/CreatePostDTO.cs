@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.ViewModels.Blog
 {
-    public class CreateBlogPostDTO
+    public class CreatePostDTO
     {
         public string? Category { get; set; }
 

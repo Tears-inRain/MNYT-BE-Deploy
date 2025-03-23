@@ -13,7 +13,7 @@ namespace Application.Services.IServices
         Task<bool> UnlikePostAsync(int accountId, int postId);
         Task<bool> BookmarkPostAsync(int accountId, int postId);
         Task<bool> RemoveBookmarkAsync(int accountId, int postId);
-        Task<List<ReadBlogPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId);
-        Task<List<ReadBlogPostDTO>> GetAllLikesByAccountIdAsync(int accountId);
+        Task<List<ReadPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId);
+        Task<List<ReadPostDTO>> GetAllLikesByAccountIdAsync(int accountId);
     }
 }

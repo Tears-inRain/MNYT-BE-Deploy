@@ -69,7 +69,7 @@ namespace Infrastructure
             services.AddScoped<IVnPayService, VnPayService>();
             services.AddScoped<ICashPaymentService, CashPaymentService>();
 
-            services.AddScoped<IBlogPostService, BlogPostService>();
+            services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInteractionService, InteractionService>();
             services.AddScoped<IMediaService, MediaService>();
