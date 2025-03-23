@@ -1,10 +1,14 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Enums;
+
+namespace Domain.Entities;
 
 public partial class BlogPost : BaseEntity
 {
     public string? Category { get; set; }
 
     public string Title { get; set; } = null!;
+
+    public PostType TypeEnum { get; set; } = PostType.Forum;
 
     public string? Description { get; set; }
 

@@ -13,7 +13,10 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Server=database.purintech.id.vn;uid=sa;uid=sa;pwd=<Hu@nH0aH0n9>;Database=PrenatalCareDB;TrustServerCertificate=true;Encrypt=true;");
+    }
 
     public virtual DbSet<Account> Accounts { get; set; }
 
