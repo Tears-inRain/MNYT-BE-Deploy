@@ -44,10 +44,10 @@ namespace WebAPI.Controllers
 
         [HttpGet("likes")]
         [AllowAnonymous]
-        public async Task<ActionResult<ApiResponse<List<ReadBlogPostDTO>>>> GetLikesByAccountId(int accountId)
+        public async Task<ActionResult<ApiResponse<List<ReadPostDTO>>>> GetLikesByAccountId(int accountId)
         {
             var likedPosts = await _interactionService.GetAllLikesByAccountIdAsync(accountId);
-            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+            return Ok(ApiResponse<List<ReadPostDTO>>.SuccessResponse(
                 likedPosts,
                 $"Retrieved {likedPosts.Count} liked posts for accountId = {accountId}."
             ));
@@ -79,10 +79,10 @@ namespace WebAPI.Controllers
 
         [HttpGet("bookmarks")]
         [AllowAnonymous]
-        public async Task<ActionResult<ApiResponse<List<ReadBlogPostDTO>>>> GetBookmarksByAccountId(int accountId)
+        public async Task<ActionResult<ApiResponse<List<ReadPostDTO>>>> GetBookmarksByAccountId(int accountId)
         {
             var bookmarkedPosts = await _interactionService.GetAllBookmarksByAccountIdAsync(accountId);
-            return Ok(ApiResponse<List<ReadBlogPostDTO>>.SuccessResponse(
+            return Ok(ApiResponse<List<ReadPostDTO>>.SuccessResponse(
                 bookmarkedPosts,
                 $"Retrieved {bookmarkedPosts.Count} bookmarked posts for accountId = {accountId}."
             ));

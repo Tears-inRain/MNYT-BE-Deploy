@@ -12,41 +12,56 @@ using System.Net;
 
 namespace Application.Services
 {
-    public class BlogPostService : IBlogPostService
+    public class PostService : IPostService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<BlogPostService> _logger;
+        private readonly ILogger<PostService> _logger;
 
-        public BlogPostService(
+        public PostService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            ILogger<BlogPostService> logger)
+            ILogger<PostService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
 
-        public async Task<ReadBlogPostDTO> CreateBlogPostAsync(int authorId, CreateBlogPostDTO dto)
+        public async Task<ReadPostDTO> CreateBlogPostAsync(int authorId, CreatePostDTO dto)
         {
             _logger.LogInformation("Creating a blog post for AuthorId: {AuthorId}", authorId);
 
             var post = _mapper.Map<BlogPost>(dto);
             post.AuthorId = authorId;
             post.Status = "Draft";
-            post.CreateDate = DateTime.UtcNow;
-            post.UpdateDate = DateTime.UtcNow;
+            post.TypeEnum = Domain.Enums.PostType.Blog;
 
             await _unitOfWork.PostRepo.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Successfully created BlogPost Id: {PostId}", post.Id);
 
-            return _mapper.Map<ReadBlogPostDTO>(post);
+            return _mapper.Map<ReadPostDTO>(post);
         }
 
-        public async Task<ReadBlogPostDTO?> UpdateBlogPostAsync(int postId, UpdateBlogPostDTO dto, int requestAccountId)
+        public async Task<ReadPostDTO> CreateForumPostAsync(int authorId, CreatePostDTO dto)
+        {
+            _logger.LogInformation("Creating a forum post for AuthorId: {AuthorId}", authorId);
+
+            var post = _mapper.Map<BlogPost>(dto);
+            post.AuthorId = authorId;
+            post.Status = "Draft";
+
+            await _unitOfWork.PostRepo.AddAsync(post);
+            await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Successfully created ForumPost Id: {PostId}", post.Id);
+
+            return _mapper.Map<ReadPostDTO>(post);
+        }
+
+        public async Task<ReadPostDTO?> UpdatePostAsync(int postId, UpdatePostDTO dto, int requestAccountId)
         {
             _logger.LogInformation("Updating postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
@@ -74,12 +89,12 @@ namespace Application.Services
             _unitOfWork.PostRepo.Update(post);
             await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully updated BlogPost Id: {PostId}", post.Id);
+            _logger.LogInformation("Successfully updated Post Id: {PostId}", post.Id);
 
-            return _mapper.Map<ReadBlogPostDTO>(post);
+            return _mapper.Map<ReadPostDTO>(post);
         }
 
-        public async Task<bool> DeleteBlogPostAsync(int postId, int requestAccountId)
+        public async Task<bool> DeletePostAsync(int postId, int requestAccountId)
         {
             _logger.LogInformation("Deleting postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
@@ -99,11 +114,11 @@ namespace Application.Services
             _unitOfWork.PostRepo.SoftDelete(post);
             await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully soft-deleted BlogPost Id: {PostId}", post.Id);
+            _logger.LogInformation("Successfully soft-deleted Post Id: {PostId}", post.Id);
             return true;
         }
 
-        public async Task<bool> ChangeBlogPostStatusAsync(int postId, int requestAccountId, string status)
+        public async Task<bool> ChangePostStatusAsync(int postId, int requestAccountId, string status)
         {
             _logger.LogInformation("Change postId: {PostId} status by accountId: {AccountId}", postId, requestAccountId);
 
@@ -115,16 +130,15 @@ namespace Application.Services
             }
 
             post.Status = status;
-            post.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.PostRepo.Update(post);
             await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully change BlogPost Id: {PostId} status", post.Id);
+            _logger.LogInformation("Successfully change Post Id: {PostId} status", post.Id);
             return true;
         }
 
-        public async Task<bool> PublishBlogPostAsync(int postId, int requestAccountId)
+        public async Task<bool> PublishPostAsync(int postId, int requestAccountId)
         {
             _logger.LogInformation("Publishing postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
@@ -143,16 +157,15 @@ namespace Application.Services
 
             post.Status = "Published";
             post.PublishedDay = DateOnly.FromDateTime(DateTime.UtcNow);
-            post.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.PostRepo.Update(post);
             await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Successfully published BlogPost Id: {PostId}", post.Id);
+            _logger.LogInformation("Successfully published Post Id: {PostId}", post.Id);
             return true;
         }
 
-        public async Task<ReadBlogPostDTO?> GetBlogPostByIdAsync(int postId)
+        public async Task<ReadPostDTO?> GetPostByIdAsync(int postId)
         {
             var post = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
@@ -164,22 +177,33 @@ namespace Application.Services
                 return null;
             }
 
-            return _mapper.Map<ReadBlogPostDTO>(post);
+            return _mapper.Map<ReadPostDTO>(post);
         }
 
-        public async Task<List<ReadBlogPostDTO>> GetAllPostsAsync()
+        public async Task<List<ReadPostDTO>> GetAllForumPostsAsync()
         {
             var query =  _unitOfWork.PostRepo.GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.Author.Role != "Admin"); 
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum); 
             var posts = await query.ToListAsync();
 
-            return _mapper.Map<List<ReadBlogPostDTO>>(posts);
+            return _mapper.Map<List<ReadPostDTO>>(posts);
         }
 
-        public async Task<PaginatedList<ReadBlogPostDTO>> GetAllPostsPaginatedAsync(QueryParameters queryParameters)
+        public async Task<List<ReadPostDTO>> GetAllBlogPostsAsync()
+        {
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog);
+
+            var adminPosts = await query.ToListAsync();
+
+            return _mapper.Map<List<ReadPostDTO>>(adminPosts);
+        }
+
+        public async Task<PaginatedList<ReadPostDTO>> GetAllForumPostsPaginatedAsync(QueryParameters queryParameters)
         {
             var query = _unitOfWork.PostRepo.GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.Author.Role != "Admin");
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum);
 
             var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
                 query.OrderByDescending(p => p.CreateDate),
@@ -187,9 +211,9 @@ namespace Application.Services
                 queryParameters.PageSize
             );
 
-            var mappedList = _mapper.Map<List<ReadBlogPostDTO>>(pagedEntities.Items);
+            var mappedList = _mapper.Map<List<ReadPostDTO>>(pagedEntities.Items);
 
-            return new PaginatedList<ReadBlogPostDTO>(
+            return new PaginatedList<ReadPostDTO>(
                 mappedList,
                 pagedEntities.TotalCount,
                 pagedEntities.PageIndex,
@@ -197,7 +221,7 @@ namespace Application.Services
             );
         }
 
-        public async Task<List<ReadBlogPostDTO>> GetAllByCategoryAsync(string category)
+        public async Task<List<ReadPostDTO>> GetAllForumByCategoryAsync(string category)
         {
             if (string.IsNullOrEmpty(category))
             {
@@ -206,22 +230,11 @@ namespace Application.Services
 
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => p.Category == category && p.Author.Role != "Admin");
+                .Where(p => p.Category == category && p.TypeEnum == Domain.Enums.PostType.Forum);
 
             var posts = await query.ToListAsync();
 
-            return _mapper.Map<List<ReadBlogPostDTO>>(posts);
-        }
-
-        public async Task<List<ReadBlogPostDTO>> GetAllPostsByAdminAsync()
-        {
-            var query = _unitOfWork.PostRepo
-                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.Author.Role == "Admin");
-
-            var adminPosts = await query.ToListAsync();
-
-            return _mapper.Map<List<ReadBlogPostDTO>>(adminPosts);
+            return _mapper.Map<List<ReadPostDTO>>(posts);
         }
 
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()

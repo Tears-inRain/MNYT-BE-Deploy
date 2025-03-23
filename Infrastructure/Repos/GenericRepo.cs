@@ -60,6 +60,7 @@ namespace Infrastructure.Repos
             {
                 throw new Exceptions.InfrastructureException(HttpStatusCode.BadRequest, "Data is not exist");
             }
+            model.UpdateDate = DateTime.UtcNow;
             _dbSet.Update(model);
         }
         public virtual async Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "")
