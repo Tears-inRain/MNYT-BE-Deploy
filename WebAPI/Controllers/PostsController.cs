@@ -10,11 +10,11 @@ namespace WebAPI.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class BlogPostsController : ControllerBase
+    public class PostsController : ControllerBase
     {
         private readonly IPostService _postService;
 
-        public BlogPostsController(IPostService postService)
+        public PostsController(IPostService postService)
         {
             _postService = postService;
         }
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             return Ok(ApiResponse<ReadPostDTO>.SuccessResponse(result, "Post retrieved successfully."));
         }
 
-        [HttpGet("all")]
+        [HttpGet("forums")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllForumPosts()
         {
@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
             ));
         }
 
-        [HttpGet("all-paginated")]
+        [HttpGet("forums/paginated")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllForumPostsPaginated([FromQuery] QueryParameters query)
         {
@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
             ));
         }
 
-        [HttpGet("by-category")]
+        [HttpGet("forums/by-category")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllForumByCategory([FromQuery] string category)
         {
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
             ));
         }
 
-        [HttpGet("admin-posts")]
+        [HttpGet("blogs")]
         [AllowAnonymous]
         public async Task<ActionResult<ApiResponse<List<ReadPostDTO>>>> GetAllBlogPosts()
         {
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
             return Ok(ApiResponse<ReadPostDTO>.SuccessResponse(created, "Blog post created successfully."));
         }
 
-        [HttpPost]
+        [HttpPost("forum")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateForumPost([FromQuery] int authorId, [FromBody] CreatePostDTO dto)
         {
@@ -123,7 +123,7 @@ namespace WebAPI.Controllers
 
         [HttpPatch("{postId}/change-status")]
         [AllowAnonymous]
-        public async Task<IActionResult> PublishPost(int postId, [FromQuery] int accountId, string status)
+        public async Task<IActionResult> ChangePostStatus(int postId, [FromQuery] int accountId, string status)
         {
             var success = await _postService.ChangePostStatusAsync(postId, accountId, status);
             if (!success)

@@ -17,5 +17,6 @@ namespace Application.ViewModels.Accounts
         public string? Status { get; set; }
         public bool IsExternal { get; set; }
         public string? ExternalProvider { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }
