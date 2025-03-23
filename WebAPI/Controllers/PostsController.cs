@@ -53,6 +53,20 @@ namespace WebAPI.Controllers
             ));
         }
 
+        [HttpGet("blogs/by-category")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllBlogByCategory([FromQuery] string category)
+        {
+            var posts = await _postService.GetAllBlogByCategoryAsync(category);
+
+            return Ok(ApiResponse<List<ReadPostDTO>>.SuccessResponse(
+                posts,
+                string.IsNullOrEmpty(category)
+                    ? "All blog posts retrieved without category filter."
+                    : $"All blog posts for category '{category}' retrieved successfully."
+            ));
+        }
+
         [HttpGet("forums/by-category")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllForumByCategory([FromQuery] string category)
