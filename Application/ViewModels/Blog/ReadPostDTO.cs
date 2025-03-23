@@ -11,6 +11,7 @@ namespace Application.ViewModels.Blog
     {
         public int Id { get; set; }
         public string? Category { get; set; }
+        public bool IsAnonymous { get; set; }
         public string Title { get; set; } = null!;
         public PostType? TypeEnum { get; set; }
         public string? Description { get; set; }
