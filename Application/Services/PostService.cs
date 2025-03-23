@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Application.ViewModels.Blog;

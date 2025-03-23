@@ -8,6 +8,7 @@ using Application.ViewModels.Blog;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Application.Services.IServices;
 using Application.Utils;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAPI.Controllers
 {
@@ -75,6 +76,14 @@ namespace WebAPI.Controllers
             }
         }
 
+        [HttpGet("check-exists")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CheckUsernameOrEmailExists([FromQuery] string username, [FromQuery] string email)
+        {
+            var isTaken = await _accountService.CheckUsernameOrEmailExistsAsync(email, username);
+            return Ok(ApiResponse<bool>.SuccessResponse(isTaken, isTaken ? "Username or Email already exists." : "Username or Email does not exists."));
+        }
+
         [HttpPut("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateAccountDTO updateDto)
@@ -100,6 +109,22 @@ namespace WebAPI.Controllers
             {
                 return StatusCode(500, ApiResponse<AccountDTO>.FailureResponse("An error occurred while updating the account."));
             }
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ApiResponse<ResetPasswordDTO>.FailureResponse(
+                    "Invalid data.",
+                    ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                ));
+            }
+
+            var success = await _accountService.ResetPasswordAsync(dto);
+            return Ok(ApiResponse<string>.SuccessResponse("Password reset successfully."));
         }
 
         [HttpPatch("ban/{id}")]
