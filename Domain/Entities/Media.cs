@@ -8,4 +8,6 @@ public partial class Media : BaseEntity
     public string? EntityType { get; set; }
 
     public string? Url { get; set; }
+
+    public int? EntityId { get; set; }
 }
