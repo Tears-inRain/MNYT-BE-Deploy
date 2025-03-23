@@ -27,10 +27,13 @@ namespace Application.Services
 
         public async Task<ReadAccountMembershipDTO?> GetActiveMembershipAsync(int accountId)
         {
-            var activeMem = await _unitOfWork.AccountMembershipRepo.FindOneAsync(
-                m => m.AccountId == accountId && m.Status == "Active"
-            );
-            return _mapper.Map<ReadAccountMembershipDTO>(activeMem);
+            var allMemberships = await _unitOfWork.AccountMembershipRepo.GetAllAsync();
+
+            var latestActiveMembership = allMemberships
+                .Where(m => m.AccountId == accountId && m.Status == "Active")
+                .OrderByDescending(m => m.StartDate) // Use correct date field
+                .FirstOrDefault();
+            return _mapper.Map<ReadAccountMembershipDTO>(latestActiveMembership);
             ;
         }
 
