@@ -1,28 +1,28 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Application.ViewModels;
 using Application.ViewModels.Accounts;
-using Application.ViewModels.FetusRecord;
-using Application.ViewModels.Blog;
 using Application.Services.IServices;
 using Application.Utils;
+using Microsoft.Extensions.Logging;
+using System.Net;
 
 namespace Application.Services
 {
     public class AccountService : IAccountService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<AccountService> _logger;
         private readonly IMapper _mapper;
 
-        public AccountService(IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountService(
+            IUnitOfWork unitOfWork,
+            ILogger<AccountService> logger,
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
             _mapper = mapper;
         }
 
@@ -33,16 +33,6 @@ namespace Application.Services
 
             return _mapper.Map<AccountDTO>(account);
         }
-
-        //public async Task<CreateAccountDTO> AddAsync(CreateAccountDTO createAccountDto)
-        //{
-        //    Account record = _mapper.Map<Account>(createAccountDto);
-        //    record.Password = BCrypt.Net.BCrypt.HashPassword(record.Password, workFactor: 12);
-        //    await _unitOfWork.AccountRepo.AddAsync(record);
-        //    await _unitOfWork.SaveChangesAsync();
-
-        //    return _mapper.Map<CreateAccountDTO>(record);
-        //}
 
         public async Task<IEnumerable<AccountDTO>> GetAllAccountsAsync()
         {
@@ -66,21 +56,53 @@ namespace Application.Services
             );
         }
 
+        public async Task<bool> CheckUsernameOrEmailExistsAsync(string email, string username)
+        {
+            var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(email, username);
+            if (existedAccount != null) return true;
+
+            return false;
+        }
+
         public async Task<AccountDTO?> UpdateAccountAsync(int accountId, UpdateAccountDTO updateDto)
         {
+            var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(updateDto.Email, updateDto.UserName);
+
+            if (existedAccount != null)
+            {
+                _logger.LogWarning("User already exists with the provided email or username.");
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "User already exists with the provided email or username.");
+            }
+
             var account = await _unitOfWork.AccountRepo.GetAsync(accountId);
             if (account == null) return null;
+
             account.FullName = updateDto.FullName;
             account.PhoneNumber = updateDto.PhoneNumber;
             account.UserName = updateDto.UserName;
             account.Email = updateDto.Email;
 
-            account.UpdateDate = DateTime.UtcNow;
-
             _unitOfWork.AccountRepo.Update(account);
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<AccountDTO>(account);
+        }
+
+        public async Task<bool> ResetPasswordAsync(ResetPasswordDTO dto)
+        {
+            var account = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(dto.Email, dto.UserName);
+            if (account == null)
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Account with the given email or username does not exist.");
+
+            if (dto.NewPassword != dto.ConfirmNewPassword)
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "New password and confirmation do not match.");
+
+            account.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword, workFactor: 12);
+
+            _unitOfWork.AccountRepo.Update(account);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> BanAccountAsync(int accountId)
@@ -89,7 +111,6 @@ namespace Application.Services
             if (account == null) return false;
 
             account.Status = "Banned";
-            account.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.AccountRepo.Update(account);
             await _unitOfWork.SaveChangesAsync();
@@ -102,7 +123,6 @@ namespace Application.Services
             if (account == null) return false;
 
             account.Status = "Active";
-            account.UpdateDate = DateTime.UtcNow;
 
             _unitOfWork.AccountRepo.Update(account);
             await _unitOfWork.SaveChangesAsync();

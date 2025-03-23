@@ -16,7 +16,6 @@ namespace Application.ViewModels.Accounts
         public string? Role { get; set; }
         public string? Status { get; set; }
         public bool IsExternal { get; set; }
-
         public string? ExternalProvider { get; set; }
     }
 }
