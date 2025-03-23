@@ -10,6 +10,8 @@ public partial class BlogPost : BaseEntity
 
     public PostType TypeEnum { get; set; } = PostType.Forum;
 
+    public bool IsAnonymous { get; set; } = false;
+
     public string? Description { get; set; }
 
     public int? ImageId { get; set; }
