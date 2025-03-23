@@ -2,13 +2,8 @@
 using Application.ViewModels;
 using Application.ViewModels.Accounts;
 using Microsoft.AspNetCore.Authorization;
-using Application.Services;
-using Application.ViewModels.Fetus;
-using Application.ViewModels.Blog;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Application.Services.IServices;
 using Application.Utils;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAPI.Controllers
 {
