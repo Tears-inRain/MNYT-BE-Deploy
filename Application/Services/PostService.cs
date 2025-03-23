@@ -236,6 +236,22 @@ namespace Application.Services
             return _mapper.Map<List<ReadPostDTO>>(posts);
         }
 
+        public async Task<List<ReadPostDTO>> GetAllBlogByCategoryAsync(string category)
+        {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cant not be null or empty.");
+            }
+
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(p => p.Category == category && p.TypeEnum == Domain.Enums.PostType.Blog);
+
+            var posts = await query.ToListAsync();
+
+            return _mapper.Map<List<ReadPostDTO>>(posts);
+        }
+
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);

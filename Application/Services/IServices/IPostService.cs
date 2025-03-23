@@ -21,6 +21,7 @@ namespace Application.Services.IServices
         Task<List<ReadPostDTO>> GetAllBlogPostsAsync();
         Task<List<ReadPostDTO>> GetAllForumPostsAsync();
         Task<PaginatedList<ReadPostDTO>> GetAllForumPostsPaginatedAsync(QueryParameters queryParameters);
+        Task<List<ReadPostDTO>> GetAllBlogByCategoryAsync(string category);
         Task<List<ReadPostDTO>> GetAllForumByCategoryAsync(string category);
         Task<IList<TopAuthorDTO>> GetTopAuthorsAsync();
     }
