@@ -90,7 +90,7 @@ namespace Application.Services
 
         public async Task<bool> ResetPasswordAsync(ResetPasswordDTO dto)
         {
-            var account = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(dto.Email, dto.UserName);
+            var account = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(dto.UserNameOrEmail, dto.UserNameOrEmail);
             if (account == null)
                 throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Account with the given email or username does not exist.");
 
