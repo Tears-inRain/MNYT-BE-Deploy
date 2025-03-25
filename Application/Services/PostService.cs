@@ -251,10 +251,10 @@ namespace Application.Services
                 queryParameters.PageSize
             );
 
-            var mappedList = _mapper.Map<List<ReadPostDTO>>(pagedEntities.Items);
+            var dtosWithImages = await AttachMediaAndMapAsync(pagedEntities.Items);
 
             return new PaginatedList<ReadPostDTO>(
-                mappedList,
+                dtosWithImages,
                 pagedEntities.TotalCount,
                 pagedEntities.PageIndex,
                 pagedEntities.Items.Count

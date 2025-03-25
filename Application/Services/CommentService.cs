@@ -5,6 +5,8 @@ using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
+using Application.ViewModels.Media;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
@@ -42,38 +44,120 @@ namespace Application.Services
             await _unitOfWork.CommentRepo.AddAsync(comment);
             await _unitOfWork.SaveChangesAsync();
 
+            if (dto.Images != null && dto.Images.Any())
+            {
+                foreach (var imageDto in dto.Images)
+                {
+                    var media = _mapper.Map<Media>(imageDto);
+                    media.EntityType = "Comment";
+                    media.EntityId = comment.Id;
+                    media.Type = "image"; 
+
+                    await _unitOfWork.MediaRepo.AddAsync(media);
+                }
+                await _unitOfWork.SaveChangesAsync();
+            }
+
             _logger.LogInformation("Comment Id: {CommentId} added successfully.", comment.Id);
 
-            return _mapper.Map<ReadCommentDTO>(comment);
+            var readDto = _mapper.Map<ReadCommentDTO>(comment);
+
+            if (dto.Images != null && dto.Images.Any())
+            {
+                var newMedia = await _unitOfWork.MediaRepo.GetAllQueryable()
+                    .Where(m => m.EntityType == "Comment" && m.EntityId == comment.Id)
+                    .ToListAsync();
+
+                readDto.Images = _mapper.Map<List<ReadMediaDTO>>(newMedia);
+            }
+
+            return readDto;
         }
 
-        public async Task<PaginatedList<ReadCommentDTO>> GetCommentsByPostAsync(int postId, QueryParameters parameters)
+        public async Task<List<ReadCommentDTO>> GetCommentsByPostAsync(int postId)
         {
             var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
-            if (post == null)
+            if (post == null || post.IsDeleted)
+            {
+                _logger.LogWarning("Post {PostId} does not exist or is deleted. Returning empty comments list.", postId);
+                return new List<ReadCommentDTO>();
+            }
+
+            var comments = await _unitOfWork.CommentRepo
+                .GetAllQueryable("Account")
+                .Where(c => c.BlogPostId == postId && !c.IsDeleted)
+                .OrderByDescending(c => c.CreateDate)
+                .ToListAsync();
+
+            return await AttachMediaAndMapAsync(comments);
+        }
+
+        public async Task<PaginatedList<ReadCommentDTO>> GetCommentsByPostPaginatedAsync(int postId, QueryParameters parameters)
+        {
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
+            if (post == null || post.IsDeleted)
             {
                 _logger.LogWarning("Post {PostId} does not exist or is deleted. Returning empty comments list.", postId);
                 return new PaginatedList<ReadCommentDTO>(new List<ReadCommentDTO>(), 0, parameters.PageNumber, parameters.PageSize);
             }
 
             var commentsQuery = _unitOfWork.CommentRepo.GetAllQueryable("Account")
-                .Where(c => c.BlogPostId == postId && !c.IsDeleted);
+                .Where(c => c.BlogPostId == postId)
+                .OrderByDescending(c => c.CreateDate);
 
             var paginatedComments = await PaginatedList<Comment>.CreateAsync(
-                commentsQuery.OrderByDescending(c => c.CreateDate),
+                commentsQuery,
                 parameters.PageNumber,
                 parameters.PageSize
             );
 
-            var mappedList = _mapper.Map<List<ReadCommentDTO>>(paginatedComments.Items);
+            var dtosWithImages = await AttachMediaAndMapAsync(paginatedComments.Items);
 
             return new PaginatedList<ReadCommentDTO>(
-                mappedList,
+                dtosWithImages,
                 paginatedComments.TotalCount,
                 paginatedComments.PageIndex,
                 paginatedComments.Items.Count
             );
         }
+
+        public async Task<ReadCommentDTO?> UpdateCommentAsync(int commentId, int accountId, UpdateCommentDTO dto)
+        {
+            _logger.LogInformation("Account {AccountId} is editing commentId: {CommentId}", accountId, commentId);
+
+            var comment = await _unitOfWork.CommentRepo.GetByIdAsync(commentId);
+            if (comment == null || comment.IsDeleted)
+            {
+                _logger.LogWarning("Comment Id: {CommentId} not found or is deleted", commentId);
+                return null;
+            }
+
+            if (comment.AccountId != accountId)
+            {
+                _logger.LogWarning("Account {AccountId} does not own commentId: {CommentId}", accountId, commentId);
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Content))
+                comment.Content = dto.Content;
+
+            comment.UpdateDate = DateTime.UtcNow;
+
+            _unitOfWork.CommentRepo.Update(comment);
+            await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Comment Id: {CommentId} updated successfully by Account {AccountId}", commentId, accountId);
+
+            var updatedDto = _mapper.Map<ReadCommentDTO>(comment);
+
+            var images = await _unitOfWork.MediaRepo.GetAllQueryable()
+                .Where(m => m.EntityType == "Comment" && m.EntityId == comment.Id)
+                .ToListAsync();
+            updatedDto.Images = _mapper.Map<List<ReadMediaDTO>>(images);
+
+            return updatedDto;
+        }
+
 
         public async Task<bool> DeleteCommentAsync(int commentId, int accountId)
         {
@@ -97,6 +181,43 @@ namespace Application.Services
 
             _logger.LogInformation("Comment Id: {CommentId} soft-deleted by account {AccountId}", commentId, accountId);
             return true;
+        }
+
+        private async Task<List<ReadCommentDTO>> AttachMediaAndMapAsync(List<Comment> commentEntities)
+        {
+            if (!commentEntities.Any())
+            {
+                return new List<ReadCommentDTO>();
+            }
+
+            var commentIds = commentEntities.Select(c => c.Id).ToList();
+
+            var mediaList = await _unitOfWork.MediaRepo.GetAllQueryable()
+                .Where(m => m.EntityType == "Comment"
+                            && m.EntityId.HasValue
+                            && commentIds.Contains(m.EntityId.Value))
+                .ToListAsync();
+
+            var mediaGrouped = mediaList
+                .GroupBy(m => m.EntityId)
+                .ToDictionary(g => g.Key!.Value, g => g.ToList());
+
+            var mappedDtos = _mapper.Map<List<ReadCommentDTO>>(commentEntities);
+
+            foreach (var commentDto in mappedDtos)
+            {
+                if (mediaGrouped.ContainsKey(commentDto.Id))
+                {
+                    var relatedMedia = mediaGrouped[commentDto.Id];
+                    commentDto.Images = _mapper.Map<List<ReadMediaDTO>>(relatedMedia);
+                }
+                else
+                {
+                    commentDto.Images = new List<ReadMediaDTO>();
+                }
+            }
+
+            return mappedDtos;
         }
     }
 }

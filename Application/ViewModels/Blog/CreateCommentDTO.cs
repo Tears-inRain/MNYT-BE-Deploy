@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.ViewModels.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Application.ViewModels.Blog
     {
         public int BlogPostId { get; set; }
         public int? ReplyId { get; set; }
-        public string Content { get; set; } = null!;
+        public string? Content { get; set; }
+        public List<CreateMediaDTO>? Images { get; set; }
     }
 }
