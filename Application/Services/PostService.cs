@@ -7,6 +7,7 @@ using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
 using System.Net;
+using Application.ViewModels.Media;
 
 
 namespace Application.Services
@@ -39,6 +40,21 @@ namespace Application.Services
             await _unitOfWork.PostRepo.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
 
+            if (dto.Images != null && dto.Images.Count > 0)
+            {
+                foreach (var imageDto in dto.Images)
+                {
+                    var media = _mapper.Map<Media>(imageDto);
+                    media.EntityType = "Post";
+                    media.EntityId = post.Id;
+                    media.Type = "image";
+
+                    await _unitOfWork.MediaRepo.AddAsync(media);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            }
+
             _logger.LogInformation("Successfully created BlogPost Id: {PostId}", post.Id);
 
             return _mapper.Map<ReadPostDTO>(post);
@@ -54,6 +70,21 @@ namespace Application.Services
 
             await _unitOfWork.PostRepo.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
+
+            if (dto.Images != null && dto.Images.Count > 0)
+            {
+                foreach (var imageDto in dto.Images)
+                {
+                    var media = _mapper.Map<Media>(imageDto);
+                    media.EntityType = "Post";
+                    media.EntityId = post.Id;
+                    media.Type = "image";
+
+                    await _unitOfWork.MediaRepo.AddAsync(media);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            }
 
             _logger.LogInformation("Successfully created ForumPost Id: {PostId}", post.Id);
 
@@ -76,14 +107,16 @@ namespace Application.Services
                 _logger.LogWarning("Account Id: {AccountId} is not the author of postId: {PostId}", requestAccountId, postId);
                 return null;
             }
-            if (!string.IsNullOrWhiteSpace(dto.Category)) { post.Category = dto.Category; }
-            if (!string.IsNullOrWhiteSpace(dto.Title)) post.Title = dto.Title;
-            if (!string.IsNullOrWhiteSpace(dto.Description)) post.Description = dto.Description;
-            if (!string.IsNullOrWhiteSpace(dto.ImageUrl)) post.ImageUrl = dto.ImageUrl;
-            if (dto.Period.HasValue) post.Period = dto.Period.Value;
-            if (dto.ImageId.HasValue) post.ImageId = dto.ImageId.Value;
-
-            post.UpdateDate = DateTime.UtcNow;
+            if (!string.IsNullOrWhiteSpace(dto.Category))
+                post.Category = dto.Category;
+            if (!string.IsNullOrWhiteSpace(dto.Title))
+                post.Title = dto.Title;
+            if (!string.IsNullOrWhiteSpace(dto.Description))
+                post.Description = dto.Description;
+            if (dto.Period.HasValue)
+                post.Period = dto.Period.Value;
+            if (dto.TypeEnum.HasValue)
+                post.TypeEnum = dto.TypeEnum.Value;
 
             _unitOfWork.PostRepo.Update(post);
             await _unitOfWork.SaveChangesAsync();
@@ -176,27 +209,35 @@ namespace Application.Services
                 return null;
             }
 
-            return _mapper.Map<ReadPostDTO>(post);
+            var images = await _unitOfWork.MediaRepo
+                .GetAllQueryable()
+                .Where(m => m.EntityType == "Post" && m.EntityId == postId)
+                .ToListAsync();
+
+            var postDto = _mapper.Map<ReadPostDTO>(post);
+            postDto.Images = _mapper.Map<List<ReadMediaDTO>>(images);
+
+            return postDto;
         }
 
         public async Task<List<ReadPostDTO>> GetAllForumPostsAsync()
         {
-            var query =  _unitOfWork.PostRepo.GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum); 
-            var posts = await query.ToListAsync();
+            var forumPosts = await _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum && !post.IsDeleted)
+                .ToListAsync();
 
-            return _mapper.Map<List<ReadPostDTO>>(posts);
+            return await AttachMediaAndMapAsync(forumPosts);
         }
 
         public async Task<List<ReadPostDTO>> GetAllBlogPostsAsync()
         {
-            var query = _unitOfWork.PostRepo
+            var blogPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog);
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog && !post.IsDeleted)
+                .ToListAsync();
 
-            var blogPosts = await query.ToListAsync();
-
-            return _mapper.Map<List<ReadPostDTO>>(blogPosts);
+            return await AttachMediaAndMapAsync(blogPosts);
         }
 
         public async Task<PaginatedList<ReadPostDTO>> GetAllForumPostsPaginatedAsync(QueryParameters queryParameters)
@@ -224,16 +265,17 @@ namespace Application.Services
         {
             if (string.IsNullOrEmpty(category))
             {
-                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cant not be null or empty.");
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cannot be null or empty.");
             }
 
-            var query = _unitOfWork.PostRepo
+            var forumPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => p.Category == category && p.TypeEnum == Domain.Enums.PostType.Forum);
+                .Where(p => p.Category == category
+                            && p.TypeEnum == Domain.Enums.PostType.Forum
+                            && !p.IsDeleted)
+                .ToListAsync();
 
-            var posts = await query.ToListAsync();
-
-            return _mapper.Map<List<ReadPostDTO>>(posts);
+            return await AttachMediaAndMapAsync(forumPosts);
         }
 
         public async Task<List<ReadPostDTO>> GetAllBlogByCategoryAsync(string category)
@@ -243,18 +285,50 @@ namespace Application.Services
                 throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cant not be null or empty.");
             }
 
-            var query = _unitOfWork.PostRepo
+            var blogPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(p => p.Category == category && p.TypeEnum == Domain.Enums.PostType.Blog);
+                .Where(p => p.Category == category && p.TypeEnum == Domain.Enums.PostType.Blog)
+                .ToListAsync();
 
-            var posts = await query.ToListAsync();
-
-            return _mapper.Map<List<ReadPostDTO>>(posts);
+            return await AttachMediaAndMapAsync(blogPosts);
         }
 
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
+        }
+
+        private async Task<List<ReadPostDTO>> AttachMediaAndMapAsync(List<BlogPost> posts)
+        {
+            if (!posts.Any())
+                return new List<ReadPostDTO>();
+
+            var postIds = posts.Select(p => p.Id).ToList();
+
+            var mediaList = await _unitOfWork.MediaRepo.GetAllQueryable()
+                .Where(m => m.EntityType == "Post" && m.EntityId.HasValue && postIds.Contains(m.EntityId.Value))
+                .ToListAsync();
+
+            var mediaGrouped = mediaList
+                .GroupBy(m => m.EntityId)
+                .ToDictionary(g => g.Key!.Value, g => g.ToList());
+
+            var mappedDtos = _mapper.Map<List<ReadPostDTO>>(posts);
+
+            foreach (var postDto in mappedDtos)
+            {
+                if (mediaGrouped.ContainsKey(postDto.Id))
+                {
+                    var relatedMedia = mediaGrouped[postDto.Id];
+                    postDto.Images = _mapper.Map<List<ReadMediaDTO>>(relatedMedia);
+                }
+                else
+                {
+                    postDto.Images = new List<ReadMediaDTO>();
+                }
+            }
+
+            return mappedDtos;
         }
     }
 }

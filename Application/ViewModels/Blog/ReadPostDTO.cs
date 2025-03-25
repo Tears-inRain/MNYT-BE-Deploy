@@ -1,9 +1,5 @@
-﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.ViewModels.Media;
+using Domain.Enums;
 
 namespace Application.ViewModels.Blog
 {
@@ -20,8 +16,7 @@ namespace Application.ViewModels.Blog
         public int? Period { get; set; }
         public string? Status { get; set; }
         public DateOnly? PublishedDay { get; set; }
-        public int? ImageId { get; set; }
-        public string? ImageUrl { get; set; }
+        public List<ReadMediaDTO>? Images { get; set; }
         public DateTime CreateDate { get; set; }
 
         // For illustration: 

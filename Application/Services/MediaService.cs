@@ -23,16 +23,20 @@ namespace Application.Services
             _logger = logger;
         }
 
-        public async Task<ReadMediaDTO> CreateMediaAsync(CreateMediaDTO createMediaDto)
+        public async Task<ReadMediaDetailDTO> CreateMediaAsync(CreateMediaDTO createMediaDto)
         {
             var entity = _mapper.Map<Media>(createMediaDto);
+            entity.EntityType = "System";
+            entity.EntityId = 0;
 
             await _unitOfWork.MediaRepo.AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
 
-            var resultDto = new ReadMediaDTO
+            var resultDto = new ReadMediaDetailDTO
             {
                 Id = entity.Id,
+                EntityType = entity.EntityType,
+                EntityId = entity.EntityId,
                 Type = entity.Type,
                 Url = entity.Url
             };
@@ -40,22 +44,22 @@ namespace Application.Services
             return resultDto;
         }
 
-        public async Task<ReadMediaDTO?> GetMediaByIdAsync(int id)
+        public async Task<ReadMediaDetailDTO?> GetMediaByIdAsync(int id)
         {
             var entity = await _unitOfWork.MediaRepo.GetByIdAsync(id);
             if (entity == null)
                 return null;
 
-            return _mapper.Map<ReadMediaDTO>(entity);
+            return _mapper.Map<ReadMediaDetailDTO>(entity);
         }
 
-        public async Task<IEnumerable<ReadMediaDTO>> GetAllMediaAsync()
+        public async Task<IEnumerable<ReadMediaDetailDTO>> GetAllMediaAsync()
         {
             var entities = await _unitOfWork.MediaRepo.GetAllQueryable().Where(m => m.EntityType == "System").ToListAsync();
-            return _mapper.Map<IEnumerable<ReadMediaDTO>>(entities);
+            return _mapper.Map<IEnumerable<ReadMediaDetailDTO>>(entities);
         }
 
-        public async Task<ReadMediaDTO?> UpdateMediaAsync(int mediaId, UpdateMediaDTO updateDto)
+        public async Task<ReadMediaDetailDTO?> UpdateMediaAsync(int mediaId, UpdateMediaDTO updateDto)
         {
             var entity = await _unitOfWork.MediaRepo.GetByIdAsync(mediaId);
             if (entity == null)
@@ -64,7 +68,7 @@ namespace Application.Services
             _mapper.Map(updateDto, entity);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<ReadMediaDTO>(entity);
+            return _mapper.Map<ReadMediaDetailDTO>(entity);
         }
 
         public async Task<bool> DeleteMediaAsync(int id)
