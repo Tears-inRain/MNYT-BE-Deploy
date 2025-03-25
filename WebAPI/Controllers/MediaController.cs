@@ -93,9 +93,9 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{mediaId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Update([FromBody] ReadMediaDTO mediaDto)
+        public async Task<IActionResult> Update(int mediaId, [FromBody] UpdateMediaDTO updateDto)
         {
             if (!ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace WebAPI.Controllers
 
             try
             {
-                var updatedDto = await _mediaService.UpdateMediaAsync(mediaDto);
+                var updatedDto = await _mediaService.UpdateMediaAsync(mediaId, updateDto);
                 if (updatedDto == null)
                 {
                     return NotFound(ApiResponse<ReadMediaDTO>.FailureResponse(

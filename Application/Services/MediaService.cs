@@ -2,6 +2,7 @@
 using Application.ViewModels.Media;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services
@@ -41,7 +42,7 @@ namespace Application.Services
 
         public async Task<ReadMediaDTO?> GetMediaByIdAsync(int id)
         {
-            var entity = await _unitOfWork.MediaRepo.GetAsync(id);
+            var entity = await _unitOfWork.MediaRepo.GetByIdAsync(id);
             if (entity == null)
                 return null;
 
@@ -50,22 +51,17 @@ namespace Application.Services
 
         public async Task<IEnumerable<ReadMediaDTO>> GetAllMediaAsync()
         {
-            var entities = await _unitOfWork.MediaRepo.GetAllAsync();
+            var entities = await _unitOfWork.MediaRepo.GetAllQueryable().Where(m => m.EntityType == "System").ToListAsync();
             return _mapper.Map<IEnumerable<ReadMediaDTO>>(entities);
         }
 
-        public async Task<ReadMediaDTO?> UpdateMediaAsync(ReadMediaDTO mediaDto)
+        public async Task<ReadMediaDTO?> UpdateMediaAsync(int mediaId, UpdateMediaDTO updateDto)
         {
-            if (mediaDto.Id <= 0)
-            {
-                return null;
-            }
-
-            var entity = await _unitOfWork.MediaRepo.GetAsync(mediaDto.Id);
+            var entity = await _unitOfWork.MediaRepo.GetByIdAsync(mediaId);
             if (entity == null)
                 return null;
 
-            _mapper.Map(mediaDto, entity);
+            _mapper.Map(updateDto, entity);
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<ReadMediaDTO>(entity);
@@ -73,7 +69,7 @@ namespace Application.Services
 
         public async Task<bool> DeleteMediaAsync(int id)
         {
-            var entity = await _unitOfWork.MediaRepo.GetAsync(id);
+            var entity = await _unitOfWork.MediaRepo.GetByIdAsync(id);
             if (entity == null)
                 return false;
 

@@ -51,7 +51,7 @@ namespace Application.Services
                 throw new Exception("You already have an active membership. Cannot register a new one.");
             }
 
-            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(membershipPlanId);
+            var plan = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(membershipPlanId);
             if (plan == null)
                 throw new Exception("MembershipPlan not found.");
 
@@ -81,7 +81,7 @@ namespace Application.Services
                 throw new Exception("You don't have an active membership to upgrade.");
             }
 
-            var newPlan = await _unitOfWork.MembershipPlanRepo.GetAsync(newPlanId);
+            var newPlan = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(newPlanId);
             if (newPlan == null)
                 throw new Exception("New MembershipPlan not found.");
 

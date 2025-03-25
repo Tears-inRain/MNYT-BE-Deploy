@@ -28,7 +28,7 @@ namespace Application.Services
         {
             _logger.LogInformation("User {AccountId} is adding a comment to postId: {PostId}", accountId, dto.BlogPostId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == dto.BlogPostId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == dto.BlogPostId);
             if (post == null)
             {
                 _logger.LogWarning("Blog post {PostId} not found, cannot add comment", dto.BlogPostId);
@@ -37,8 +37,6 @@ namespace Application.Services
 
             var comment = _mapper.Map<Comment>(dto);
             comment.AccountId = accountId;
-            comment.CreateDate = DateTime.UtcNow;
-            comment.UpdateDate = DateTime.UtcNow;
             comment.Status = "Active";
 
             await _unitOfWork.CommentRepo.AddAsync(comment);
@@ -51,7 +49,7 @@ namespace Application.Services
 
         public async Task<PaginatedList<ReadCommentDTO>> GetCommentsByPostAsync(int postId, QueryParameters parameters)
         {
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post {PostId} does not exist or is deleted. Returning empty comments list.", postId);
@@ -81,7 +79,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Account {AccountId} is deleting commentId: {CommentId}", accountId, commentId);
 
-            var comment = await _unitOfWork.CommentRepo.FindOneAsync(c => c.Id == commentId && !c.IsDeleted);
+            var comment = await _unitOfWork.CommentRepo.GetByIdAsync(commentId);
             if (comment == null)
             {
                 _logger.LogWarning("Comment Id: {CommentId} not found", commentId);

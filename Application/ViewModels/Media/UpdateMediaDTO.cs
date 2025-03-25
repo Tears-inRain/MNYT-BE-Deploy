@@ -1,9 +1,13 @@
-﻿namespace Application.ViewModels.Media
-{
-    public class ReadMediaDTO
-    {
-        public int Id { get; set; }
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Application.ViewModels.Media
+{
+    public class UpdateMediaDTO
+    {
         public string? EntityType { get; set; }
 
         public int? EntityId { get; set; }

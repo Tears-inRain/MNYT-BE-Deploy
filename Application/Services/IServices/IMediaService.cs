@@ -10,7 +10,7 @@ namespace Application.Services.IServices
 
         Task<IEnumerable<ReadMediaDTO>> GetAllMediaAsync();
 
-        Task<ReadMediaDTO?> UpdateMediaAsync(ReadMediaDTO mediaDto);
+        Task<ReadMediaDTO?> UpdateMediaAsync(int mediaId, UpdateMediaDTO updateDto);
 
         Task<bool> DeleteMediaAsync(int id);
     }

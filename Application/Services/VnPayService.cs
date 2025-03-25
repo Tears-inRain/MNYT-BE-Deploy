@@ -116,7 +116,7 @@ namespace Application.Services
             {
                 return false;
             }
-            var membership = await _unitOfWork.AccountMembershipRepo.GetAsync(membershipId);
+            var membership = await _unitOfWork.AccountMembershipRepo.GetByIdAsync(membershipId);
             if (membership == null) return false;
 
             if (queryParams.TryGetValue("vnp_ResponseCode", out var resp) && resp == "00")

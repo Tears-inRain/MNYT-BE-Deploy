@@ -43,7 +43,7 @@ namespace Application.Services
 
         public async Task<MembershipPlanDTO?> GetMembershipPlanByIdAsync(int id)
         {
-            var entity = await _unitOfWork.MembershipPlanRepo.GetAsync(id);
+            var entity = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(id);
             if (entity == null)
                 return null;
 
@@ -63,7 +63,7 @@ namespace Application.Services
                 return null;
             }
 
-            var entity = await _unitOfWork.MembershipPlanRepo.GetAsync(planDto.Id);
+            var entity = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(planDto.Id);
             if (entity == null)
                 return null;
 
@@ -75,7 +75,7 @@ namespace Application.Services
 
         public async Task<bool> DeleteMembershipPlanAsync(int id)
         {
-            var entity = await _unitOfWork.MembershipPlanRepo.GetAsync(id);
+            var entity = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(id);
             if (entity == null)
                 return false;
 

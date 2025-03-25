@@ -64,7 +64,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Updating postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -97,7 +97,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Deleting postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found or is deleted", postId);
@@ -121,7 +121,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Change postId: {PostId} status by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found", postId);
@@ -141,7 +141,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Publishing postId: {PostId} by accountId: {AccountId}", postId, requestAccountId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post Id: {PostId} not found", postId);
@@ -194,9 +194,9 @@ namespace Application.Services
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
                 .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog);
 
-            var adminPosts = await query.ToListAsync();
+            var blogPosts = await query.ToListAsync();
 
-            return _mapper.Map<List<ReadPostDTO>>(adminPosts);
+            return _mapper.Map<List<ReadPostDTO>>(blogPosts);
         }
 
         public async Task<PaginatedList<ReadPostDTO>> GetAllForumPostsPaginatedAsync(QueryParameters queryParameters)

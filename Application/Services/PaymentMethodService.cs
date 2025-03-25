@@ -38,7 +38,7 @@ namespace Application.Services
 
         public async Task<PaymentMethodDTO?> GetPaymentMethodByIdAsync(int id)
         {
-            var paymentMethod = await _unitOfWork.PaymentMethodRepo.GetAsync(id);
+            var paymentMethod = await _unitOfWork.PaymentMethodRepo.GetByIdAsync(id);
             if (paymentMethod == null) return null;
 
             return _mapper.Map<PaymentMethodDTO>(paymentMethod);
@@ -46,7 +46,7 @@ namespace Application.Services
 
         public async Task<bool> TogglePaymentMethodAsync(int id, bool isActive)
         {
-            var paymentMethod = await _unitOfWork.PaymentMethodRepo.GetAsync(id);
+            var paymentMethod = await _unitOfWork.PaymentMethodRepo.GetByIdAsync(id);
             if (paymentMethod == null)
                 return false;
 
