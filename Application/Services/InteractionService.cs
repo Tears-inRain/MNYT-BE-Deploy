@@ -5,6 +5,7 @@ using Application.Services.IServices;
 using Application.ViewModels.Blog;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Application.ViewModels.Media;
 
 namespace Application.Services
 {
@@ -42,8 +43,6 @@ namespace Application.Services
             {
                 AccountId = accountId,
                 PostId = postId,
-                CreateDate = DateTime.UtcNow,
-                UpdateDate = DateTime.UtcNow
             };
 
             await _unitOfWork.BlogLikeRepo.AddAsync(like);
@@ -82,7 +81,9 @@ namespace Application.Services
                 .Select(l => l.Post!)
                 .ToListAsync();
 
-            return _mapper.Map<List<ReadPostDTO>>(likedPosts);
+            var likedDtos = await AttachMediaAndMapAsync(likedPosts);
+
+            return likedDtos;
         }
 
         public async Task<bool> BookmarkPostAsync(int accountId, int postId)
@@ -106,8 +107,6 @@ namespace Application.Services
             {
                 AccountId = accountId,
                 PostId = postId,
-                CreateDate = DateTime.UtcNow,
-                UpdateDate = DateTime.UtcNow
             };
 
             await _unitOfWork.BlogBookmarkRepo.AddAsync(bookmark);
@@ -139,14 +138,50 @@ namespace Application.Services
 
             var query = _unitOfWork.BlogBookmarkRepo
                 .GetAllQueryable("Post.Author, Post.BlogBookmarks, Post.BlogLikes, Post.Comments")
-                .Where(b => b.AccountId == accountId && !b.IsDeleted
+                .Where(b => b.AccountId == accountId
                             && b.Post != null && !b.Post.IsDeleted);
 
             var bookmarkedPosts = await query
                 .Select(b => b.Post!)
                 .ToListAsync();
 
-            return _mapper.Map<List<ReadPostDTO>>(bookmarkedPosts);
+            var bookmarkedDtos = await AttachMediaAndMapAsync(bookmarkedPosts);
+
+            return bookmarkedDtos;
+        }
+
+        private async Task<List<ReadPostDTO>> AttachMediaAndMapAsync(List<BlogPost> posts)
+        {
+            if (!posts.Any())
+                return new List<ReadPostDTO>();
+
+            var postIds = posts.Select(p => p.Id).ToList();
+
+            var mediaList = await _unitOfWork.MediaRepo
+                .GetAllQueryable()
+                .Where(m => m.EntityType == "Post" && m.EntityId.HasValue && postIds.Contains(m.EntityId.Value))
+                .ToListAsync();
+
+            var mediaGrouped = mediaList
+                .GroupBy(m => m.EntityId)
+                .ToDictionary(g => g.Key!.Value, g => g.ToList());
+
+            var mappedDtos = _mapper.Map<List<ReadPostDTO>>(posts);
+
+            foreach (var postDto in mappedDtos)
+            {
+                if (mediaGrouped.ContainsKey(postDto.Id))
+                {
+                    var relatedMedia = mediaGrouped[postDto.Id];
+                    postDto.Images = _mapper.Map<List<ReadMediaDTO>>(relatedMedia);
+                }
+                else
+                {
+                    postDto.Images = new List<ReadMediaDTO>();
+                }
+            }
+
+            return mappedDtos;
         }
     }
 }
