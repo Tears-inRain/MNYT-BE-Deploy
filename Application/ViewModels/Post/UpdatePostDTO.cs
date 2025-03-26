@@ -1,5 +1,5 @@
 ﻿using Domain.Enums;
-namespace Application.ViewModels.Blog
+namespace Application.ViewModels.Post
 {
     public class UpdatePostDTO
     {

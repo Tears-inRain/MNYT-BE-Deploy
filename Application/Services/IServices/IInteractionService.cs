@@ -1,4 +1,4 @@
-﻿using Application.ViewModels.Blog;
+﻿using Application.ViewModels.Post;
 using System;
 using System.Collections.Generic;
 using System.Linq;

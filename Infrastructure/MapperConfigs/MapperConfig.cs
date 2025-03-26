@@ -9,7 +9,6 @@ using Domain.Entities;
 using Application.ViewModels.ScheduleUser;
 using Application.ViewModels.Accounts;
 using Application.ViewModels.PregnancyStandard;
-using Application.ViewModels.Blog;
 using Application.ViewModels.Media;
 using Application.ViewModels.ScheduleTemplate;
 using Application.ViewModels.AccountMembership;

@@ -2,10 +2,10 @@
 using Domain;
 using Microsoft.Extensions.Logging;
 using Application.Services.IServices;
-using Application.ViewModels.Blog;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Application.ViewModels.Media;
+using Application.ViewModels.Post;
 
 namespace Application.Services
 {

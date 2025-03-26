@@ -1,5 +1,5 @@
 ﻿using Application.IRepos;
-using Application.ViewModels.Blog;
+using Application.ViewModels.Post;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

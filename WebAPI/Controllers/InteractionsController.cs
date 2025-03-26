@@ -1,6 +1,6 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
-using Application.ViewModels.Blog;
+using Application.ViewModels.Post;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

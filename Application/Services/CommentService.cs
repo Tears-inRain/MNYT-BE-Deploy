@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Microsoft.Extensions.Logging;
-using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
 using Application.ViewModels.Media;
 using Microsoft.EntityFrameworkCore;
+using Application.ViewModels.Post;
 
 namespace Application.Services
 {

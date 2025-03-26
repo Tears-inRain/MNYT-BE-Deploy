@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.Services.IServices;
 using Application.Utils;
