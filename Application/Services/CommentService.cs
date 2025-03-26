@@ -60,17 +60,7 @@ namespace Application.Services
 
             _logger.LogInformation("Comment Id: {CommentId} added successfully.", comment.Id);
 
-            var readDto = _mapper.Map<ReadCommentDTO>(comment);
-
-            if (dto.Images != null && dto.Images.Any())
-            {
-                var newMedia = await _unitOfWork.MediaRepo.GetAllQueryable()
-                    .Where(m => m.EntityType == "Comment" && m.EntityId == comment.Id)
-                    .ToListAsync();
-
-                readDto.Images = _mapper.Map<List<ReadMediaDTO>>(newMedia);
-            }
-
+            var readDto = await AttachMediaAndMapSingleAsync(comment);
             return readDto;
         }
 
@@ -148,13 +138,7 @@ namespace Application.Services
 
             _logger.LogInformation("Comment Id: {CommentId} updated successfully by Account {AccountId}", commentId, accountId);
 
-            var updatedDto = _mapper.Map<ReadCommentDTO>(comment);
-
-            var images = await _unitOfWork.MediaRepo.GetAllQueryable()
-                .Where(m => m.EntityType == "Comment" && m.EntityId == comment.Id)
-                .ToListAsync();
-            updatedDto.Images = _mapper.Map<List<ReadMediaDTO>>(images);
-
+            var updatedDto = await AttachMediaAndMapSingleAsync(comment);
             return updatedDto;
         }
 
@@ -181,6 +165,18 @@ namespace Application.Services
 
             _logger.LogInformation("Comment Id: {CommentId} soft-deleted by account {AccountId}", commentId, accountId);
             return true;
+        }
+
+        private async Task<ReadCommentDTO> AttachMediaAndMapSingleAsync(Comment comment)
+        {
+            var mediaList = await _unitOfWork.MediaRepo.GetAllQueryable()
+                .Where(m => m.EntityType == "Comment" && m.EntityId == comment.Id)
+                .ToListAsync();
+
+            var readDto = _mapper.Map<ReadCommentDTO>(comment);
+            readDto.Images = _mapper.Map<List<ReadMediaDTO>>(mediaList);
+
+            return readDto;
         }
 
         private async Task<List<ReadCommentDTO>> AttachMediaAndMapAsync(List<Comment> commentEntities)

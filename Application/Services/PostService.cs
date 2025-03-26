@@ -8,6 +8,7 @@ using Application.Services.IServices;
 using Application.Utils;
 using System.Net;
 using Application.ViewModels.Media;
+using Application.ViewModels.Post;
 
 
 namespace Application.Services
@@ -57,7 +58,7 @@ namespace Application.Services
 
             _logger.LogInformation("Successfully created BlogPost Id: {PostId}", post.Id);
 
-            return _mapper.Map<ReadPostDTO>(post);
+            return await AttachMediaAndMapSingleAsync(post);
         }
 
         public async Task<ReadPostDTO> CreateForumPostAsync(int authorId, CreatePostDTO dto)
@@ -88,7 +89,7 @@ namespace Application.Services
 
             _logger.LogInformation("Successfully created ForumPost Id: {PostId}", post.Id);
 
-            return _mapper.Map<ReadPostDTO>(post);
+            return await AttachMediaAndMapSingleAsync(post);
         }
 
         public async Task<ReadPostDTO?> UpdatePostAsync(int postId, UpdatePostDTO dto, int requestAccountId)
@@ -209,15 +210,7 @@ namespace Application.Services
                 return null;
             }
 
-            var images = await _unitOfWork.MediaRepo
-                .GetAllQueryable()
-                .Where(m => m.EntityType == "Post" && m.EntityId == postId)
-                .ToListAsync();
-
-            var postDto = _mapper.Map<ReadPostDTO>(post);
-            postDto.Images = _mapper.Map<List<ReadMediaDTO>>(images);
-
-            return postDto;
+            return await AttachMediaAndMapSingleAsync(post);
         }
 
         public async Task<List<ReadPostDTO>> GetAllForumPostsAsync()
@@ -296,6 +289,18 @@ namespace Application.Services
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
         {
             return await _unitOfWork.PostRepo.GetTopAuthorAsync(3);
+        }
+
+        private async Task<ReadPostDTO?> AttachMediaAndMapSingleAsync(BlogPost post)
+        {
+            var images = await _unitOfWork.MediaRepo.GetAllQueryable()
+                .Where(m => m.EntityType == "Post" && m.EntityId == post.Id)
+                .ToListAsync();
+
+            var postDto = _mapper.Map<ReadPostDTO>(post);
+            postDto.Images = _mapper.Map<List<ReadMediaDTO>>(images);
+
+            return postDto;
         }
 
         private async Task<List<ReadPostDTO>> AttachMediaAndMapAsync(List<BlogPost> posts)

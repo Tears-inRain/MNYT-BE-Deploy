@@ -13,6 +13,7 @@ using Application.ViewModels.Blog;
 using Application.ViewModels.Media;
 using Application.ViewModels.ScheduleTemplate;
 using Application.ViewModels.AccountMembership;
+using Application.ViewModels.Post;
 
 namespace Infrastructure.MapperConfigs
 {
@@ -100,6 +101,10 @@ namespace Infrastructure.MapperConfigs
                 .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author != null ? src.Author.UserName : null))
                 .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.BlogLikes.Count))
                 .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
+                .ForMember(dest => dest.BookmarkCount, opt => opt.MapFrom(src => src.BlogBookmarks.Count));
+            CreateMap<BlogPost, ReadBlogPostDTO>()
+                .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author != null ? src.Author.UserName : null))
+                .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.BlogLikes.Count))
                 .ForMember(dest => dest.BookmarkCount, opt => opt.MapFrom(src => src.BlogBookmarks.Count));
             CreateMap<UpdatePostDTO, BlogPost>();
 
