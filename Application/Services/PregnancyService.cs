@@ -54,7 +54,7 @@ namespace Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
+            var itemToDelete = await _unitOfWork.PregnancyRepo.GetByIdAsync(id);
             
             
             _unitOfWork.PregnancyRepo.Delete(itemToDelete);
@@ -70,14 +70,14 @@ namespace Application.Services
 
         public async Task<PregnancyVM> GetAsync(int id)
         {
-            var item = await _unitOfWork.PregnancyRepo.GetAsync(id);
+            var item = await _unitOfWork.PregnancyRepo.GetByIdAsync(id);
             var result = _mapper.Map<PregnancyVM>(item);
             return result;
         }
 
         public async Task SoftDeleteAsync(int id)
         {
-            var itemToDelete = await _unitOfWork.PregnancyRepo.GetAsync(id);
+            var itemToDelete = await _unitOfWork.PregnancyRepo.GetByIdAsync(id);
             
             _unitOfWork.PregnancyRepo.SoftDelete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();

@@ -15,8 +15,7 @@ namespace Application.IRepos
         void Delete(TModel model);
         void SoftDelete(TModel model);
         Task<IEnumerable<TModel>> GetAllAsync();
-        Task<TModel> GetAsync(int id);
-        Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "");
+        Task<TModel> GetByIdAsync(int id);
         IQueryable<TModel> GetAllQueryable(string includeProperties = "");
         Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> predicate, string includeProperties = "");
     }

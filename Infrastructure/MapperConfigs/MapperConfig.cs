@@ -110,7 +110,8 @@ namespace Infrastructure.MapperConfigs
         public void MappingMedia()
         {
             CreateMap<CreateMediaDTO, Media>();
-            CreateMap<ReadMediaDTO, Media>();
+            CreateMap<UpdateMediaDTO, Media>();
+            CreateMap<Media, ReadMediaDetailDTO>();
             CreateMap<Media, ReadMediaDTO>();
         }
         public void MappingScheduleTemplate()

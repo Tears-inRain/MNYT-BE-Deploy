@@ -47,7 +47,7 @@ namespace Application.Services
                 newMembership = await _membershipService.UpgradeMembershipAsync(accountId, membershipPlanId);
             }
 
-            var plan = await _unitOfWork.MembershipPlanRepo.GetAsync(newMembership.MembershipPlanId ?? 0);
+            var plan = await _unitOfWork.MembershipPlanRepo.GetByIdAsync(newMembership.MembershipPlanId ?? 0);
             if (plan == null)
                 throw new Exception("Membership plan not found.");
 

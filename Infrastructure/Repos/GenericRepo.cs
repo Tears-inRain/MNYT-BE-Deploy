@@ -38,7 +38,7 @@ namespace Infrastructure.Repos
             return await result.ToListAsync();
         }
 
-        public async Task<TModel> GetAsync(int id)
+        public async Task<TModel> GetByIdAsync(int id)
         {
             TModel? model = await _dbSet.FindAsync(id);
             if (model == null || model.IsDeleted == true)
@@ -62,17 +62,6 @@ namespace Infrastructure.Repos
             }
             model.UpdateDate = DateTime.UtcNow;
             _dbSet.Update(model);
-        }
-        public virtual async Task<IEnumerable<TModel>> GetAllAsync(string includeProperties = "")
-        {
-            IQueryable<TModel> query = _dbSet;
-
-            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty.Trim());
-            }
-
-            return await query.Where(x=>x.IsDeleted!=true).ToListAsync();
         }
 
         public virtual IQueryable<TModel> GetAllQueryable(string includeProperties = "")

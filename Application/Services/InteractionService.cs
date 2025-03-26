@@ -25,14 +25,14 @@ namespace Application.Services
         {
             _logger.LogInformation("Account {AccountId} liking post {PostId}", accountId, postId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post {PostId} not found, cannot like", postId);
                 return false;
             }
 
-            var existingLike = await _unitOfWork.BlogLikeRepo.FindOneAsync(l => l.AccountId == accountId && l.PostId == postId && !l.IsDeleted);
+            var existingLike = await _unitOfWork.BlogLikeRepo.FindOneAsync(l => l.AccountId == accountId && l.PostId == postId);
             if (existingLike != null)
             {
                 return true;
@@ -57,7 +57,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Account {AccountId} unliking post {PostId}", accountId, postId);
 
-            var like = await _unitOfWork.BlogLikeRepo.FindOneAsync(l => l.AccountId == accountId && l.PostId == postId && !l.IsDeleted);
+            var like = await _unitOfWork.BlogLikeRepo.FindOneAsync(l => l.AccountId == accountId && l.PostId == postId);
             if (like == null)
             {
                 _logger.LogWarning("No existing like found for postId: {PostId}, account: {AccountId}", postId, accountId);
@@ -75,7 +75,7 @@ namespace Application.Services
 
             var query = _unitOfWork.BlogLikeRepo
                 .GetAllQueryable("Post.Author, Post.BlogBookmarks, Post.BlogLikes, Post.Comments")
-                .Where(l => l.AccountId == accountId && !l.IsDeleted
+                .Where(l => l.AccountId == accountId
                             && l.Post != null && !l.Post.IsDeleted);
 
             var likedPosts = await query
@@ -89,14 +89,14 @@ namespace Application.Services
         {
             _logger.LogInformation("Account {AccountId} bookmarking post {PostId}", accountId, postId);
 
-            var post = await _unitOfWork.PostRepo.FindOneAsync(p => p.Id == postId && !p.IsDeleted);
+            var post = await _unitOfWork.PostRepo.GetByIdAsync(postId);
             if (post == null)
             {
                 _logger.LogWarning("Post {PostId} not found, cannot bookmark", postId);
                 return false;
             }
 
-            var existingBookmark = await _unitOfWork.BlogBookmarkRepo.FindOneAsync(b => b.AccountId == accountId && b.PostId == postId && !b.IsDeleted);
+            var existingBookmark = await _unitOfWork.BlogBookmarkRepo.FindOneAsync(b => b.AccountId == accountId && b.PostId == postId);
             if (existingBookmark != null)
             {
                 return true;
@@ -121,7 +121,7 @@ namespace Application.Services
         {
             _logger.LogInformation("Account {AccountId} removing bookmark from post {PostId}", accountId, postId);
 
-            var bookmark = await _unitOfWork.BlogBookmarkRepo.FindOneAsync(b => b.AccountId == accountId && b.PostId == postId && !b.IsDeleted);
+            var bookmark = await _unitOfWork.BlogBookmarkRepo.FindOneAsync(b => b.AccountId == accountId && b.PostId == postId);
             if (bookmark == null)
             {
                 _logger.LogWarning("Bookmark does not exist for postId: {PostId}, account: {AccountId}", postId, accountId);

@@ -28,7 +28,7 @@ namespace Application.Services
 
         public async Task<AccountDTO?> GetAccountByIdAsync(int id)
         {
-            var account = await _unitOfWork.AccountRepo.GetAsync(id);
+            var account = await _unitOfWork.AccountRepo.GetByIdAsync(id);
             if (account == null) return null;
 
             return _mapper.Map<AccountDTO>(account);
@@ -74,7 +74,7 @@ namespace Application.Services
                 throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "User already exists with the provided email or username.");
             }
 
-            var account = await _unitOfWork.AccountRepo.GetAsync(accountId);
+            var account = await _unitOfWork.AccountRepo.GetByIdAsync(accountId);
             if (account == null) return null;
 
             account.FullName = updateDto.FullName;
@@ -107,7 +107,7 @@ namespace Application.Services
 
         public async Task<bool> BanAccountAsync(int accountId)
         {
-            var account = await _unitOfWork.AccountRepo.GetAsync(accountId);
+            var account = await _unitOfWork.AccountRepo.GetByIdAsync(accountId);
             if (account == null) return false;
 
             account.Status = "Banned";
@@ -119,7 +119,7 @@ namespace Application.Services
 
         public async Task<bool> UnbanAccountAsync(int accountId)
         {
-            var account = await _unitOfWork.AccountRepo.GetAsync(accountId);
+            var account = await _unitOfWork.AccountRepo.GetByIdAsync(accountId);
             if (account == null) return false;
 
             account.Status = "Active";

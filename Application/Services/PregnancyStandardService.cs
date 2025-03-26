@@ -25,7 +25,7 @@ namespace Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var itemToDelete =await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
+            var itemToDelete =await _unitOfWork.PregnancyStandardRepo.GetByIdAsync(id);
             _unitOfWork.PregnancyStandardRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -39,7 +39,7 @@ namespace Application.Services
 
         public async Task<PregnancyStandardVM> GetAsync(int id)
         {
-            var item = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
+            var item = await _unitOfWork.PregnancyStandardRepo.GetByIdAsync(id);
             var result = _mapper.Map<PregnancyStandardVM>(item);
             return result;
         }
@@ -53,14 +53,14 @@ namespace Application.Services
 
         public async Task SoftDeleteAsync(int id)
         {
-            var itemToDelete = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
+            var itemToDelete = await _unitOfWork.PregnancyStandardRepo.GetByIdAsync(id);
             _unitOfWork.PregnancyStandardRepo.SoftDelete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PregnancyStandardVM> UpdateAsync(int id,PregnacyStandardAddVM pregnancyVM)
         {
-            var itemToUpdate = await _unitOfWork.PregnancyStandardRepo.GetAsync(id);
+            var itemToUpdate = await _unitOfWork.PregnancyStandardRepo.GetByIdAsync(id);
             if (itemToUpdate == null) return null;
             _mapper.Map(pregnancyVM, itemToUpdate);
             _unitOfWork.PregnancyStandardRepo.Update(itemToUpdate);

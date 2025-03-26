@@ -1,8 +1,8 @@
 ﻿namespace Application.ViewModels.Media
 {
-    public class ReadMediaDTO
+    public class UpdateMediaDTO
     {
-        public int Id { get; set; }
+        public string? Type { get; set; }
 
         public string? Url { get; set; }
     }

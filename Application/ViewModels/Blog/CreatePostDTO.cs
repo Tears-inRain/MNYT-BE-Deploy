@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.ViewModels.Media;
 
 namespace Application.ViewModels.Blog
 {
@@ -16,9 +12,7 @@ namespace Application.ViewModels.Blog
 
         public string? Description { get; set; }
 
-        public int? ImageId { get; set; }
-
-        public string? ImageUrl { get; set; }
+        public List<CreateMediaDTO>? Images { get; set; }
 
         public int? Period { get; set; }
 

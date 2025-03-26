@@ -12,7 +12,9 @@ namespace Application.Services.IServices
     public interface ICommentService
     {
         Task<ReadCommentDTO?> AddCommentAsync(int accountId, CreateCommentDTO dto);
-        Task<PaginatedList<ReadCommentDTO>> GetCommentsByPostAsync(int postId, QueryParameters parameters);
+        Task<List<ReadCommentDTO>> GetCommentsByPostAsync(int postId);
+        Task<PaginatedList<ReadCommentDTO>> GetCommentsByPostPaginatedAsync(int postId, QueryParameters parameters);
+        Task<ReadCommentDTO?> UpdateCommentAsync(int commentId, int accountId, UpdateCommentDTO dto);
         Task<bool> DeleteCommentAsync(int commentId, int userId);
     }
 }

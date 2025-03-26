@@ -32,7 +32,7 @@ namespace Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var itemToDelete = await _unitOfWork.ScheduleUserRepo.GetAsync(id);
+            var itemToDelete = await _unitOfWork.ScheduleUserRepo.GetByIdAsync(id);
             _unitOfWork.ScheduleUserRepo.Delete(itemToDelete);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -47,14 +47,14 @@ namespace Application.Services
 
         public async Task<ScheduleUserVM> GetAsync(int id)
         {
-            var item = await _unitOfWork.ScheduleUserRepo.GetAsync(id);
+            var item = await _unitOfWork.ScheduleUserRepo.GetByIdAsync(id);
             var result = _mapper.Map<ScheduleUserVM>(item);
             return result;
         }
 
         public async Task SoftDelete(int id)
         {
-            var schedule = await _unitOfWork.ScheduleUserRepo.GetAsync(id);
+            var schedule = await _unitOfWork.ScheduleUserRepo.GetByIdAsync(id);
             _unitOfWork.ScheduleUserRepo.SoftDelete(schedule);
             await _unitOfWork.SaveChangesAsync();
         }

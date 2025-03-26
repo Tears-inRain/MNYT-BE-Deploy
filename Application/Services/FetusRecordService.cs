@@ -57,7 +57,7 @@ namespace Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            var itemToDelete = await _unitOfWork.FetusRecordRepo.GetAsync(id);
+            var itemToDelete = await _unitOfWork.FetusRecordRepo.GetByIdAsync(id);
 
 
             _unitOfWork.FetusRecordRepo.Delete(itemToDelete);
@@ -80,14 +80,14 @@ namespace Application.Services
 
         public async Task<FetusRecordVM> GetAsync(int id)
         {
-            var item = await _unitOfWork.FetusRepo.GetAsync(id);
+            var item = await _unitOfWork.FetusRepo.GetByIdAsync(id);
             var result = _mapper.Map<FetusRecordVM>(item);
             return result;
         }
 
         public async Task SoftDelete(int id)
         {
-            var record = await _unitOfWork.FetusRecordRepo.GetAsync(id);
+            var record = await _unitOfWork.FetusRecordRepo.GetByIdAsync(id);
             
             _unitOfWork.FetusRecordRepo.SoftDelete(record);
             await _unitOfWork.SaveChangesAsync();
