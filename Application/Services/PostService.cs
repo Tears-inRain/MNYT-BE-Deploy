@@ -123,7 +123,7 @@ namespace Application.Services
 
             _logger.LogInformation("Successfully updated Post Id: {PostId}", post.Id);
 
-            return _mapper.Map<ReadPostDTO>(post);
+            return await AttachMediaAndMapSingleAsync(post);
         }
 
         public async Task<bool> DeletePostAsync(int postId, int requestAccountId)

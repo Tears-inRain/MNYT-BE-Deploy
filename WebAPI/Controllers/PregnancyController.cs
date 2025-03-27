@@ -1,11 +1,8 @@
 ﻿using Application.Services.IServices;
-using Application.ViewModels.Blog;
 using Application.ViewModels;
 using Application.ViewModels.Pregnancy;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Application.ViewModels.Fetus;
 
 namespace WebAPI.Controllers
 {
