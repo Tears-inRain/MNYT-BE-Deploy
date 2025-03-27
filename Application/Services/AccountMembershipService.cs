@@ -1,7 +1,5 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels.AccountMembership;
-using Application.ViewModels.Blog;
-using Application.ViewModels.Media;
 using AutoMapper;
 using Domain;
 using Domain.Entities;

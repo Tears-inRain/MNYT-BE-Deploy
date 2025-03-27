@@ -1,8 +1,6 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
 using Application.ViewModels.AccountMembership;
-using Application.ViewModels.Blog;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

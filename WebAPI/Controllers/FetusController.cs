@@ -1,11 +1,7 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels;
-using Application.ViewModels.Blog;
 using Application.ViewModels.Fetus;
-using Application.ViewModels.Pregnancy;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers

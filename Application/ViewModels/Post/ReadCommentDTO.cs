@@ -1,6 +1,6 @@
 ﻿using Application.ViewModels.Media;
 
-namespace Application.ViewModels.Blog
+namespace Application.ViewModels.Post
 {
     public class ReadCommentDTO
     {
