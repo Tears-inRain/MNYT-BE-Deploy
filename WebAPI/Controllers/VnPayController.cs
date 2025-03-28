@@ -29,7 +29,6 @@ namespace WebAPI.Controllers
             return Ok(ApiResponse<string>.SuccessResponse(paymentUrl, "VNPAY payment URL generated successfully."));
         }
 
-        //    Cấu hình "vnp_ReturnUrl": "https://abcd-1234.ngrok.io/api/VnPay/Callback"
         [HttpGet("Callback")]
         [AllowAnonymous]
         public async Task<IActionResult> Callback()
@@ -43,18 +42,18 @@ namespace WebAPI.Controllers
             var success = await _vnPayService.HandleVnPayCallbackAsync(queryParams);
             if (!success)
             {
-                return BadRequest(ApiResponse<string>.FailureResponse("Payment verification failed."));
+                return Redirect("https://unrivaled-puppy-dc2558.netlify.app/payment-fail");
             }
 
             if (queryParams.TryGetValue("vnp_ResponseCode", out var responseCode) && responseCode == "00")
             {
-                return Ok(ApiResponse<string>.SuccessResponse("Payment successful!",
-                       "VNPay payment has been processed successfully."));
+                return Redirect("https://unrivaled-puppy-dc2558.netlify.app/payment-success");
             }
             else
             {
-                return Ok(ApiResponse<string>.FailureResponse("Payment failed. Please try again or contact support."));
+                return Redirect("https://unrivaled-puppy-dc2558.netlify.app/payment-fail");
             }
         }
+
     }
 }
