@@ -60,7 +60,7 @@ namespace Application.Services
             decimal amount = newMembership.Amount ?? 0;
             string orderDesc = $"Payment for membership plan ... (#{newMembership.Id})";
 
-            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("UTC+0");
+            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("Coordinated Universal Time");
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
             var tick = DateTime.Now.Ticks.ToString();
 
