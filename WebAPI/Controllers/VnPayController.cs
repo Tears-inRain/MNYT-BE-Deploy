@@ -23,9 +23,9 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDTO dto)
         {
-            var paymentUrl = await _vnPayService.CreateVnPayPaymentAsync(dto.AccountId, dto.MembershipPlanId);
             Console.WriteLine($"================My time : {DateTime.Now}");
             Console.WriteLine($"================My time UTC: {DateTime.UtcNow}");
+            var paymentUrl = await _vnPayService.CreateVnPayPaymentAsync(dto.AccountId, dto.MembershipPlanId);
             return Ok(ApiResponse<string>.SuccessResponse(paymentUrl, "VNPAY payment URL generated successfully."));
         }
 
