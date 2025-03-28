@@ -270,6 +270,36 @@ namespace Application.Services
             return await AttachMediaAndMapAsync(forumPosts);
         }
 
+        public async Task<PaginatedList<ReadPostDTO>> GetAllForumByCategoryPaginatedAsync(string category, QueryParameters queryParameters)
+        {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cannot be null or empty.");
+            }
+
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(p => p.Category == category
+                            && p.TypeEnum == Domain.Enums.PostType.Forum
+                            && !p.IsDeleted);
+
+            var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
+                query.OrderByDescending(p => p.CreateDate),
+                queryParameters.PageNumber,
+                queryParameters.PageSize
+            );
+
+            var dtosWithImages = await AttachMediaAndMapAsync(pagedEntities.Items);
+
+            return new PaginatedList<ReadPostDTO>(
+                dtosWithImages,
+                pagedEntities.TotalCount,
+                pagedEntities.PageIndex,
+                pagedEntities.Items.Count
+            );
+        }
+
+
         public async Task<List<ReadPostDTO>> GetAllBlogByCategoryAsync(string category)
         {
             if (string.IsNullOrEmpty(category))
@@ -284,6 +314,36 @@ namespace Application.Services
 
             return await AttachMediaAndMapAsync(blogPosts);
         }
+
+        public async Task<PaginatedList<ReadPostDTO>> GetAllBlogByCategoryPaginatedAsync(string category, QueryParameters queryParameters)
+        {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "Category cannot be null or empty.");
+            }
+
+            var query = _unitOfWork.PostRepo
+                .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
+                .Where(p => p.Category == category
+                            && p.TypeEnum == Domain.Enums.PostType.Blog
+                            && !p.IsDeleted);
+
+            var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
+                query.OrderByDescending(p => p.CreateDate),
+                queryParameters.PageNumber,
+                queryParameters.PageSize
+            );
+
+            var dtosWithImages = await AttachMediaAndMapAsync(pagedEntities.Items);
+
+            return new PaginatedList<ReadPostDTO>(
+                dtosWithImages,
+                pagedEntities.TotalCount,
+                pagedEntities.PageIndex,
+                pagedEntities.Items.Count
+            );
+        }
+
 
         public async Task<IList<TopAuthorDTO>> GetTopAuthorsAsync()
         {
