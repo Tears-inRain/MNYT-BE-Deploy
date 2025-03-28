@@ -3,6 +3,7 @@ using Application.ViewModels;
 using Application.ViewModels.Payment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
 {
@@ -23,6 +24,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDTO dto)
         {
             var paymentUrl = await _vnPayService.CreateVnPayPaymentAsync(dto.AccountId, dto.MembershipPlanId);
+            Console.WriteLine($"================My time : {DateTime.Now}");
+            Console.WriteLine($"================My time UTC: {DateTime.UtcNow}");
             return Ok(ApiResponse<string>.SuccessResponse(paymentUrl, "VNPAY payment URL generated successfully."));
         }
 
