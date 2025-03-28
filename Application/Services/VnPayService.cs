@@ -79,7 +79,7 @@ namespace Application.Services
             vnpay.AddRequestData("vnp_ReturnUrl", _configuration["Vnpay:vnp_ReturnUrl"]);
             vnpay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_Locale", _configuration["Vnpay:vnp_Locale"]);
-            vnpay.AddRequestData("vnp_ExpireDate", DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_ExpireDate", timeNow.AddMinutes(15).ToString("yyyyMMddHHmmss"));
 
             string paymentUrl = vnpay.CreateRequestUrl(_configuration["Vnpay:vnp_BaseUrl"], _configuration["Vnpay:vnp_HashSecret"]);
             _logger.LogInformation("Payment URL: {0}", paymentUrl);
