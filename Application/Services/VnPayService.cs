@@ -60,8 +60,10 @@ namespace Application.Services
             decimal amount = newMembership.Amount ?? 0;
             string orderDesc = $"Payment for membership plan ... (#{newMembership.Id})";
 
-            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("Greenwich Mean Time");
+            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
+
+            Console.WriteLine("timeZoneById:" + timeZoneById + "\n;" + "timeNow:" + timeNow);
             var tick = DateTime.Now.Ticks.ToString();
 
             var vnpay = new VnPayLibrary();
@@ -81,7 +83,6 @@ namespace Application.Services
 
             string paymentUrl = vnpay.CreateRequestUrl(_configuration["Vnpay:vnp_BaseUrl"], _configuration["Vnpay:vnp_HashSecret"]);
             _logger.LogInformation("Payment URL: {0}", paymentUrl);
-            Console.WriteLine("timeZoneById:" + timeZoneById + "\n;"+ "timeNow:"+timeNow);
             return paymentUrl;
         }
 
