@@ -81,7 +81,7 @@ namespace Application.Services
 
             string paymentUrl = vnpay.CreateRequestUrl(_configuration["Vnpay:vnp_BaseUrl"], _configuration["Vnpay:vnp_HashSecret"]);
             _logger.LogInformation("Payment URL: {0}", paymentUrl);
-
+            Console.WriteLine("timeZoneById:" + timeZoneById + "\n;"+ "timeNow:"+timeNow);
             return paymentUrl;
         }
 
