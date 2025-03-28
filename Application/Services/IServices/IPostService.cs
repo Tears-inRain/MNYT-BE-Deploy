@@ -22,7 +22,9 @@ namespace Application.Services.IServices
         Task<List<ReadPostDTO>> GetAllForumPostsAsync();
         Task<PaginatedList<ReadPostDTO>> GetAllForumPostsPaginatedAsync(QueryParameters queryParameters);
         Task<List<ReadPostDTO>> GetAllBlogByCategoryAsync(string category);
+        Task<PaginatedList<ReadPostDTO>> GetAllBlogByCategoryPaginatedAsync(string category, QueryParameters queryParameters);
         Task<List<ReadPostDTO>> GetAllForumByCategoryAsync(string category);
+        Task<PaginatedList<ReadPostDTO>> GetAllForumByCategoryPaginatedAsync(string category, QueryParameters queryParameters);
         Task<IList<TopAuthorDTO>> GetTopAuthorsAsync();
     }
 }

@@ -81,6 +81,20 @@ namespace WebAPI.Controllers
             ));
         }
 
+        [HttpGet("forums/by-category/paginated")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllForumByCategoryPaginated([FromQuery] string category, [FromQuery] QueryParameters query)
+        {
+            var result = await _postService.GetAllForumByCategoryPaginatedAsync(category, query);
+            return Ok(ApiResponse<PaginatedList<ReadPostDTO>>.SuccessResponse(
+                result,
+                string.IsNullOrEmpty(category)
+                    ? "All forum posts retrieved without category filter (paginated)."
+                    : $"All forum posts for category '{category}' retrieved successfully (paginated)."
+            ));
+        }
+
+
         [HttpGet("blogs")]
         [AllowAnonymous]
         public async Task<ActionResult<ApiResponse<List<ReadPostDTO>>>> GetAllBlogPosts()
@@ -92,6 +106,20 @@ namespace WebAPI.Controllers
                 "Successfully retrieved all blog posts."
             ));
         }
+
+        [HttpGet("blogs/by-category/paginated")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllBlogByCategoryPaginated([FromQuery] string category, [FromQuery] QueryParameters query)
+        {
+            var result = await _postService.GetAllBlogByCategoryPaginatedAsync(category, query);
+            return Ok(ApiResponse<PaginatedList<ReadPostDTO>>.SuccessResponse(
+                result,
+                string.IsNullOrEmpty(category)
+                    ? "All blog posts retrieved without category filter (paginated)."
+                    : $"All blog posts for category '{category}' retrieved successfully (paginated)."
+            ));
+        }
+
 
         [HttpPost("blog")]
         [AllowAnonymous]
