@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services
@@ -25,12 +26,10 @@ namespace Application.Services
 
         public async Task<ReadAccountMembershipDTO?> GetActiveMembershipAsync(int accountId)
         {
-            var allMemberships = await _unitOfWork.AccountMembershipRepo.GetAllAsync();
+            var allMemberships = await _unitOfWork.AccountMembershipRepo.GetAllQueryable().Where(m => m.AccountId == accountId && m.Status == "Active")
+                .ToListAsync();
 
-            var latestActiveMembership = allMemberships
-                .Where(m => m.AccountId == accountId && m.Status == "Active")
-                .OrderByDescending(m => m.StartDate) // Use correct date field
-                .FirstOrDefault();
+            var latestActiveMembership = allMemberships.OrderByDescending(m => m.StartDate).FirstOrDefault();
             return _mapper.Map<ReadAccountMembershipDTO>(latestActiveMembership);
             ;
         }

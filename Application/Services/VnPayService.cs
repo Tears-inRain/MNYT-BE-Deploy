@@ -55,8 +55,6 @@ namespace Application.Services
                 newMembership = await _membershipService.UpgradeMembershipAsync(accountId, membershipPlanId);
             }
 
-            newMembership.PaymentMethodId = (int)PaymentMethodEnum.VNPAY;
-
             decimal amount = newMembership.Amount ?? 0;
             string orderDesc = $"Payment for membership plan {newMembership.Id}";
 
@@ -133,6 +131,7 @@ namespace Application.Services
                 membership.PaymentStatus = "Paid";
                 membership.StartDate = DateOnly.FromDateTime(timeNow);
                 membership.EndDate = membership.StartDate.Value.AddDays(plan.Duration);
+                membership.PaymentMethodId = (int)PaymentMethodEnum.VNPAY;
 
                 _logger.LogInformation("Payment success for membership #{MembershipId}, set Active.", membershipId);
             }
