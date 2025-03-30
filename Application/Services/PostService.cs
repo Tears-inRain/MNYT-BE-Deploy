@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Application.ViewModels;
 using Application.Services.IServices;
-using Application.Utils;
 using System.Net;
 using Application.ViewModels.Media;
 using Application.ViewModels.Post;
+using Application.Utils;
 
 
 namespace Application.Services
@@ -115,8 +115,7 @@ namespace Application.Services
                 post.Description = dto.Description;
             if (dto.Period.HasValue)
                 post.Period = dto.Period.Value;
-            if (dto.TypeEnum.HasValue)
-                post.TypeEnum = dto.TypeEnum.Value;
+            //if (dto.TypeEnum.HasValue) post.TypeEnum = dto.TypeEnum.Value;
 
             _unitOfWork.PostRepo.Update(post);
             await _unitOfWork.SaveChangesAsync();
@@ -216,7 +215,7 @@ namespace Application.Services
         {
             var forumPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum && !post.IsDeleted)
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Forum)
                 .ToListAsync();
 
             return await AttachMediaAndMapAsync(forumPosts);
@@ -226,7 +225,7 @@ namespace Application.Services
         {
             var blogPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
-                .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog && !post.IsDeleted)
+                .Where(post => post.TypeEnum == Domain.Enums.PostType.Blog)
                 .ToListAsync();
 
             return await AttachMediaAndMapAsync(blogPosts);
@@ -263,8 +262,7 @@ namespace Application.Services
             var forumPosts = await _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
                 .Where(p => p.Category == category
-                            && p.TypeEnum == Domain.Enums.PostType.Forum
-                            && !p.IsDeleted)
+                            && p.TypeEnum == Domain.Enums.PostType.Forum)
                 .ToListAsync();
 
             return await AttachMediaAndMapAsync(forumPosts);
@@ -280,8 +278,7 @@ namespace Application.Services
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
                 .Where(p => p.Category == category
-                            && p.TypeEnum == Domain.Enums.PostType.Forum
-                            && !p.IsDeleted);
+                            && p.TypeEnum == Domain.Enums.PostType.Forum);
 
             var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
                 query.OrderByDescending(p => p.CreateDate),
@@ -325,8 +322,7 @@ namespace Application.Services
             var query = _unitOfWork.PostRepo
                 .GetAllQueryable("Author,BlogLikes,BlogBookmarks,Comments")
                 .Where(p => p.Category == category
-                            && p.TypeEnum == Domain.Enums.PostType.Blog
-                            && !p.IsDeleted);
+                            && p.TypeEnum == Domain.Enums.PostType.Blog);
 
             var pagedEntities = await PaginatedList<BlogPost>.CreateAsync(
                 query.OrderByDescending(p => p.CreateDate),
