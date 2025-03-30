@@ -7,7 +7,7 @@ using Application.Services.IServices;
 using System.Net;
 using Application.ViewModels.Media;
 using Application.ViewModels.Post;
-using Application.Common.Utils;
+using Application.Utils;
 
 
 namespace Application.Services
