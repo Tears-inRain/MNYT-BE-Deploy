@@ -2,8 +2,8 @@
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Application.Services.IServices;
-using Application.Utils;
 using Application.ViewModels.Post;
+using Application.Utils;
 
 namespace WebAPI.Controllers
 {
