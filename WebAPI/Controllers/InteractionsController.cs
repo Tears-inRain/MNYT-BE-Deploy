@@ -53,6 +53,17 @@ namespace WebAPI.Controllers
             ));
         }
 
+        [HttpGet("likes/{postId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ApiResponse<List<ReadPostLikeDTO>>>> GetLikesByPostId(int postId)
+        {
+            var likedPosts = await _interactionService.GetAllLikesByPostIdAsync(postId);
+            return Ok(ApiResponse<List<ReadPostLikeDTO>>.SuccessResponse(
+                likedPosts,
+                $"Retrieved {likedPosts.Count} liked posts for postId = {postId}."
+            ));
+        }
+
         [HttpPost("bookmark/{postId}")]
         [AllowAnonymous]
         public async Task<IActionResult> BookmarkPost(int postId, int accountId)

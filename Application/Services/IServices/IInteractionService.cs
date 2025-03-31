@@ -15,5 +15,6 @@ namespace Application.Services.IServices
         Task<bool> RemoveBookmarkAsync(int accountId, int postId);
         Task<List<ReadPostDTO>> GetAllBookmarksByAccountIdAsync(int accountId);
         Task<List<ReadPostDTO>> GetAllLikesByAccountIdAsync(int accountId);
+        Task<List<ReadPostLikeDTO>> GetAllLikesByPostIdAsync(int PostId);
     }
 }

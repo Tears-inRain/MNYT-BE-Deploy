@@ -85,6 +85,21 @@ namespace Application.Services
             return likedDtos;
         }
 
+        public async Task<List<ReadPostLikeDTO>> GetAllLikesByPostIdAsync(int PostId)
+        {
+            _logger.LogInformation("Retrieving all liked for postId: {PostId}", PostId);
+
+            var query = _unitOfWork.BlogLikeRepo
+                .GetAllQueryable("Account")
+                .Where(l => l.PostId == PostId);
+
+            var likedPosts = await query
+                .ToListAsync();
+
+            var readDto = _mapper.Map<List<ReadPostLikeDTO>>(likedPosts);
+            return readDto;
+        }
+
         public async Task<bool> BookmarkPostAsync(int accountId, int postId)
         {
             _logger.LogInformation("Account {AccountId} bookmarking post {PostId}", accountId, postId);
