@@ -5,6 +5,7 @@ using Application.ViewModels.PregnancyStandard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services;
+using Org.BouncyCastle.Utilities;
 
 namespace WebAPI.Controllers
 {
@@ -89,6 +90,17 @@ namespace WebAPI.Controllers
         {
             var item = await _pregnancyStandardService.GetByTypeAndPregnancyTypeAsync(type, pregnancyType);
             return Ok(item);
+        }
+
+        [HttpDelete]
+        [AllowAnonymous]
+        public async Task<IActionResult> SoftDeleteAsync(List<int> items)
+        {
+            foreach (var item in items)
+            {
+                await _pregnancyStandardService.SoftDeleteAsync(item);
+            }
+            return Ok();
         }
     }
 }
