@@ -15,5 +15,7 @@ public partial class ScheduleUser : BaseEntity
     public string? Note { get; set; }
 
     public int? PregnancyId { get; set; }
+    public int? ScheduleTemplateId { get; set; }
+    public virtual ScheduleTemplate? ScheduleTemplate { get; set; }
     public virtual Pregnancy? Pregnancy { get; set; }
 }

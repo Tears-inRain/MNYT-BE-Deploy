@@ -89,6 +89,7 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<ScheduleUserAddVM, ScheduleUser>().ReverseMap();
             CreateMap<ScheduleUserVM, ScheduleUser>().ReverseMap();
+            CreateMap<TrueScheduleVM, ScheduleUser>().ReverseMap();
         }
 
         public void MappingBlog()
@@ -122,6 +123,7 @@ namespace Infrastructure.MapperConfigs
         {
             CreateMap<ScheduleTemplateAddVM, ScheduleTemplate>().ReverseMap();
             CreateMap<ScheduleTemplateVM, ScheduleTemplate>().ReverseMap();
+            CreateMap<TrueScheduleVM, ScheduleTemplate>().ReverseMap();
         }
     }
 }

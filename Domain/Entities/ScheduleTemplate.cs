@@ -13,4 +13,6 @@ public partial class ScheduleTemplate : BaseEntity
     public string? Status { get; set; }
 
     public string? Description { get; set; }
+
+    public virtual ICollection<ScheduleUser> ScheduleUser { get; set; } = new List<ScheduleUser>();
 }
