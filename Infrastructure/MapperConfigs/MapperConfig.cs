@@ -111,6 +111,8 @@ namespace Infrastructure.MapperConfigs
             CreateMap<CreateCommentDTO, Comment>();
             CreateMap<Comment, ReadCommentDTO>()
                 .ForMember(dest => dest.AccountUserName, opt => opt.MapFrom(src => src.Account != null ? src.Account.UserName : null));
+            CreateMap<BlogLike, ReadPostLikeDTO>()
+    .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account != null ? src.Account.UserName : null));
         }
         public void MappingMedia()
         {
