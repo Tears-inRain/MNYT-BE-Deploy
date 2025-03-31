@@ -1,6 +1,7 @@
 ﻿using Application.Services.IServices;
 using Application.ViewModels.FetusRecord;
 using Application.ViewModels.Pregnancy;
+using Application.ViewModels.ScheduleTemplate;
 using Application.ViewModels.ScheduleUser;
 using AutoMapper;
 using Domain.Entities;
@@ -75,14 +76,20 @@ namespace Application.Services
             var list = await query.ToListAsync();
             return _mapper.Map<IList<ScheduleUserVM>>(list);
         }
-        public async Task<IList<ScheduleUserVM>> GetAllScheduleAsync(int id)
+        public async Task<List<TrueScheduleVM>> GetAllByPregnancyIdAsyncV2(int id)
         {
 
-            var query = _unitOfWork.ScheduleUserRepo
+            var scheduleUsers = await _unitOfWork.ScheduleUserRepo
                 .GetAllQueryable()
-                .Where(x => x.PregnancyId == id);
-            var list = await query.ToListAsync();
-            return _mapper.Map<IList<ScheduleUserVM>>(list);
+                .Where(x => x.PregnancyId == id)
+                .ToListAsync();
+            var scheduleUserList = _mapper.Map<List<TrueScheduleVM>>(scheduleUsers);
+            
+            var scheduleTemplates = await _unitOfWork.ScheduleTemplateRepo.GetAllAsync();
+            var scheduleTemplateList = _mapper.Map<List<TrueScheduleVM>>(scheduleTemplates);
+
+            var trueScheduleList = scheduleUserList.Concat(scheduleTemplateList).ToList();
+            return trueScheduleList;
         }
     }
 }

@@ -18,6 +18,8 @@ namespace Application.ViewModels.ScheduleUser
 
         public DateTime Date { get; set; }
 
+        public int? Period { get; set; }
+
         public string? Note { get; set; }
 
         public int? PregnancyId { get; set; }
