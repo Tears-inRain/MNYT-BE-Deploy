@@ -66,7 +66,7 @@ namespace Application.Services
 
             var post = _mapper.Map<BlogPost>(dto);
             post.AuthorId = authorId;
-            post.Status = "Draft";
+            //post.Status = "Draft";
 
             await _unitOfWork.PostRepo.AddAsync(post);
             await _unitOfWork.SaveChangesAsync();
