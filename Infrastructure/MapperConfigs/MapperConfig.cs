@@ -94,8 +94,9 @@ namespace Infrastructure.MapperConfigs
 
         public void MappingBlog()
         {
+            //CreateMap<CreatePostDTO, BlogPost>().ForMember(dest => dest.Status, opt => opt.MapFrom(src =>string.IsNullOrWhiteSpace(src.Status)? "Draft": src.Status));
             CreateMap<CreatePostDTO, BlogPost>()
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>string.IsNullOrWhiteSpace(src.Status)? "Draft": src.Status));
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => "Draft"));
 
             CreateMap<BlogPost, ReadPostDTO>()
                 .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author != null ? src.Author.UserName : null))
