@@ -24,8 +24,8 @@ namespace Application.Scheduler.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-            var today = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
+            
+            var today = DateTime.UtcNow.AddHours(7).Date;//UTC+7
             var schedules = await _scheduleUserRepo.GetSchedulesByDateAsync(today);
 
             foreach (var schedule in schedules)
