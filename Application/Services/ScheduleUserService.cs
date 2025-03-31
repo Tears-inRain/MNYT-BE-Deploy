@@ -69,7 +69,18 @@ namespace Application.Services
 
         public async Task<IList<ScheduleUserVM>> GetAllByPregnancyIdAsync(int id)
         {
-            var query = _unitOfWork.ScheduleUserRepo.GetAllQueryable().Where(x => x.PregnancyId == id);
+            var query = _unitOfWork.ScheduleUserRepo
+                .GetAllQueryable()
+                .Where(x => x.PregnancyId == id);
+            var list = await query.ToListAsync();
+            return _mapper.Map<IList<ScheduleUserVM>>(list);
+        }
+        public async Task<IList<ScheduleUserVM>> GetAllScheduleAsync(int id)
+        {
+
+            var query = _unitOfWork.ScheduleUserRepo
+                .GetAllQueryable()
+                .Where(x => x.PregnancyId == id);
             var list = await query.ToListAsync();
             return _mapper.Map<IList<ScheduleUserVM>>(list);
         }

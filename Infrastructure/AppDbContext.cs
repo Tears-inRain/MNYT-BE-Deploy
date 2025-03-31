@@ -13,7 +13,6 @@ public partial class AppDbContext : DbContext
         : base(options)
     {
     }
-    
 
     public virtual DbSet<Account> Accounts { get; set; }
 
