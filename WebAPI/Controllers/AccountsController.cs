@@ -90,20 +90,13 @@ namespace WebAPI.Controllers
                 ));
             }
 
-            try
+            var updatedAccount = await _accountService.UpdateAccountAsync(id, updateDto);
+            if (updatedAccount == null)
             {
-                var updatedAccount = await _accountService.UpdateAccountAsync(id, updateDto);
-                if (updatedAccount == null)
-                {
-                    return NotFound(ApiResponse<AccountDTO>.FailureResponse("Account not found or update failed."));
-                }
+                return NotFound(ApiResponse<AccountDTO>.FailureResponse("Account not found or update failed."));
+            }
 
-                return Ok(ApiResponse<AccountDTO>.SuccessResponse(updatedAccount, "Account updated successfully."));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ApiResponse<AccountDTO>.FailureResponse("An error occurred while updating the account."));
-            }
+            return Ok(ApiResponse<AccountDTO>.SuccessResponse(updatedAccount, "Account updated successfully."));
         }
 
         [HttpPost("reset-password")]

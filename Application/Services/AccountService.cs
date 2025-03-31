@@ -66,13 +66,13 @@ namespace Application.Services
 
         public async Task<AccountDTO?> UpdateAccountAsync(int accountId, UpdateAccountDTO updateDto)
         {
-            //var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(updateDto.Email, updateDto.UserName);
+            var existedAccount = await _unitOfWork.AccountRepo.GetByUsernameOrEmail(updateDto.Email, updateDto.UserName);
 
-            //if (existedAccount != null)
-            //{
-            //    _logger.LogWarning("User already exists with the provided email or username.");
-            //    throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "User already exists with the provided email or username.");
-            //}
+            if (existedAccount != null && existedAccount.Id != accountId)
+            {
+                _logger.LogWarning("User already exists with the provided email or username.");
+                throw new Exceptions.ApplicationException(HttpStatusCode.BadRequest, "User already exists with the provided email or username.");
+            }
 
             var account = await _unitOfWork.AccountRepo.GetByIdAsync(accountId);
             if (account == null) return null;
