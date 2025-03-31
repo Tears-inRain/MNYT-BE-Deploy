@@ -62,7 +62,7 @@ namespace Application.Services
                 return false;
             }
 
-            _unitOfWork.BlogLikeRepo.SoftDelete(like);
+            _unitOfWork.BlogLikeRepo.Delete(like);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
@@ -126,7 +126,7 @@ namespace Application.Services
                 return false;
             }
 
-            _unitOfWork.BlogBookmarkRepo.SoftDelete(bookmark);
+            _unitOfWork.BlogBookmarkRepo.Delete(bookmark);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
