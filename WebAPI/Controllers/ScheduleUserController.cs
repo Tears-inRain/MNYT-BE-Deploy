@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
             var items = await _scheduleUserService.GetAllByPregnancyIdAsync(id);
             return Ok(items);
         }
-        [HttpGet("v2/pregnancyId{id}")]
+        [HttpGet("v2/pregnancyId/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTrueSchedule(int id)
         {
