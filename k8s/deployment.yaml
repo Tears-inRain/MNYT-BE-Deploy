@@ -19,17 +19,17 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: Authentication__Jwt__Secret
+        - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secrets
               key: JWT_SECRET
-        - name: Authentication__Jwt__Issuer
+        - name: JWT_ISSUER
           valueFrom:
             secretKeyRef:
               name: jwt-secrets
               key: JWT_ISSUER
-        - name: Authentication__Jwt__Audience
+        - name: JWT_AUDIENCE
           valueFrom:
             secretKeyRef:
               name: jwt-secrets
