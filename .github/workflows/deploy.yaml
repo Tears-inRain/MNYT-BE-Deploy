@@ -45,8 +45,10 @@ jobs:
       # Build and push Docker image
       - name: Build and push Docker image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/mnyt-be:latest .
-          docker push ghcr.io/${{ github.actor }}/mnyt-be:latest
+          # Convert github.actor to lowercase
+          IMAGE_TAG="ghcr.io/$(echo ${{ github.actor }} | tr '[:upper:]' '[:lower:]')/mnyt-be:latest"
+          docker build -t "$IMAGE_TAG" .
+          docker push "$IMAGE_TAG"
 
       # Set up Minikube
       - name: Start Minikube
