@@ -1,0 +1,76 @@
+name: CI/CD for ASP.NET Core to Minikube
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Build solution
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # Publish solution
+      - name: Publish
+        run: dotnet publish --configuration Release --no-build -o ./publish
+
+      # Log in to GitHub Container Registry
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      # Build and push Docker image
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.actor }}/mnyt-be:latest .
+          docker push ghcr.io/${{ github.actor }}/mnyt-be:latest
+
+      # Set up Minikube
+      - name: Start Minikube
+        uses: medyagh/setup-minikube@latest
+
+      # Deploy to Minikube
+      - name: Deploy to Minikube
+        run: |
+          # Create GHCR Secret
+          kubectl create secret docker-registry ghcr-secret \
+            --docker-server=ghcr.io \
+            --docker-username=${{ github.actor }} \
+            --docker-password=${{ secrets.GHCR_PAT }} \
+            --docker-email=${{ secrets.EMAIL }}
+          
+          # Create JWT Secret
+          kubectl create secret generic jwt-secrets \
+            --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --from-literal=JWT_ISSUER=${{ secrets.JWT_ISSUER }} \
+            --from-literal=JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE }}
+          
+          # Apply Kubernetes manifests
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          
+          # Wait for deployment to be ready
+          kubectl rollout status deployment/mnyt-be

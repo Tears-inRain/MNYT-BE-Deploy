@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mnyt-be
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mnyt-be
+  template:
+    metadata:
+      labels:
+        app: mnyt-be
+    spec:
+      containers:
+      - name: mnyt-be
+        image: ghcr.io/Tears-inRain/mnyt-be:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: Authentication__Jwt__Secret
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secrets
+              key: JWT_SECRET
+        - name: Authentication__Jwt__Issuer
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secrets
+              key: JWT_ISSUER
+        - name: Authentication__Jwt__Audience
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secrets
+              key: JWT_AUDIENCE
+        imagePullSecrets:
+        - name: ghcr-secret
