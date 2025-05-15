@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
+    //comment for fun
     public enum ApproveEnum2
     {
         Pending,
