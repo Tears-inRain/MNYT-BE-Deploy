@@ -34,5 +34,5 @@ spec:
             secretKeyRef:
               name: jwt-secrets
               key: JWT_AUDIENCE
-        imagePullSecrets:
-        - name: ghcr-secret
+      imagePullSecrets:
+      - name: ghcr-secret
