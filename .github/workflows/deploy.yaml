@@ -68,7 +68,8 @@ jobs:
           kubectl create secret generic jwt-secrets \
             --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} \
             --from-literal=JWT_ISSUER=${{ secrets.JWT_ISSUER }} \
-            --from-literal=JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE }}
+            --from-literal=JWT_AUDIENCE=${{ secrets.JWT_AUDIENCE }} \
+            --from-literal=Authentication__Jwt__Secret=${{ secrets.Authentication__Jwt__Secret}}
           
           # Apply Kubernetes manifests
           kubectl apply -f k8s/deployment.yaml
