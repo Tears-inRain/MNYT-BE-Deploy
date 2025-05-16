@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Exceptions
 {
+	//ah ssibal
     public class InfrastructureException : Exception
     {
         public int StatusCode { get; }
