@@ -57,6 +57,8 @@ jobs:
       # Deploy to Minikube
       - name: Deploy to Minikube
         run: |
+            # Delete the old secret
+            kubectl delete secret ghcr-secret
           # Create GHCR Secret
           kubectl create secret docker-registry ghcr-secret \
             --docker-server=ghcr.io \
