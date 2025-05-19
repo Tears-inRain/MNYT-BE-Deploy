@@ -22,7 +22,7 @@ spec:
         - name: ASPNETCORE_URLS
           value: "http://0.0.0.0:80"
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=192.168.59.1;uid=sa;pwd=12345;Database=PrenatalCareDB;TrustServerCertificate=true;Encrypt=true;"
+          value: "Server=192.168.59.101:31624;uid=sa;pwd=12345;Database=PrenatalCareDB;TrustServerCertificate=true;Encrypt=true;"
         - name: Authentication__Jwt__Secret
           valueFrom:
             secretKeyRef:
