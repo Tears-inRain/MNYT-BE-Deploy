@@ -14,7 +14,7 @@ namespace Application.Scheduler.JobSetup
         public void ConfigureQuartz(IServiceCollectionQuartzConfigurator quartz)
         {
             var jobKey = new JobKey("SendEmailJob");
-
+			
             quartz.AddJob<SendEmailJob>(opts => opts.WithIdentity(jobKey));
 
             quartz.AddTrigger(opts => opts
