@@ -31,6 +31,7 @@ namespace WebAPI
             // register Job in DI
             builder.Services.AddTransient<SendEmailJob>();
 
+//ưtf
             // Add services to the container.
             builder.Configuration.AddEnvironmentVariables();
 
