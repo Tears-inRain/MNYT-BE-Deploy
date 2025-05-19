@@ -15,6 +15,11 @@ spec:
     spec:
       containers:
       - name: mnyt-be
+        image: mnyt-be:local
+        env:
+        - name: ConnectionString_DefaultConnection
+          value: "Server=192.168.59.100;uid=sa;pwd=12345;Database=PrenatalCareDB;TrustServerCertificate=true;Encrypt=true;"
+      - name: mnyt-be
         image: ghcr.io/tears-inrain/mnyt-be:latest
         ports:
         - containerPort: 80
