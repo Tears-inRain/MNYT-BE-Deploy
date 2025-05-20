@@ -19,6 +19,7 @@ namespace WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+			//add
             // Add CORS policy
             builder.Services.AddCors(options =>
             {
