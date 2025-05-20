@@ -37,11 +37,13 @@ namespace WebAPI
 
             builder.Configuration.AddUserSecrets<Program>();
 
-            var jwtSecretKey = builder.Configuration["Authentication:Jwt:Secret"];
+            var jwtSecretKey = builder.Configuration["Authentication:Jwt:Secret"] ;
             if (string.IsNullOrEmpty(jwtSecretKey))
             {
                 throw new InvalidOperationException("JWT Secret Key is not configured.");
             }
+            var jwtIssuer = builder.Configuration["Authentication:Jwt:Issuer"] ?? builder.Configuration["JWT_ISSUER"];
+            var jwtAudience = builder.Configuration["Authentication:Jwt:Audience"] ?? builder.Configuration["JWT_AUDIENCE"];
 
             builder.Services.AddAuthentication(options =>
             {
@@ -54,10 +56,10 @@ namespace WebAPI
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidIssuer = builder.Configuration["Authentication:Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Authentication:Jwt:Audience"],
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = jwtAudience,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero

@@ -32,11 +32,12 @@ namespace Application.Authentication
                 throw new ArgumentNullException(nameof(role), "Role cannot be null or empty.");
             }
 
-            var secret = _configuration["Authentication:Jwt:Secret"];
-            var issuer = _configuration["Authentication:Jwt:Issuer"];
-            var audience = _configuration["Authentication:Jwt:Audience"];
+            var secret = _configuration["Authentication:Jwt:Secret"] ?? _configuration["JWT_SECRET"];
+            var issuer = _configuration["Authentication:Jwt:Issuer"] ?? _configuration["JWT_ISSUER"];
+            var audience = _configuration["Authentication:Jwt:Audience"] ?? _configuration["JWT_AUDIENCE"];
 
-            Console.WriteLine(secret);
+            _logger.LogInformation("JWT Configuration - Secret: {Secret}, Issuer: {Issuer}, Audience: {Audience}", secret, issuer, audience);
+            
             if (string.IsNullOrEmpty(secret))
             {
                 _logger.LogError("JWT Secret is not configured.");

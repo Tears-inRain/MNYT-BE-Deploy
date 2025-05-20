@@ -21,8 +21,6 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Development"
-        - name: ASPNETCORE_URLS
-          value: "http://0.0.0.0:80"
         - name: ConnectionStrings__DefaultConnection
           value: "Server=172.25.192.1;uid=sa;pwd=12345;Database=PrenatalCareDB;TrustServerCertificate=true;Encrypt=true;"
         - name: Authentication__Jwt__Secret
